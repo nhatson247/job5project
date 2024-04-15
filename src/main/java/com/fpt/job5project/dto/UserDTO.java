@@ -1,5 +1,6 @@
 package com.fpt.job5project.dto;
 
+import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -27,6 +28,8 @@ public class UserDTO {
     @NotEmpty(message = "PASSWORD_INVALID")
     String password;
 
-    Set<String> roles;
+    List<String> rolesString;
+
+    Set<RoleDTO> roles;
 
 }

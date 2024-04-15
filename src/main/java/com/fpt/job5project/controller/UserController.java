@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
-@RequestMapping("api/Users")
+@RequestMapping("/users")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserController {
 
@@ -43,7 +43,7 @@ public class UserController {
                 .build();
     }
 
-    @PostMapping("/create")
+    @PostMapping
     ResponseObject<UserDTO> createUser(@ModelAttribute @Valid UserDTO request) throws Exception {
         return ResponseObject.<UserDTO>builder()
                 .data(iuserService.addUser(request))

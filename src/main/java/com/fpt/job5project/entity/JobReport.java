@@ -5,8 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
-
-import java.time.Instant;
 import java.util.Date;
 
 @Getter

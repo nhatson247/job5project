@@ -14,6 +14,7 @@ public interface UserMapper {
     UserDTO toUserDTO(User user);
 
     @Mapping(target = "userId", ignore = true)
+    @Mapping(target = "roles", ignore = true)
     void updateUser(@MappingTarget User user, UserDTO request);
 
 }
