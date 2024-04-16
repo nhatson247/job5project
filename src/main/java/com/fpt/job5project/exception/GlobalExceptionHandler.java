@@ -1,8 +1,12 @@
 package com.fpt.job5project.exception;
 
 import com.fpt.job5project.dto.ResponseObject;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -44,23 +48,41 @@ public class GlobalExceptionHandler {
                         .build());
     }
 
-    @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    ResponseEntity<ResponseObject> handlingValidation(MethodArgumentNotValidException exception) {
+    // @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    // ResponseEntity<ResponseObject>
+    // handlingValidation(MethodArgumentNotValidException exception) {
 
-        String enumKey = exception.getFieldError().getDefaultMessage();
+    // String enumKey = exception.getFieldError().getDefaultMessage();
+
+    // ErrorCode errorCode = ErrorCode.INVALID_KEY;
+    // try {
+    // errorCode = ErrorCode.valueOf(enumKey);
+    // } catch (IllegalArgumentException e) {
+    // e.getMessage();
+    // }
+
+    // ResponseObject responseObject = new ResponseObject();
+
+    // responseObject.setStatus(errorCode.getStatus());
+    // responseObject.setMessage(errorCode.getMessage());
+
+    // return ResponseEntity.badRequest().body(responseObject);
+    // }
+
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    public ResponseEntity<ResponseObject> handlingValidation(MethodArgumentNotValidException exception) {
+        List<String> errors = exception.getBindingResult().getFieldErrors().stream()
+                .map(FieldError::getDefaultMessage)
+                .collect(Collectors.toList());
 
         ErrorCode errorCode = ErrorCode.INVALID_KEY;
-        try {
-            errorCode = ErrorCode.valueOf(enumKey);
-        } catch (IllegalArgumentException e) {
-            e.getMessage();
-        }
 
         ResponseObject responseObject = new ResponseObject();
-
         responseObject.setStatus(errorCode.getStatus());
         responseObject.setMessage(errorCode.getMessage());
+        responseObject.setData(errors);
 
         return ResponseEntity.badRequest().body(responseObject);
     }
+
 }

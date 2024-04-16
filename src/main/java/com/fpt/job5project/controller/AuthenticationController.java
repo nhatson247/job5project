@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fpt.job5project.dto.AuthenticationDTO;
 import com.fpt.job5project.dto.IntrospectDTO;
+import com.fpt.job5project.dto.LogoutDTO;
 import com.fpt.job5project.dto.ResponseObject;
 import com.fpt.job5project.service.IAuthenticationService;
 import com.nimbusds.jose.JOSEException;
@@ -38,9 +39,18 @@ public class AuthenticationController {
     @PostMapping("/introspect")
     ResponseObject<IntrospectDTO> authenticate(@ModelAttribute IntrospectDTO request)
             throws ParseException, JOSEException {
+
         var result = authenticationService.introspect(request);
         return ResponseObject.<IntrospectDTO>builder()
                 .data(result)
                 .build();
     }
+
+    @PostMapping("/logout")
+    ResponseObject<Void> logout(@ModelAttribute LogoutDTO request) throws JOSEException, ParseException {
+        authenticationService.logout(request);
+        return ResponseObject.<Void>builder()
+                .build();
+    }
+
 }

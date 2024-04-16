@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.StringJoiner;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,9 +15,12 @@ import org.springframework.stereotype.Service;
 
 import com.fpt.job5project.dto.AuthenticationDTO;
 import com.fpt.job5project.dto.IntrospectDTO;
+import com.fpt.job5project.dto.LogoutDTO;
+import com.fpt.job5project.entity.InvalidatedToken;
 import com.fpt.job5project.entity.User;
 import com.fpt.job5project.exception.AppException;
 import com.fpt.job5project.exception.ErrorCode;
+import com.fpt.job5project.repository.InvalidatedTokenResponsitory;
 import com.fpt.job5project.repository.UserRepository;
 import com.fpt.job5project.service.IAuthenticationService;
 import com.nimbusds.jose.JOSEException;
@@ -35,10 +39,14 @@ import lombok.experimental.NonFinal;
 
 @Service
 @RequiredArgsConstructor
-public class AuthenticationService implements IAuthenticationService {
+public class AuthenticationServiceImpl implements IAuthenticationService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+
+    private InvalidatedTokenResponsitory invalidatedTokenResponsitory;
 
     @NonFinal
     @Value("${com.nimbusds.jwt.signerKey}")
@@ -47,21 +55,20 @@ public class AuthenticationService implements IAuthenticationService {
     public IntrospectDTO introspect(IntrospectDTO request)
             throws JOSEException, ParseException {
         var token = request.getToken();
-
-        // Check chữ ký token
-        JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
-
-        SignedJWT signedJWT = SignedJWT.parse(token);
-
-        // Check thời gian của token
-        Date expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
-
-        var verified = signedJWT.verify(verifier);
+        boolean isValid = true;
 
         // Trả kết quả
+        try {
+            verifyToken(token);
+
+        } catch (Exception e) {
+            isValid = false;
+        }
+
         return IntrospectDTO.builder()
-                .valid(verified && expiryTime.after(new Date()))
+                .valid(isValid)
                 .build();
+
     }
 
     public AuthenticationDTO authenticate(AuthenticationDTO request) {
@@ -83,6 +90,43 @@ public class AuthenticationService implements IAuthenticationService {
                 .build();
     }
 
+    public void logout(LogoutDTO request) throws JOSEException, ParseException {
+        // lấy token đã kiểm tra ở verifyToken
+        var signToken = verifyToken(request.getToken());
+
+        String jit = signToken.getJWTClaimsSet().getJWTID();
+        Date expiryTime = signToken.getJWTClaimsSet().getExpirationTime();
+
+        InvalidatedToken invalidatedToken = InvalidatedToken.builder()
+                .id(jit)
+                .expiryDate(expiryTime)
+                .build();
+
+        invalidatedTokenResponsitory.save(invalidatedToken);
+    }
+
+    // Kiem tra token
+    private SignedJWT verifyToken(String token) throws JOSEException, ParseException {
+
+        // Check chữ ký token
+        JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
+
+        SignedJWT signedJWT = SignedJWT.parse(token);
+
+        // Check thời gian của token
+        Date expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+
+        // Trả về hết hạn thời gian token
+        var verified = signedJWT.verify(verifier);
+        if (!verified && expiryTime.after(new Date()))
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+
+        if (invalidatedTokenResponsitory.existsById(signedJWT.getJWTClaimsSet().getJWTID()))
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+
+        return signedJWT;
+    }
+
     public String generateToken(User user) {
         // Tạo token với thuật toán HS512
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
@@ -94,6 +138,7 @@ public class AuthenticationService implements IAuthenticationService {
                 .issueTime(new Date())
                 .expirationTime(new Date(
                         Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()))
+                .jwtID(UUID.randomUUID().toString())
                 .claim("scope", buildScope(user))
                 .build();
 

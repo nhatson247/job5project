@@ -4,6 +4,7 @@ import java.text.ParseException;
 
 import com.fpt.job5project.dto.AuthenticationDTO;
 import com.fpt.job5project.dto.IntrospectDTO;
+import com.fpt.job5project.dto.LogoutDTO;
 import com.fpt.job5project.entity.User;
 import com.nimbusds.jose.JOSEException;
 
@@ -13,4 +14,6 @@ public interface IAuthenticationService {
     public String generateToken(User user);
 
     public IntrospectDTO introspect(IntrospectDTO request) throws JOSEException, ParseException;
+
+    public void logout(LogoutDTO request) throws JOSEException, ParseException;
 }

@@ -16,8 +16,6 @@ public enum ErrorCode {
     CATEGORY_NAME_NOT_NULL(402, "Category name can't be null", HttpStatus.BAD_REQUEST),
 
     // User error code
-    USERNAME_INVALID(401, "username is required", HttpStatus.BAD_REQUEST),
-    PASSWORD_INVALID(401, "Password is required", HttpStatus.BAD_REQUEST),
     USER_EXISTED(401, "User already existed", HttpStatus.BAD_REQUEST),
     USER_NOT_EXISTED(1005, "User not existed", HttpStatus.NOT_FOUND),
 

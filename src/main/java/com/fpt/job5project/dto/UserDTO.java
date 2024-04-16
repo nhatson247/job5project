@@ -1,10 +1,8 @@
 package com.fpt.job5project.dto;
 
-import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -21,11 +19,11 @@ import lombok.experimental.FieldDefaults;
 public class UserDTO {
     long userId;
 
-    @NotEmpty(message = "USERNAME_INVALID")
+    @NotEmpty(message = "Username is required")
     String userName;
 
     @JsonIgnore
-    @NotEmpty(message = "PASSWORD_INVALID")
+    @NotEmpty(message = "Password is required")
     String password;
 
     Set<String> roles;
