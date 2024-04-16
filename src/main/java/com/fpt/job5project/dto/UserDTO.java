@@ -28,8 +28,6 @@ public class UserDTO {
     @NotEmpty(message = "PASSWORD_INVALID")
     String password;
 
-    List<String> rolesString;
-
-    Set<RoleDTO> roles;
+    Set<String> roles;
 
 }

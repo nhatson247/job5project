@@ -16,7 +16,7 @@ import com.fpt.job5project.entity.User;
 import com.fpt.job5project.exception.AppException;
 import com.fpt.job5project.exception.ErrorCode;
 import com.fpt.job5project.mapper.UserMapper;
-import com.fpt.job5project.repository.RoleRepository;
+
 import com.fpt.job5project.repository.UserRepository;
 import com.fpt.job5project.service.IUserService;
 
@@ -29,11 +29,7 @@ public class UserServiceImpl implements IUserService {
     private UserRepository userRepository;
 
     @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
-
-    private PasswordEncoder passwordEncoder;
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     private UserMapper userMapper;
@@ -66,6 +62,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public UserDTO addUser(UserDTO request) {
+
         if (userRepository.existsByUserName(request.getUserName()))
             throw new AppException(ErrorCode.USER_EXISTED);
 
@@ -76,7 +73,7 @@ public class UserServiceImpl implements IUserService {
         HashSet<String> roles = new HashSet<>();
         roles.add(Role.USER.name());
 
-        // user.setRoles(roles);
+        user.setRoles(roles);
         return userMapper.toUserDTO(userRepository.save(user));
     }
 
@@ -86,11 +83,7 @@ public class UserServiceImpl implements IUserService {
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         userMapper.updateUser(user, request);
-
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-
-        var roles = roleRepository.findAllById(request.getRolesString());
-        user.setRoles(new HashSet<>(roles));
 
         return userMapper.toUserDTO(userRepository.save(user));
     }

@@ -28,7 +28,7 @@ public class ApplicationInitConfig {
                 User user = User.builder()
                         .userName("ADMIN")
                         .password(passwordEncoder.encode("ADMIN"))
-                        // .roles(roles)
+                        .roles(roles)
                         .build();
 
                 userRepository.save(user);

@@ -1,15 +1,16 @@
 package com.fpt.job5project.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.Nationalized;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "industries")
 public class Industry {
@@ -22,7 +23,9 @@ public class Industry {
     @Column(name = "industryname", nullable = false)
     private String industryName;
 
-    @OneToMany(mappedBy = "industry")
-    private Set<Job> jobs = new LinkedHashSet<>();
+    //    @OneToMany(mappedBy = "industry")
+//    private Set<Job> jobs = new LinkedHashSet<>();
+//    @ManyToMany
+//    private Set<Job> jobs = new LinkedHashSet<>();
 
 }

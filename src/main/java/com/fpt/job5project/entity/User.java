@@ -22,15 +22,11 @@ public class User {
     @Column(name = "userid", nullable = false)
     long userId;
 
-    // @MapsId
-    // @OneToOne(fetch = FetchType.LAZY, optional = false)
-    // @JoinColumn(name = "userid", nullable = false)
-    // Candidate candidate;
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    private Employer employer;
 
-    // @MapsId
-    // @OneToOne(fetch = FetchType.LAZY, optional = false)
-    // @JoinColumn(name = "employerid", nullable = false)
-    // Employer employer;
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    private Candidate candidate;
 
     @NotNull
     @Column(name = "username", nullable = false)
@@ -41,7 +37,6 @@ public class User {
     @Column(name = "password", nullable = false)
     String password;
 
-    @ManyToMany
-    Set<Role> roles;
+    Set<String> roles;
 
 }

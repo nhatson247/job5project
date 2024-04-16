@@ -2,16 +2,17 @@ package com.fpt.job5project.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.Nationalized;
 
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "jobs")
 public class Job {
@@ -68,10 +69,12 @@ public class Job {
     @JoinColumn(name = "location", nullable = false)
     private Province province;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "industryid", nullable = false)
-    private Industry industry;
+    // @NotNull
+    // @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    // @JoinColumn(name = "industryid", nullable = false)
+    // private Industry industry;
+    @ManyToMany
+    private Set<Industry> industries = new LinkedHashSet<>();
 
     @Column(name = "isexpired")
     private boolean isExpired;

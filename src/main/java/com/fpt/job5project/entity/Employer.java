@@ -2,22 +2,29 @@ package com.fpt.job5project.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.Nationalized;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "employers")
 public class Employer {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "employerid", nullable = false)
     private long employerId;
+
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "employerid", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private User user;
 
     @NotNull
     @Nationalized
@@ -64,8 +71,5 @@ public class Employer {
 
     @OneToMany(mappedBy = "employer")
     private Set<Job> jobs = new LinkedHashSet<>();
-
-    // @OneToOne(mappedBy = "employer")
-    // private User user;
 
 }
