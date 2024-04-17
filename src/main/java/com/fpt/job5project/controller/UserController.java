@@ -2,6 +2,7 @@ package com.fpt.job5project.controller;
 
 import com.fpt.job5project.dto.UserDTO;
 import com.fpt.job5project.dto.ResponseObject;
+import com.fpt.job5project.dto.UserChangeDTO;
 import com.fpt.job5project.service.IUserService;
 
 import jakarta.validation.Valid;
@@ -11,6 +12,10 @@ import lombok.experimental.FieldDefaults;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties.Authentication;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -22,6 +27,7 @@ public class UserController {
     @Autowired
     IUserService iuserService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     ResponseObject<List<UserDTO>> getUser() {
         return ResponseObject.<List<UserDTO>>builder()
@@ -29,6 +35,7 @@ public class UserController {
                 .build();
     }
 
+    @PostAuthorize("returnObject.userName == authentication.name")
     @GetMapping("/{userId}")
     ResponseObject<UserDTO> getUser(@PathVariable("userId") long userId) {
         return ResponseObject.<UserDTO>builder()
@@ -43,20 +50,23 @@ public class UserController {
                 .build();
     }
 
-    @PostMapping
-    ResponseObject<UserDTO> createUser(@ModelAttribute @Valid UserDTO request) throws Exception {
-        return ResponseObject.<UserDTO>builder()
-                .data(iuserService.addUser(request))
-                .build();
-    }
-
     @PutMapping("/{userId}")
-    ResponseObject<UserDTO> updateUser(@PathVariable long userId, @ModelAttribute UserDTO request) {
+    ResponseObject<UserDTO> updateUser(@PathVariable long userId, @ModelAttribute @Valid UserDTO request) {
         return ResponseObject.<UserDTO>builder()
                 .data(iuserService.updateUser(userId, request))
                 .build();
     }
 
+    @PostMapping("/change-password/{userId}")
+    public ResponseObject<?> changePassword(@Valid @ModelAttribute UserChangeDTO request,
+            @PathVariable long userId) {
+        iuserService.changePassword(userId, request);
+        return ResponseObject.<String>builder()
+                .data("User has been changed")
+                .build();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{userId}")
     ResponseObject<String> deleteUser(@PathVariable long userId) {
         iuserService.deleteUser(userId);

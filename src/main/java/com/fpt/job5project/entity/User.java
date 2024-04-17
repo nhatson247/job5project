@@ -6,7 +6,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.util.Set;
-
 import org.hibernate.annotations.Nationalized;
 
 @Data
@@ -23,10 +22,10 @@ public class User {
     long userId;
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
-    private Employer employer;
+    Employer employer;
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
-    private Candidate candidate;
+    Candidate candidate;
 
     @NotNull
     @Column(name = "username", nullable = false)
@@ -36,6 +35,9 @@ public class User {
     @Nationalized
     @Column(name = "password", nullable = false)
     String password;
+
+    @Column(name = "islocked")
+    boolean isLocked;
 
     Set<String> roles;
 

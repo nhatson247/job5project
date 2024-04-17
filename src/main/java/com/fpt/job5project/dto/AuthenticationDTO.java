@@ -19,6 +19,8 @@ public class AuthenticationDTO {
 
     @NotEmpty(message = "Password is required")
     String password;
+
     String token;
+
     boolean authenticated;
 }

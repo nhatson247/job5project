@@ -24,6 +24,6 @@ public class InvalidatedToken {
 
     @Id
     String id;
-    Date expiryDate;
+    Date expiryTime;
 
 }

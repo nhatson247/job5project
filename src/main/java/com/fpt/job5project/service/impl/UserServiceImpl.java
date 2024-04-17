@@ -4,13 +4,12 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.fpt.job5project.enums.Role;
+import com.fpt.job5project.dto.UserChangeDTO;
 import com.fpt.job5project.dto.UserDTO;
 import com.fpt.job5project.entity.User;
 import com.fpt.job5project.exception.AppException;
@@ -34,7 +33,6 @@ public class UserServiceImpl implements IUserService {
     @Autowired
     private UserMapper userMapper;
 
-    @PreAuthorize("hasRole('ADMIN')")
     @Override
     public List<UserDTO> listOfUsers() {
         return userRepository.findAll().stream()
@@ -42,7 +40,6 @@ public class UserServiceImpl implements IUserService {
     }
 
     // Check tài khoản có đúng quyền truy cập không
-    @PostAuthorize("returnObject.userName == authentication.name")
     @Override
     public UserDTO getUserID(long id) {
         return userMapper.toUserDTO(userRepository.findById(id)
@@ -79,6 +76,10 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public UserDTO updateUser(long id, UserDTO request) {
+
+        if (!checkAccount(id))
+            throw new AppException(ErrorCode.UNAUTHORIZED);
+
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
@@ -91,6 +92,43 @@ public class UserServiceImpl implements IUserService {
     @Override
     public void deleteUser(long id) {
         userRepository.deleteById(id);
+    }
+
+    private boolean checkAccount(long userId) {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String currentUsername = authentication.getName();
+
+        // Admin có quyền truy cập
+        if (authentication.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"))) {
+            return true;
+        }
+
+        // Người dùng chỉ có thể chỉnh sửa chính mình
+        User currentUser = userRepository.findByUserName(currentUsername)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        return currentUser.getUserId() == userId;
+    }
+
+    public void changePassword(long userId, UserChangeDTO request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        // Kiểm tra mật khẩu cũ có chính xác không
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new AppException(ErrorCode.PASSWORD_INCORRECT);
+        }
+
+        // Kiểm tra mật khẩu mới và xác nhận mật khẩu mới có trùng nhau không
+        if (!request.getNewPassword().equals(request.getConfirmNewPassword())) {
+            throw new AppException(ErrorCode.PASSWORD_MISMATCH);
+        }
+
+        // Cập nhật mật khẩu mới
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
     }
 
 }

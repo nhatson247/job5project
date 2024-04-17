@@ -1,8 +1,5 @@
 package com.fpt.job5project.dto;
 
-import java.util.Set;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -16,18 +13,13 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserDTO {
-    long userId;
-
-    @NotEmpty(message = "Username is required")
-    String userName;
-
-    @JsonIgnore
-    @NotEmpty(message = "Password is required")
+public class UserChangeDTO {
+    @NotEmpty(message = "Old Password is required")
     String password;
 
-    boolean isLocked;
+    @NotEmpty(message = "New Password is required")
+    String newPassword;
 
-    Set<String> roles;
-
+    @NotEmpty(message = "Confirm New Password is required")
+    String confirmNewPassword;
 }

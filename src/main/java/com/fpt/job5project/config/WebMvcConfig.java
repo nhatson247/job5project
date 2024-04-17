@@ -9,11 +9,7 @@
 
 // @Override
 // public void addCorsMappings(CorsRegistry registry) {
-// registry.addMapping("/auth/token")
-// .allowedOrigins("http://localhost:5173")
-// .allowedMethods("*")
-// .allowCredentials(true);
-// registry.addMapping("/users")
+// registry.addMapping("/**")
 // .allowedOrigins("http://localhost:5173")
 // .allowedMethods("*")
 // .allowCredentials(true);

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.fpt.job5project.dto.AuthenticationDTO;
 import com.fpt.job5project.dto.IntrospectDTO;
 import com.fpt.job5project.dto.LogoutDTO;
+import com.fpt.job5project.dto.RefreshDTO;
 import com.fpt.job5project.entity.InvalidatedToken;
 import com.fpt.job5project.entity.User;
 import com.fpt.job5project.exception.AppException;
@@ -72,7 +73,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
     }
 
     public AuthenticationDTO authenticate(AuthenticationDTO request) {
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(5);
         var user = userRepository.findByUserName(request.getUserName())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
@@ -80,7 +81,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
                 user.getPassword());
 
         if (!authenticated)
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
+            throw new AppException(ErrorCode.USER_INVALID);
 
         var token = generateToken(user);
 
@@ -99,7 +100,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 
         InvalidatedToken invalidatedToken = InvalidatedToken.builder()
                 .id(jit)
-                .expiryDate(expiryTime)
+                .expiryTime(expiryTime)
                 .build();
 
         invalidatedTokenResponsitory.save(invalidatedToken);
@@ -125,6 +126,34 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
 
         return signedJWT;
+    }
+
+    // TO DO: RESERT TOKEN
+    public AuthenticationDTO refreshToken(RefreshDTO request)
+            throws ParseException, JOSEException {
+        var signedJWT = verifyToken(request.getToken());
+
+        var jit = signedJWT.getJWTClaimsSet().getJWTID();
+        var expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+
+        InvalidatedToken invalidatedToken = InvalidatedToken.builder()
+                .id(jit)
+                .expiryTime(expiryTime)
+                .build();
+
+        invalidatedTokenResponsitory.save(invalidatedToken);
+
+        var username = signedJWT.getJWTClaimsSet().getSubject();
+
+        var user = userRepository.findByUserName(username).orElseThrow(
+                () -> new AppException(ErrorCode.UNAUTHENTICATED));
+
+        var token = generateToken(user);
+
+        return AuthenticationDTO.builder()
+                .token(token)
+                .authenticated(true)
+                .build();
     }
 
     public String generateToken(User user) {
