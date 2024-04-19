@@ -12,10 +12,8 @@ import lombok.experimental.FieldDefaults;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties.Authentication;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -35,7 +33,6 @@ public class UserController {
                 .build();
     }
 
-    @PostAuthorize("returnObject.userName == authentication.name")
     @GetMapping("/{userId}")
     ResponseObject<UserDTO> getUser(@PathVariable("userId") long userId) {
         return ResponseObject.<UserDTO>builder()
@@ -57,8 +54,8 @@ public class UserController {
                 .build();
     }
 
-    @PostMapping("/change-password/{userId}")
-    public ResponseObject<?> changePassword(@Valid @ModelAttribute UserChangeDTO request,
+    @PostMapping("/{userId}")
+    public ResponseObject<String> changePassword(@Valid @ModelAttribute UserChangeDTO request,
             @PathVariable long userId) {
         iuserService.changePassword(userId, request);
         return ResponseObject.<String>builder()

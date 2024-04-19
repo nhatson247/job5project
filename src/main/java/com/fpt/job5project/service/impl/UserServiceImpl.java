@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,14 +40,15 @@ public class UserServiceImpl implements IUserService {
                 .map(userMapper::toUserDTO).toList();
     }
 
-    // Check tài khoản có đúng quyền truy cập không
+    // TO DO: Check tài khoản có đúng quyền truy cập không
+    @PostAuthorize("returnObject.userName == authentication.name")
     @Override
     public UserDTO getUserID(long id) {
         return userMapper.toUserDTO(userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_EXISTED)));
     }
 
-    // Gọi thông tin tài khoản chính chủ
+    // TO DO: Gọi thông tin tài khoản chính chủ
     public UserDTO getMyInfo() {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
@@ -94,6 +96,22 @@ public class UserServiceImpl implements IUserService {
         userRepository.deleteById(id);
     }
 
+    public void changePassword(long userId, UserChangeDTO request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new AppException(ErrorCode.PASSWORD_INCORRECT);
+        }
+
+        if (!request.getNewPassword().equals(request.getConfirmNewPassword())) {
+            throw new AppException(ErrorCode.PASSWORD_MISMATCH);
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+    }
+
     private boolean checkAccount(long userId) {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -110,25 +128,6 @@ public class UserServiceImpl implements IUserService {
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         return currentUser.getUserId() == userId;
-    }
-
-    public void changePassword(long userId, UserChangeDTO request) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-
-        // Kiểm tra mật khẩu cũ có chính xác không
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new AppException(ErrorCode.PASSWORD_INCORRECT);
-        }
-
-        // Kiểm tra mật khẩu mới và xác nhận mật khẩu mới có trùng nhau không
-        if (!request.getNewPassword().equals(request.getConfirmNewPassword())) {
-            throw new AppException(ErrorCode.PASSWORD_MISMATCH);
-        }
-
-        // Cập nhật mật khẩu mới
-        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
-        userRepository.save(user);
     }
 
 }
