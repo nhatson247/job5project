@@ -37,7 +37,8 @@ public class UserServiceImpl implements IUserService {
     @Override
     public List<UserDTO> listOfUsers() {
         return userRepository.findAll().stream()
-                .map(userMapper::toUserDTO).toList();
+                .map(userMapper::toUserDTO)
+                .toList();
     }
 
     // TO DO: Check tài khoản có đúng quyền truy cập không
