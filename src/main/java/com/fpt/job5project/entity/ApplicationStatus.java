@@ -5,7 +5,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.Nationalized;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -20,12 +22,11 @@ public class ApplicationStatus {
     @Column(name = "status", nullable = false)
     private long status;
 
-    @NotNull
     @Nationalized
     @Column(name = "description", nullable = false)
     private String description;
 
     @OneToMany(mappedBy = "applicationStatus")
-    private Set<Application> applications = new LinkedHashSet<>();
+    private List<Application> applications = new ArrayList<>();
 
 }

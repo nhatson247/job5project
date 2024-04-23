@@ -18,24 +18,29 @@ public class Application {
     @Column(name = "applicationid", nullable = false)
     private long applicationId;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "jobid", nullable = false)
+    @ManyToOne(targetEntity = Job.class)
+    @JoinColumn(name = "jobid", insertable = false, updatable = false)
     private Job job;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "candidateid", nullable = false)
+    @Column(name = "jobid", nullable = false)
+    private long jobId;
+
+    @ManyToOne(targetEntity = Candidate.class)
+    @JoinColumn(name = "candidateid", insertable = false, updatable = false)
     private Candidate candidate;
 
-    @NotNull
+    @Column(name = "candidateid", nullable = false)
+    private long candidateId;
+
     @Column(name = "applicationdate", nullable = false)
     private Date applicationDate;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "status", nullable = false)
+    @ManyToOne(targetEntity = ApplicationStatus.class)
+    @JoinColumn(name = "status", insertable = false, updatable = false)
     private ApplicationStatus applicationStatus;
+
+    @Column(name = "status", nullable = false)
+    private long status;
 
     @Column(name = "cv")
     private String cv;

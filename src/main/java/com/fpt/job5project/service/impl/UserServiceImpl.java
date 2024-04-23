@@ -1,6 +1,5 @@
 package com.fpt.job5project.service.impl;
 
-import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +8,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.fpt.job5project.enums.Role;
 import com.fpt.job5project.dto.UserChangeDTO;
 import com.fpt.job5project.dto.UserDTO;
 import com.fpt.job5project.entity.User;
@@ -70,10 +68,10 @@ public class UserServiceImpl implements IUserService {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(5);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        HashSet<String> roles = new HashSet<>();
-        roles.add(Role.USER.name());
+        // HashSet<String> roles = new HashSet<>();
+        // roles.add(Role.USER.name());
 
-        user.setRoles(roles);
+        // user.setRoles(roles);
         return userMapper.toUserDTO(userRepository.save(user));
     }
 

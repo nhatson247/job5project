@@ -1,0 +1,20 @@
+package com.fpt.job5project.service;
+
+import com.fpt.job5project.dto.EmployerDTO;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+
+
+public interface IEmployerService {
+    public List<EmployerDTO> listOfEmployers();
+
+    public EmployerDTO getEmployer(long id);
+
+    public EmployerDTO addEmployer(EmployerDTO employerDTO);
+
+    public EmployerDTO updateEmployer(long id, EmployerDTO employerDTO,MultipartFile photo, MultipartFile background);
+
+    public void deleteEmployer(long id);
+
+}

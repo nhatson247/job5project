@@ -1,15 +1,12 @@
 package com.fpt.job5project.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.util.Date;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @AllArgsConstructor
@@ -27,13 +24,11 @@ public class Candidate {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
-    @NotNull
     @Nationalized
-    @Column(name = "fullname", nullable = false)
+    @Column(name = "fullname")
     private String fullName;
 
-    @NotNull
-    @Column(name = "birthdate", nullable = false)
+    @Column(name = "birthdate")
     private Date birthDate;
 
     @Column(name = "yearexpirence")
@@ -43,34 +38,36 @@ public class Candidate {
     @Column(name = "bio")
     private String bio;
 
-    @NotNull
-    @Column(name = "phone", nullable = false)
+    @Column(name = "phone")
     private String phone;
 
-    @NotNull
-    @Column(name = "email", nullable = false)
+    @Column(name = "email")
     private String email;
 
     @Column(name = "photo")
     private String photo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "provincename")
+    @ManyToOne(targetEntity = Province.class)
+    @JoinColumn(name = "provincename", insertable = false, updatable = false)
     private Province province;
+
+    @Column(name = "provincename")
+    @Nationalized
+    private String provinceName;
 
     @Nationalized
     @Column(name = "address")
     private String address;
 
     @OneToMany(mappedBy = "candidate")
-    private Set<Application> applications = new LinkedHashSet<>();
+    private List<Application> applications = new ArrayList<>();
 
     @OneToMany(mappedBy = "candidate")
-    private Set<CV> cvs = new LinkedHashSet<>();
+    private List<CV> cvs = new ArrayList<>();
 
     @OneToMany(mappedBy = "candidate")
-    private Set<EmployerReview> employerReviews = new LinkedHashSet<>();
+    private List<EmployerReview> employerReviews = new ArrayList<>();
 
     @OneToMany(mappedBy = "candidate")
-    private Set<JobReport> jobReports = new LinkedHashSet<>();
+    private List<JobReport> jobReports = new ArrayList<>();
 }

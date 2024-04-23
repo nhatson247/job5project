@@ -5,9 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.Nationalized;
 
-import java.util.Date;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.time.Instant;
+import java.util.*;
 
 @Data
 @AllArgsConstructor
@@ -21,17 +20,17 @@ public class Job {
     @Column(name = "jobid", nullable = false)
     private long jobId;
 
-    @NotNull
     @Nationalized
     @Column(name = "jobname", nullable = false)
     private String jobName;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "employerid", nullable = false)
+    @ManyToOne(targetEntity = Employer.class)
+    @JoinColumn(name = "employerid", insertable = false, updatable = false)
     private Employer employer;
 
-    @NotNull
+    @Column(name = "employerid", nullable = false)
+    private long employerId;
+
     @Column(name = "postdate", nullable = false)
     private Date postDate;
 
@@ -41,17 +40,17 @@ public class Job {
     @Column(name = "acceptdate")
     private Date acceptDate;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "typeid", nullable = false)
+    @ManyToOne(targetEntity = JobType.class)
+    @JoinColumn(name = "typeid", insertable = false, updatable = false)
     private JobType jobType;
 
-    @NotNull
+    @Column(name = "typeid", nullable = false)
+    private int typeId;
+
     @Nationalized
     @Column(name = "jobposition", nullable = false)
     private String jobPosition;
 
-    @NotNull
     @Column(name = "numposition", nullable = false)
     private int numPosition;
 
@@ -61,18 +60,17 @@ public class Job {
     @Column(name = "maxsalary")
     private long maxSalary;
 
-    @Column(name = "expirence")
-    private int expirence;
+    @Column(name = "yearexpirence")
+    private int yearExpirence;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "location", nullable = false)
+    @ManyToOne(targetEntity = Province.class)
+    @JoinColumn(name = "location", insertable = false, updatable = false)
     private Province province;
 
-    // @NotNull
-    // @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    // @JoinColumn(name = "industryid", nullable = false)
-    // private Industry industry;
+    @Column(name = "location")
+    @Nationalized
+    private String location;
+
     @ManyToMany
     private Set<Industry> industries = new LinkedHashSet<>();
 
@@ -83,21 +81,21 @@ public class Job {
     private boolean isRemoved;
 
     @OneToMany(mappedBy = "job")
-    private Set<Application> applications = new LinkedHashSet<>();
+    private List<Application> applications = new ArrayList<>();
 
     @OneToMany(mappedBy = "job")
-    private Set<JobBenefit> jobBenefits = new LinkedHashSet<>();
+    private List<JobBenefit> jobBenefits = new ArrayList<>();
 
     @OneToMany(mappedBy = "job")
-    private Set<JobDescription> jobDescriptions = new LinkedHashSet<>();
+    private List<JobDescription> jobDescriptions = new ArrayList<>();
 
     @OneToMany(mappedBy = "job")
-    private Set<JobKey> jobKeys = new LinkedHashSet<>();
+    private List<JobKey> jobKeys = new ArrayList<>();
 
     @OneToMany(mappedBy = "job")
-    private Set<JobReport> jobReports = new LinkedHashSet<>();
+    private List<JobReport> jobReports = new ArrayList<>();
 
     @OneToMany(mappedBy = "job")
-    private Set<JobRequirement> jobRequirements = new LinkedHashSet<>();
+    private List<JobRequirement> jobRequirements = new ArrayList<>();
 
 }

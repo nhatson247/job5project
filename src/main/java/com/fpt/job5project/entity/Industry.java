@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Nationalized;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,10 +22,5 @@ public class Industry {
     @Nationalized
     @Column(name = "industryname", nullable = false)
     private String industryName;
-
-    // @OneToMany(mappedBy = "industry")
-    // private Set<Job> jobs = new LinkedHashSet<>();
-    // @ManyToMany
-    // private Set<Job> jobs = new LinkedHashSet<>();
 
 }

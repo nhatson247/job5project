@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AppException extends RuntimeException {
+public class AppException extends RuntimeException{
     private ErrorCode errorCode;
 
 }

@@ -18,17 +18,20 @@ public class JobInterest {
     @Column(name = "jobinterestid", nullable = false)
     private long jobInterestId;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "jobid", nullable = false)
+    @ManyToOne(targetEntity = Job.class)
+    @JoinColumn(name = "jobid", insertable = false, updatable = false)
     private Job job;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "candidateid", nullable = false)
+    @Column(name = "jobid", nullable = false)
+    private long jobId;
+
+    @ManyToOne(targetEntity = Candidate.class)
+    @JoinColumn(name = "candidateid", insertable = false, updatable = false)
     private Candidate candidate;
 
-    @NotNull
+    @Column(name = "candidateid")
+    private long candidateId;
+
     @Column(name = "interestdate", nullable = false)
     private Date interestDate;
 }

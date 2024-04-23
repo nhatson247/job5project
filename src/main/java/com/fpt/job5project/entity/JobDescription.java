@@ -17,12 +17,13 @@ public class JobDescription {
     @Column(name = "descriptionid", nullable = false)
     private long descriptionId;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "jobid", nullable = false)
+    @ManyToOne(targetEntity = Job.class)
+    @JoinColumn(name = "jobid", insertable = false, updatable = false)
     private Job job;
 
-    @NotNull
+    @Column(name = "jobid")
+    private long jobId;
+
     @Nationalized
     @Column(name = "description", nullable = false)
     private String description;

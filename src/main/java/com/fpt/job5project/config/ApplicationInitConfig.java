@@ -7,10 +7,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.fpt.job5project.entity.User;
-import com.fpt.job5project.enums.Role;
-import com.fpt.job5project.repository.UserRepository;
 
-import java.util.HashSet;
+import com.fpt.job5project.repository.UserRepository;
 
 @Configuration
 public class ApplicationInitConfig {
@@ -22,13 +20,10 @@ public class ApplicationInitConfig {
     ApplicationRunner applicationRunner(UserRepository userRepository) {
         return args -> {
             if (userRepository.findByUserName("ADMIN").isEmpty()) {
-                var roles = new HashSet<String>();
-                roles.add(Role.ADMIN.name());
-
                 User user = User.builder()
                         .userName("ADMIN")
                         .password(passwordEncoder.encode("ADMIN"))
-                        .roles(roles)
+                        .role("ADMIN")
                         .build();
 
                 userRepository.save(user);

@@ -3,6 +3,7 @@ package com.fpt.job5project.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.Nationalized;
 
 @Data
 @AllArgsConstructor
@@ -16,10 +17,13 @@ public class CV {
     @Column(name = "cvid", nullable = false)
     private long cvId;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "candidateid", nullable = false)
+    @ManyToOne(targetEntity = Candidate.class)
+    @JoinColumn(name = "candidateid", insertable = false, updatable = false)
     private Candidate candidate;
+
+    @Column(name = "candidateid")
+    private long candidateId;
+
 
     @NotNull
     @Column(name = "cvfile", nullable = false)

@@ -1,5 +1,7 @@
 package com.fpt.job5project.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -7,7 +9,9 @@ import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -21,31 +25,31 @@ public class Employer {
     @Column(name = "employerid", nullable = false)
     private long employerId;
 
+    @MapsId
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "employerid", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
-    @NotNull
     @Nationalized
-    @Column(name = "employername", nullable = false)
+    @Column(name = "employername")
     private String employerName;
 
     @Nationalized
     @Column(name = "description")
     private String description;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "rank", nullable = false)
+    @ManyToOne(targetEntity = Rank.class)
+    @JoinColumn(name = "rankid", insertable = false, updatable = false)
     private Rank rank;
 
-    @NotNull
-    @Column(name = "phone", nullable = false)
+    @Column(name = "rankid", nullable = false)
+    private long rankId;
+
+    @Column(name = "phone")
     private String phone;
 
-    @NotNull
-    @Column(name = "email", nullable = false)
+    @Column(name = "email")
     private String email;
 
     @Column(name = "photo")
@@ -54,9 +58,13 @@ public class Employer {
     @Column(name = "background")
     private String backGround;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "provincename")
+    @ManyToOne(targetEntity = Province.class)
+    @JoinColumn(name = "provincename", insertable = false, updatable = false)
     private Province province;
+
+    @Column(name = "provincename")
+    @Nationalized
+    private String provinceName;
 
     @Nationalized
     @Column(name = "address")
@@ -64,12 +72,13 @@ public class Employer {
 
     @NotNull
     @Column(name = "reviewscore", nullable = false)
-    private int reviewScore;
+    private double reviewScore;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "employer")
+    private List<EmployerReview> employerReviews = new ArrayList<>();
 
     @OneToMany(mappedBy = "employer")
-    private Set<EmployerReview> employerReviews = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "employer")
-    private Set<Job> jobs = new LinkedHashSet<>();
+    private List<Job> jobs = new ArrayList<>();
 
 }

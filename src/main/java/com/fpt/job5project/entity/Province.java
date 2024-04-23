@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Nationalized;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -20,12 +22,12 @@ public class Province {
     private String provinceName;
 
     @OneToMany(mappedBy = "province")
-    private Set<Candidate> candidates = new LinkedHashSet<>();
+    private List<Candidate> candidates = new ArrayList<>();
 
     @OneToMany(mappedBy = "province")
-    private Set<Employer> employers = new LinkedHashSet<>();
+    private List<Employer> employers = new ArrayList<>();
 
     @OneToMany(mappedBy = "province")
-    private Set<Job> jobs = new LinkedHashSet<>();
+    private List<Job> jobs = new ArrayList<>();
 
 }

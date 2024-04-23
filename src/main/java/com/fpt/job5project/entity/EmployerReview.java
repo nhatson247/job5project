@@ -1,8 +1,8 @@
 package com.fpt.job5project.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -18,22 +18,25 @@ public class EmployerReview {
     @Column(name = "reviewid", nullable = false)
     private long reviewId;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "employerid", nullable = false)
+    @ManyToOne(targetEntity = Employer.class)
+    @JoinColumn(name = "employerid", insertable = false, updatable = false)
     private Employer employer;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "candidateid", nullable = false)
+    @Column(name = "employerid")
+    private long employerId;
+
+    @ManyToOne(targetEntity = Candidate.class)
+    @JoinColumn(name = "candidateid", insertable = false, updatable = false)
     private Candidate candidate;
 
-    @NotNull
-    @Column(name = "score", nullable = false)
-    private int score;
+    @Column(name = "candidateid")
+    private long candidateId;
 
-    @NotNull
+    @Column(name = "score", nullable = false)
+    private double score;
+
     @Column(name = "reviewdate", nullable = false)
+    @Temporal(TemporalType.DATE)
     private Date reviewDate;
 
 }

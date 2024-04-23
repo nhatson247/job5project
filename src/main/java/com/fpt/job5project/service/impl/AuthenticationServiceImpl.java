@@ -168,7 +168,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
                 .expirationTime(new Date(
                         Instant.now().plus(4, ChronoUnit.HOURS).toEpochMilli()))
                 .jwtID(UUID.randomUUID().toString())
-                .claim("scope", buildScope(user))
+                .claim("scope", user.getRole())
                 .build();
 
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
@@ -181,15 +181,6 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
         } catch (JOSEException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    // Check role USER || ADMIN
-    private String buildScope(User user) {
-        StringJoiner stringJoiner = new StringJoiner(" ");
-        if (!CollectionUtils.isEmpty(user.getRoles()))
-            user.getRoles().forEach(stringJoiner::add);
-
-        return stringJoiner.toString();
     }
 
 }

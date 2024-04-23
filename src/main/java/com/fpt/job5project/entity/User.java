@@ -39,6 +39,8 @@ public class User {
     @Column(name = "islocked")
     boolean isLocked;
 
-    Set<String> roles;
+    @Column(name = "role", nullable = false)
+    String role;
+    // Set<String> roles;
 
 }
