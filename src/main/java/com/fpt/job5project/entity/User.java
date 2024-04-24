@@ -51,6 +51,5 @@ public class User {
 
     @Column(name = "role", nullable = false)
     String role;
-    // Set<String> roles;
 
 }

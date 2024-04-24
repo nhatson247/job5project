@@ -16,15 +16,16 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 public class GlobalExceptionHandler {
 
     // thông báo lỗi server
-    @ExceptionHandler(value = Exception.class)
-    ResponseEntity<ResponseObject<Void>> handlingRuntimeException(RuntimeException exception) {
-        ResponseObject<Void> apiResponse = new ResponseObject<>();
+    // @ExceptionHandler(value = Exception.class)
+    // ResponseEntity<ResponseObject<Void>>
+    // handlingRuntimeException(RuntimeException exception) {
+    // ResponseObject<Void> apiResponse = new ResponseObject<>();
 
-        apiResponse.setStatus(ErrorCode.UNEXPECTED_ERROR.getStatus());
-        apiResponse.setMessage(ErrorCode.UNEXPECTED_ERROR.getMessage());
+    // apiResponse.setStatus(ErrorCode.UNEXPECTED_ERROR.getStatus());
+    // apiResponse.setMessage(ErrorCode.UNEXPECTED_ERROR.getMessage());
 
-        return ResponseEntity.badRequest().body(apiResponse);
-    }
+    // return ResponseEntity.badRequest().body(apiResponse);
+    // }
 
     // Xử lý ngoại lệ tự định nghĩa
     @ExceptionHandler(value = AppException.class)
