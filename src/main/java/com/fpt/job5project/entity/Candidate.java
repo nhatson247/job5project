@@ -59,15 +59,19 @@ public class Candidate {
     @Column(name = "address")
     private String address;
 
+    @Builder.Default
     @OneToMany(mappedBy = "candidate")
     private List<Application> applications = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "candidate")
     private List<CV> cvs = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "candidate")
     private List<EmployerReview> employerReviews = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "candidate")
     private List<JobReport> jobReports = new ArrayList<>();
 }

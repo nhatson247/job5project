@@ -86,6 +86,7 @@ public class Job {
     @Nationalized
     private String location;
 
+    @Builder.Default
     @ManyToMany
     private Set<Industry> industries = new LinkedHashSet<>();
 
@@ -95,21 +96,27 @@ public class Job {
     @Column(name = "isremoved")
     private boolean isRemoved;
 
+    @Builder.Default
     @OneToMany(mappedBy = "job")
     private List<Application> applications = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "job")
     private List<JobBenefit> jobBenefits = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "job")
     private List<JobDescription> jobDescriptions = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "job")
     private List<JobKey> jobKeys = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "job")
     private List<JobReport> jobReports = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "job")
     private List<JobRequirement> jobRequirements = new ArrayList<>();
 

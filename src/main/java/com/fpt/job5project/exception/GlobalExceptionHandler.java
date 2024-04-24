@@ -15,10 +15,10 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    // TODO thông báo lỗi server
+    // thông báo lỗi server
     @ExceptionHandler(value = Exception.class)
-    ResponseEntity<ResponseObject> handlingRuntimeException(RuntimeException exception) {
-        ResponseObject apiResponse = new ResponseObject();
+    ResponseEntity<ResponseObject<Void>> handlingRuntimeException(RuntimeException exception) {
+        ResponseObject<Void> apiResponse = new ResponseObject<>();
 
         apiResponse.setStatus(ErrorCode.UNEXPECTED_ERROR.getStatus());
         apiResponse.setMessage(ErrorCode.UNEXPECTED_ERROR.getMessage());
@@ -26,13 +26,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(apiResponse);
     }
 
-    // TODO Xử lý ngoại lệ tự định nghĩa
+    // Xử lý ngoại lệ tự định nghĩa
     @ExceptionHandler(value = AppException.class)
-    ResponseEntity<ResponseObject> handlingAppException(AppException exception) {
+    ResponseEntity<ResponseObject<Void>> handlingAppException(AppException exception) {
 
         ErrorCode errorCode = exception.getErrorCode();
 
-        ResponseObject responseObject = new ResponseObject();
+        ResponseObject<Void> responseObject = new ResponseObject<>();
 
         responseObject.setStatus(errorCode.getStatus());
         responseObject.setMessage(errorCode.getMessage());
@@ -40,59 +40,37 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(errorCode.getStatusCode()).body(responseObject);
     }
 
-    // TODO Xử lý quyền truy cập
+    // Xử lý quyền truy cập
     @ExceptionHandler(value = AccessDeniedException.class)
-    ResponseEntity<ResponseObject> handlingAccessDeniedException(AccessDeniedException exception) {
+    ResponseEntity<ResponseObject<Void>> handlingAccessDeniedException(AccessDeniedException exception) {
         ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
 
         return ResponseEntity.status(errorCode.getStatusCode()).body(
-                ResponseObject.builder()
+                ResponseObject.<Void>builder()
                         .status(errorCode.getStatus())
                         .message(errorCode.getMessage())
                         .build());
     }
 
-    // @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    // ResponseEntity<ResponseObject>
-    // handlingValidation(MethodArgumentNotValidException exception) {
-
-    // String enumKey = exception.getFieldError().getDefaultMessage();
-
-    // ErrorCode errorCode = ErrorCode.INVALID_KEY;
-    // try {
-    // errorCode = ErrorCode.valueOf(enumKey);
-    // } catch (IllegalArgumentException e) {
-    // e.getMessage();
-    // }
-
-    // ResponseObject responseObject = new ResponseObject();
-
-    // responseObject.setStatus(errorCode.getStatus());
-    // responseObject.setMessage(errorCode.getMessage());
-
-    // return ResponseEntity.badRequest().body(responseObject);
-    // }
-
     @ExceptionHandler(value = MaxUploadSizeExceededException.class)
-    ResponseEntity<ResponseObject> handlingEntityTooLarge(MaxUploadSizeExceededException exception) {
+    ResponseEntity<ResponseObject<Void>> handlingEntityTooLarge(MaxUploadSizeExceededException exception) {
 
-        ResponseObject responseObject = new ResponseObject();
+        ResponseObject<Void> responseObject = new ResponseObject<>();
         ErrorCode errorCode = ErrorCode.FILE_CAPATICY_TOO_BIG;
         responseObject.setStatus(errorCode.getStatus());
         responseObject.setMessage(errorCode.getMessage());
         return ResponseEntity.badRequest().body(responseObject);
     }
 
-    // TODO thông báo lỗi từ các trường requested
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public ResponseEntity<ResponseObject> handlingValidation(MethodArgumentNotValidException exception) {
+    public ResponseEntity<ResponseObject<List<String>>> handlingValidation(MethodArgumentNotValidException exception) {
         List<String> errors = exception.getBindingResult().getFieldErrors().stream()
                 .map(FieldError::getDefaultMessage)
                 .collect(Collectors.toList());
 
-        ErrorCode errorCode = ErrorCode.INVALID_KEY;
+        ErrorCode errorCode = ErrorCode.INVALID_KEY; // Use a more appropriate error code for validation errors
 
-        ResponseObject responseObject = new ResponseObject();
+        ResponseObject<List<String>> responseObject = new ResponseObject<>();
         responseObject.setStatus(errorCode.getStatus());
         responseObject.setMessage(errorCode.getMessage());
         responseObject.setData(errors);

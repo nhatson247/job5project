@@ -20,7 +20,7 @@ public class EmployerController {
 
     IEmployerService iEmployerService;
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseObject<List<EmployerDTO>> listEmployers() {
 
         ResponseObject<List<EmployerDTO>> responseObject = new ResponseObject<>();
@@ -37,7 +37,6 @@ public class EmployerController {
         responseObject.setData(iEmployerService.getEmployer(id));
         return responseObject;
     }
-
 
     @PostMapping("/Create")
     public ResponseObject<EmployerDTO> addEmployer(@ModelAttribute @Valid EmployerDTO newEmployer) {
@@ -57,7 +56,9 @@ public class EmployerController {
     }
 
     @PutMapping("/Update/{id}")
-    public ResponseObject<EmployerDTO> updateEmployer(@PathVariable("id") Long id, @ModelAttribute EmployerDTO employerDTO, @ModelAttribute("filePhoto") MultipartFile filePhoto, @ModelAttribute("fileBackground") MultipartFile fileBackground) {
+    public ResponseObject<EmployerDTO> updateEmployer(@PathVariable("id") Long id,
+            @ModelAttribute EmployerDTO employerDTO, @ModelAttribute("filePhoto") MultipartFile filePhoto,
+            @ModelAttribute("fileBackground") MultipartFile fileBackground) {
         System.out.println("alo");
         ResponseObject<EmployerDTO> responseObject = new ResponseObject<>();
         responseObject.setData(iEmployerService.updateEmployer(id, employerDTO, filePhoto, fileBackground));

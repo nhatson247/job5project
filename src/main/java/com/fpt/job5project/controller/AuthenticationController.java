@@ -2,7 +2,6 @@ package com.fpt.job5project.controller;
 
 import java.text.ParseException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,10 +28,8 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationController {
 
-    @Autowired
     IAuthenticationService authenticationService;
 
-    @Autowired
     IUserService iUserService;
 
     @PostMapping("/login")
@@ -44,7 +41,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    ResponseObject<UserDTO> createUser(@ModelAttribute @Valid UserDTO request) throws Exception {
+    ResponseObject<UserDTO> createUser(@ModelAttribute @Valid UserDTO request) {
         return ResponseObject.<UserDTO>builder()
                 .data(iUserService.addUser(request))
                 .build();

@@ -35,12 +35,10 @@ public enum ErrorCode {
     PASSWORD_MISMATCH(402, "Password mismatch", HttpStatus.BAD_REQUEST),
     USER_EXISTED(401, "User already existed", HttpStatus.BAD_REQUEST),
 
-    USERNAME_NOT_NULL(701, "Username can't be null", HttpStatus.BAD_REQUEST),
-    PASSWORD_NOT_NULL(702, "Password can't be null", HttpStatus.BAD_REQUEST),
-    ROLE_NOT_NULL(703, "Role can't be null", HttpStatus.BAD_REQUEST),
     USERNAME_EXISTED(704, "Username already existed", HttpStatus.BAD_REQUEST),
     USER_NOT_EXISTED(705, "User doesn't exist", HttpStatus.NOT_FOUND),
 
+    // Mail
     EMAIL_NOT_NULL(705, "Email can't be null", HttpStatus.BAD_REQUEST),
     PHONE_NOT_NULL(706, "Phone can't be null", HttpStatus.BAD_REQUEST),
     EMAIL_EXISTED(705, "Email already existed", HttpStatus.BAD_REQUEST),

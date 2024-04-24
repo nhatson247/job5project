@@ -33,6 +33,7 @@ public class JobType {
     @Column(name = "type", nullable = false)
     private String type;
 
+    @Builder.Default
     @OneToMany(mappedBy = "jobType")
     private List<Job> jobs = new ArrayList<>();
 

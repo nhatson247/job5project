@@ -40,6 +40,7 @@ public class Rank {
     private String description;
 
     @JsonIgnore
+    @Builder.Default
     @OneToMany(mappedBy = "rank")
     private List<Employer> employers = new ArrayList<>();
 

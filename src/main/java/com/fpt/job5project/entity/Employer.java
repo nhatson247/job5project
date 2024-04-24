@@ -86,9 +86,11 @@ public class Employer {
     private double reviewScore;
 
     @JsonIgnore
+    @Builder.Default
     @OneToMany(mappedBy = "employer")
     private List<EmployerReview> employerReviews = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "employer")
     private List<Job> jobs = new ArrayList<>();
 

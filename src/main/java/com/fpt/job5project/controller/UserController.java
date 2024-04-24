@@ -62,7 +62,7 @@ public class UserController {
                 .build();
     }
 
-    @PreAuthorize("hasRole('1')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{userId}")
     ResponseObject<String> deleteUser(@PathVariable long userId) {
         iuserService.deleteUser(userId);

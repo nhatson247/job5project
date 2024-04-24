@@ -1,5 +1,8 @@
 package com.fpt.job5project.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,14 +16,15 @@ import lombok.NoArgsConstructor;
 public class UserDTO {
     private long userId;
 
-    @NotNull(message = "USERNAME_NOT_NULL")
+    @NotEmpty(message = "Username is required")
     private String userName;
 
-    @NotNull(message = "PASSWORD_NOT_NULL")
+    @JsonIgnore
+    @NotEmpty(message = "Password is required")
     private String password;
 
     boolean isLocked;
 
-    @NotNull(message = "ROLE_NOT_NULL")
+    @NotEmpty(message = "Role is required")
     String role;
 }

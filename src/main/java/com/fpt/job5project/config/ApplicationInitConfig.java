@@ -1,6 +1,5 @@
 package com.fpt.job5project.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,16 +12,21 @@ import com.fpt.job5project.repository.UserRepository;
 @Configuration
 public class ApplicationInitConfig {
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    private static final String ACCOUNT_ADMIN = "ADMIN";
+
+    private final PasswordEncoder passwordEncoder;
+
+    ApplicationInitConfig(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Bean
     ApplicationRunner applicationRunner(UserRepository userRepository) {
         return args -> {
-            if (userRepository.findByUserName("ADMIN").isEmpty()) {
+            if (userRepository.findByUserName(ACCOUNT_ADMIN).isEmpty()) {
                 User user = User.builder()
-                        .userName("ADMIN")
-                        .password(passwordEncoder.encode("ADMIN"))
+                        .userName(ACCOUNT_ADMIN)
+                        .password(passwordEncoder.encode(ACCOUNT_ADMIN))
                         .role("ADMIN")
                         .build();
 

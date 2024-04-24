@@ -27,12 +27,15 @@ public class Province {
     @Column(name = "provincename", nullable = false)
     private String provinceName;
 
+    @Builder.Default
     @OneToMany(mappedBy = "province")
     private List<Candidate> candidates = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "province")
     private List<Employer> employers = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "province")
     private List<Job> jobs = new ArrayList<>();
 

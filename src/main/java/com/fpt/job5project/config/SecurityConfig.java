@@ -1,6 +1,5 @@
 package com.fpt.job5project.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -19,18 +18,26 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private final String[] PUBLIC_ENDPOINTS = { "/users",
-            "/auth/login", "/auth/register", "/auth/introspect", "/auth/logout", "/auth/refresh"
+    private static final String[] publicEndpoints = { "/users",
+            "/auth/login", "/auth/register", "/auth/introspect", "/auth/logout", "/auth/refresh",
+            "/api/Employer"
     };
 
-    @Autowired
-    CustomJwtDecoder customJwtDecoder;
+    private final CustomJwtDecoder customJwtDecoder;
+
+    SecurityConfig(CustomJwtDecoder customJwtDecoder) {
+        this.customJwtDecoder = customJwtDecoder;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(
-                request -> request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
+                request -> request.requestMatchers(HttpMethod.POST, publicEndpoints).permitAll()
                         .anyRequest().authenticated());
+
+        // truy cập tất cả phương thức
+        // request -> request.requestMatchers( publicEndpoints).permitAll()
+        // .anyRequest().authenticated());
 
         // Support Token
         httpSecurity.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(customJwtDecoder)

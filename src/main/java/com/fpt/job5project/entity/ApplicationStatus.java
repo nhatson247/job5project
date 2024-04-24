@@ -33,6 +33,7 @@ public class ApplicationStatus {
     @Column(name = "description", nullable = false)
     private String description;
 
+    @Builder.Default
     @OneToMany(mappedBy = "applicationStatus")
     private List<Application> applications = new ArrayList<>();
 
