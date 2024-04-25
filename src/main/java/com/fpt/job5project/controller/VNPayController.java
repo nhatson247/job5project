@@ -32,7 +32,7 @@ public class VNPayController {
     }
 
     @GetMapping("/vnpay-payment")
-    public String GetMapping(HttpServletRequest request, Model model) {
+    public ResponseObject<String> handleVnPayPayment(HttpServletRequest request, Model model) {
         int paymentStatus = vnPayService.orderReturn(request);
 
         String orderInfo = request.getParameter("vnp_OrderInfo");
@@ -45,7 +45,16 @@ public class VNPayController {
         model.addAttribute("paymentTime", paymentTime);
         model.addAttribute("transactionId", transactionId);
 
-        return paymentStatus == 1 ? "ordersuccess" : "orderfail";
+        if (paymentStatus == 1) {
+            return ResponseObject.<String>builder()
+                    .message("Payment Successful")
+                    .data(null)
+                    .build();
+        } else {
+            return ResponseObject.<String>builder()
+                    .message("Payment failed")
+                    .data(null)
+                    .build();
+        }
     }
-
 }

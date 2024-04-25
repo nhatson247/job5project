@@ -34,6 +34,7 @@ public enum ErrorCode {
     PASSWORD_INCORRECT(402, "Password incorrect", HttpStatus.BAD_REQUEST),
     PASSWORD_MISMATCH(402, "Password mismatch", HttpStatus.BAD_REQUEST),
     USER_EXISTED(401, "User already existed", HttpStatus.BAD_REQUEST),
+    USER_ALREADY_LOCKED(403, "User already locked", HttpStatus.BAD_REQUEST),
 
     USERNAME_EXISTED(704, "Username already existed", HttpStatus.BAD_REQUEST),
     USER_NOT_EXISTED(705, "User doesn't exist", HttpStatus.NOT_FOUND),

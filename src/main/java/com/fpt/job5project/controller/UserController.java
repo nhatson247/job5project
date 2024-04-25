@@ -67,7 +67,15 @@ public class UserController {
     ResponseObject<String> deleteUser(@PathVariable long userId) {
         iuserService.deleteUser(userId);
         return ResponseObject.<String>builder()
-                .data("Category has been deleted")
+                .data("User has been deleted")
+                .build();
+    }
+
+    @PostMapping("/lock/{userId}")
+    public ResponseObject<String> lockUserAccount(@PathVariable("userId") long userId) {
+        iuserService.lockAccount(userId);
+        return ResponseObject.<String>builder()
+                .data("User has been locked")
                 .build();
     }
 }

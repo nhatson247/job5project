@@ -22,5 +22,5 @@ public interface IUserService {
 
     public void changePassword(long userId, UserChangeDTO request);
 
-    // public boolean checkAccount(long userId);
+    public void lockAccount(long userId);
 }

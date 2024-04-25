@@ -46,8 +46,8 @@ public class User {
     @Column(name = "password", nullable = false)
     String password;
 
-    @Column(name = "islocked")
-    boolean isLocked;
+    @Column(name = "blocked")
+    boolean blocked;
 
     @Column(name = "role", nullable = false)
     String role;

@@ -40,7 +40,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     // TO DO: Check tài khoản có đúng quyền truy cập không
-    @PostAuthorize("returnObject.userName == authentication.name")
+    @PostAuthorize("returnObject.userName == authentication.name or hasAuthority('ROLE_ADMIN')")
     @Override
     public UserDTO getUserID(long id) {
         return userMapper.toUserDTO(userRepository.findById(id)
@@ -68,10 +68,6 @@ public class UserServiceImpl implements IUserService {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(5);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        // HashSet<String> roles = new HashSet<>();
-        // roles.add(Role.USER.name());
-
-        // user.setRoles(roles);
         return userMapper.toUserDTO(userRepository.save(user));
     }
 
@@ -109,6 +105,19 @@ public class UserServiceImpl implements IUserService {
 
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
+    }
+
+    @Override
+    public void lockAccount(long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        if (user.isBlocked()) {
+            throw new AppException(ErrorCode.USER_ALREADY_LOCKED);
+        }
+
+        user.setBlocked(true);
+        userMapper.toUserDTO(userRepository.save(user));
     }
 
     private boolean checkAccount(long userId) {

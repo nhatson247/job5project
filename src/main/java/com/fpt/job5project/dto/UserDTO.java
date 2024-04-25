@@ -22,7 +22,7 @@ public class UserDTO {
     @NotEmpty(message = "Password is required")
     private String password;
 
-    boolean isLocked;
+    boolean blocked;
 
     @NotEmpty(message = "Role is required")
     String role;
