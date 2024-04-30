@@ -12,7 +12,7 @@ import com.fpt.job5project.repository.UserRepository;
 @Configuration
 public class ApplicationInitConfig {
 
-    private static final String ACCOUNT_ADMIN = "ADMIN";
+    private static final String ACCOUNT_ADMIN = "Admin";
 
     private final PasswordEncoder passwordEncoder;
 
@@ -27,7 +27,7 @@ public class ApplicationInitConfig {
                 User user = User.builder()
                         .userName(ACCOUNT_ADMIN)
                         .password(passwordEncoder.encode(ACCOUNT_ADMIN))
-                        .role("ADMIN")
+                        .role(ACCOUNT_ADMIN)
                         .build();
 
                 userRepository.save(user);

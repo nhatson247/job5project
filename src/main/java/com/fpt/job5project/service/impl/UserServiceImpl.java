@@ -40,7 +40,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     // TO DO: Check tài khoản có đúng quyền truy cập không
-    @PostAuthorize("returnObject.userName == authentication.name or hasAuthority('ROLE_ADMIN')")
+    @PostAuthorize("returnObject.userName == authentication.name or hasAuthority('ROLE_Admin')")
     @Override
     public UserDTO getUserID(long id) {
         return userMapper.toUserDTO(userRepository.findById(id)
@@ -127,7 +127,7 @@ public class UserServiceImpl implements IUserService {
 
         // Admin có quyền truy cập
         if (authentication.getAuthorities().stream()
-                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"))) {
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_Admin"))) {
             return true;
         }
 

@@ -17,14 +17,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/Users")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserController {
 
     @Autowired
     IUserService iuserService;
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('Admin')")
     @GetMapping
     ResponseObject<List<UserDTO>> getUser() {
         return ResponseObject.<List<UserDTO>>builder()
@@ -62,7 +62,7 @@ public class UserController {
                 .build();
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('Admin')")
     @DeleteMapping("/{userId}")
     ResponseObject<String> deleteUser(@PathVariable long userId) {
         iuserService.deleteUser(userId);

@@ -21,7 +21,7 @@ public class SecurityConfig {
     // private static final String[] publicEndpoints = { "/users",
     // "/auth/login", "/auth/register", "/auth/introspect", "/auth/logout",
     // "/auth/refresh",
-    // "/api/Employer", "/VNpay"
+    // "/api/Employer",
     // };
 
     private static final String[] publicEndpoints = { "/**"
@@ -40,7 +40,7 @@ public class SecurityConfig {
                 // publicEndpoints).permitAll()
                 // .anyRequest().authenticated());
 
-                // truy cập tất cả phương thức
+                // // truy cập tất cả phương thức
                 request -> request.requestMatchers(publicEndpoints).permitAll()
                         .anyRequest().authenticated());
 
