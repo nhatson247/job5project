@@ -76,7 +76,7 @@ public class UserController {
     public ResponseObject<String> lockUserAccount(@PathVariable("userId") long userId) {
         iuserService.lockAccount(userId);
         return ResponseObject.<String>builder()
-                .data("User has been locked")
+                .data("Lock success")
                 .build();
     }
 

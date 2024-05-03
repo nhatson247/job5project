@@ -134,11 +134,8 @@ public class UserServiceImpl implements IUserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-        if (user.isBlocked()) {
-            throw new AppException(ErrorCode.USER_ALREADY_LOCKED);
-        }
-
-        user.setBlocked(true);
+        boolean blockCrr = user.isBlocked();
+        user.setBlocked(!blockCrr);
         userMapper.toUserDTO(userRepository.save(user));
     }
 
