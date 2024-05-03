@@ -50,10 +50,12 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 
     @NonFinal
     @Value("${com.nimbusds.jwt.signerKey}")
-    protected String SIGNER_KEY;
+    protected String singerKey;
 
+    // TO DO: Kiểm tra token
     public IntrospectDTO introspect(IntrospectDTO request)
             throws JOSEException, ParseException {
+
         var token = request.getToken();
         boolean isValid = true;
 
@@ -68,10 +70,11 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
         return IntrospectDTO.builder()
                 .valid(isValid)
                 .build();
-
     }
 
+    // TO DO: Đăng nhập
     public AuthenticationDTO authenticate(AuthenticationDTO request) {
+
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(5);
         var user = userRepository.findByUserName(request.getUserName())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
@@ -90,10 +93,12 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
                 .build();
     }
 
+    // TO DO: Đăng xuất
     public void logout(LogoutDTO request) throws JOSEException, ParseException {
         // lấy token đã kiểm tra ở verifyToken
         var signToken = verifyToken(request.getToken());
 
+        // tạo ra 1 biến để lưu trữ
         String jit = signToken.getJWTClaimsSet().getJWTID();
         Date expiryTime = signToken.getJWTClaimsSet().getExpirationTime();
 
@@ -109,7 +114,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
     private SignedJWT verifyToken(String token) throws JOSEException, ParseException {
 
         // Check chữ ký token
-        JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
+        JWSVerifier verifier = new MACVerifier(singerKey.getBytes());
 
         SignedJWT signedJWT = SignedJWT.parse(token);
 
@@ -127,7 +132,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
         return signedJWT;
     }
 
-    // TO DO: RESERT TOKEN
+    // TO DO: Resert token
     public AuthenticationDTO refreshToken(RefreshDTO request)
             throws ParseException, JOSEException {
         var signedJWT = verifyToken(request.getToken());
@@ -155,6 +160,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
                 .build();
     }
 
+    // TO DO: Đăng ký token
     public String generateToken(User user) {
         // Tạo token với thuật toán HS512
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
@@ -175,7 +181,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
         JWSObject jwsObject = new JWSObject(header, payload);
 
         try {
-            jwsObject.sign(new MACSigner(SIGNER_KEY.getBytes()));
+            jwsObject.sign(new MACSigner(singerKey.getBytes()));
             return jwsObject.serialize();
         } catch (JOSEException e) {
             throw new RuntimeException(e);

@@ -69,7 +69,7 @@ public class GlobalExceptionHandler {
                 .map(FieldError::getDefaultMessage)
                 .collect(Collectors.toList());
 
-        ErrorCode errorCode = ErrorCode.INVALID_KEY; // Use a more appropriate error code for validation errors
+        ErrorCode errorCode = ErrorCode.INVALID_KEY;
 
         ResponseObject<List<String>> responseObject = new ResponseObject<>();
         responseObject.setStatus(errorCode.getStatus());

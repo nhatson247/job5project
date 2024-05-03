@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fpt.job5project.dto.AuthenticationDTO;
-import com.fpt.job5project.dto.IntrospectDTO;
 import com.fpt.job5project.dto.LogoutDTO;
 import com.fpt.job5project.dto.RefreshDTO;
 import com.fpt.job5project.dto.ResponseObject;
@@ -44,16 +43,6 @@ public class AuthenticationController {
     ResponseObject<UserDTO> createUser(@ModelAttribute @Valid UserDTO request) {
         return ResponseObject.<UserDTO>builder()
                 .data(iUserService.addUser(request))
-                .build();
-    }
-
-    @PostMapping("/introspect")
-    ResponseObject<IntrospectDTO> authenticate(@ModelAttribute IntrospectDTO request)
-            throws ParseException, JOSEException {
-
-        var result = authenticationService.introspect(request);
-        return ResponseObject.<IntrospectDTO>builder()
-                .data(result)
                 .build();
     }
 

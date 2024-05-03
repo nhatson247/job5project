@@ -1,6 +1,9 @@
 package com.fpt.job5project.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -8,16 +11,24 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.fpt.job5project.dto.ForgetPasswordDTO;
+import com.fpt.job5project.dto.MailDTO;
 import com.fpt.job5project.dto.UserChangeDTO;
 import com.fpt.job5project.dto.UserDTO;
+import com.fpt.job5project.entity.Candidate;
+import com.fpt.job5project.entity.Employer;
 import com.fpt.job5project.entity.User;
 import com.fpt.job5project.exception.AppException;
 import com.fpt.job5project.exception.ErrorCode;
 import com.fpt.job5project.mapper.UserMapper;
-
+import com.fpt.job5project.repository.CandidateRepository;
+import com.fpt.job5project.repository.EmployerRepository;
 import com.fpt.job5project.repository.UserRepository;
+import com.fpt.job5project.service.IMailService;
 import com.fpt.job5project.service.IUserService;
+import com.fpt.job5project.utils.Const;
 
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -27,11 +38,21 @@ public class UserServiceImpl implements IUserService {
     private UserRepository userRepository;
 
     @Autowired
+    private EmployerRepository employerRepository;
+
+    @Autowired
+    private CandidateRepository candidateRepository;
+
+    @Autowired
     PasswordEncoder passwordEncoder;
 
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private IMailService iMailService;
+
+    // TO DO: Danh sách User
     @Override
     public List<UserDTO> listOfUsers() {
         return userRepository.findAll().stream()
@@ -39,7 +60,8 @@ public class UserServiceImpl implements IUserService {
                 .toList();
     }
 
-    // TO DO: Check tài khoản có đúng quyền truy cập không
+    // TO DO: Danh sách User theo ID
+    // Check tài khoản có đúng quyền truy cập không
     @PostAuthorize("returnObject.userName == authentication.name or hasAuthority('ROLE_Admin')")
     @Override
     public UserDTO getUserID(long id) {
@@ -65,7 +87,7 @@ public class UserServiceImpl implements IUserService {
             throw new AppException(ErrorCode.USER_EXISTED);
 
         User user = userMapper.toUser(request);
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(5);
+        passwordEncoder = new BCryptPasswordEncoder(5);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         return userMapper.toUserDTO(userRepository.save(user));
@@ -136,6 +158,45 @@ public class UserServiceImpl implements IUserService {
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         return currentUser.getUserId() == userId;
+    }
+
+    public void ForgetPassword(ForgetPasswordDTO request) {
+
+        Employer employer = employerRepository.findByEmail(request.getEmail());
+        Candidate candidate = candidateRepository.findByEmail(request.getEmail());
+
+        if (employer == null && candidate == null) {
+            throw new AppException(ErrorCode.USER_NOT_EXISTED);
+        }
+        User user = (employer != null) ? employer.getUser() : candidate.getUser();
+
+        String newPassword = UUID.randomUUID().toString().substring(0, 8);
+        user.setPassword(passwordEncoder.encode(newPassword));
+
+        userRepository.save(user);
+
+        String userName = (employer != null) ? employer.getEmployerName() : candidate.getFullName();
+        String userEmail = request.getEmail();
+
+        sendNewPasswordByEmail(userEmail, newPassword, userName);
+    }
+
+    private void sendNewPasswordByEmail(String userEmail, String newPassword, String name) {
+        try {
+            MailDTO mailDTO = new MailDTO();
+
+            mailDTO.setTo(userEmail);
+            mailDTO.setSubject(Const.SEND_MAIL_SUBJECT.CLIENT_REGISTER);
+
+            Map<String, Object> props = new HashMap<>();
+            props.put("userName", name);
+            props.put("password", newPassword);
+            mailDTO.setProps(props);
+
+            iMailService.sendHtmlMail(mailDTO, Const.TEMPLATE_FILE_NAME.USER_REGISTER);
+        } catch (MessagingException exp) {
+            exp.printStackTrace();
+        }
     }
 
 }

@@ -1,6 +1,7 @@
 package com.fpt.job5project.controller;
 
 import com.fpt.job5project.dto.UserDTO;
+import com.fpt.job5project.dto.ForgetPasswordDTO;
 import com.fpt.job5project.dto.ResponseObject;
 import com.fpt.job5project.dto.UserChangeDTO;
 import com.fpt.job5project.service.IUserService;
@@ -14,7 +15,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/api/Users")
@@ -71,6 +71,7 @@ public class UserController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('Admin')")
     @PostMapping("/lock/{userId}")
     public ResponseObject<String> lockUserAccount(@PathVariable("userId") long userId) {
         iuserService.lockAccount(userId);
@@ -78,4 +79,13 @@ public class UserController {
                 .data("User has been locked")
                 .build();
     }
+
+    @PostMapping("/forget")
+    public ResponseObject<String> forgetAccount(@ModelAttribute ForgetPasswordDTO request) {
+        iuserService.ForgetPassword(request);
+        return ResponseObject.<String>builder()
+                .data("Sending email successfully")
+                .build();
+    }
+
 }

@@ -1,8 +1,7 @@
-package com.fpt.job5project.config;
+package com.fpt.job5project.config.jwt;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -19,9 +18,8 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     // private static final String[] publicEndpoints = { "/users",
-    // "/auth/login", "/auth/register", "/auth/introspect", "/auth/logout",
+    // "/auth/login", "/auth/register", "/auth/logout",
     // "/auth/refresh",
-    // "/api/Employer",
     // };
 
     private static final String[] publicEndpoints = { "/**"

@@ -1,4 +1,4 @@
-package com.fpt.job5project.config;
+package com.fpt.job5project.config.jwt;
 
 import com.fpt.job5project.dto.IntrospectDTO;
 import com.fpt.job5project.service.IAuthenticationService;

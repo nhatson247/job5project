@@ -1,4 +1,4 @@
-package com.fpt.job5project.config;
+package com.fpt.job5project.config.jwt;
 
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;

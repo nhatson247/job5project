@@ -1,6 +1,7 @@
 
 package com.fpt.job5project.service;
 
+import com.fpt.job5project.dto.ForgetPasswordDTO;
 import com.fpt.job5project.dto.UserChangeDTO;
 import com.fpt.job5project.dto.UserDTO;
 
@@ -23,4 +24,6 @@ public interface IUserService {
     public void changePassword(long userId, UserChangeDTO request);
 
     public void lockAccount(long userId);
+
+    public void ForgetPassword(ForgetPasswordDTO request);
 }

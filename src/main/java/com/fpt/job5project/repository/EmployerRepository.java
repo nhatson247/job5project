@@ -12,14 +12,6 @@ public interface EmployerRepository extends JpaRepository<Employer, Long> {
 
     public boolean existsByEmailAndEmployerIdNot(String email, long id);
 
-    // @Modifying
-    // @Transactional
-    // @Query(value = "SELECT * FROM Employers WHERE employerId = :employerId",
-    // nativeQuery = true)
-    // List<Employer> getById(@Param("employerId") long employerId);
+    public Employer findByEmail(String email);
 
-    // @Modifying
-    // @Transactional
-    // @Query(value = "EXEC deleteUserByUserName :userName", nativeQuery = true)
-    // void deleteUserByUserName(@Param("userName")String userName);
 }
