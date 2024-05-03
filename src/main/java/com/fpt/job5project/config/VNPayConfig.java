@@ -1,4 +1,4 @@
-package com.fpt.job5project.config.jwt;
+package com.fpt.job5project.config;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;

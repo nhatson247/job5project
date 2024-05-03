@@ -1,8 +1,6 @@
 package com.fpt.job5project.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,30 +31,4 @@ public class VNPayController {
                 .build();
     }
 
-    @GetMapping("/vnpay-payment")
-    public ResponseObject<String> handleVnPayPayment(HttpServletRequest request, Model model) {
-        int paymentStatus = vnPayService.orderReturn(request);
-
-        String orderInfo = request.getParameter("vnp_OrderInfo");
-        String paymentTime = request.getParameter("vnp_PayDate");
-        String transactionId = request.getParameter("vnp_TransactionNo");
-        String totalPrice = request.getParameter("vnp_Amount");
-
-        model.addAttribute("orderId", orderInfo);
-        model.addAttribute("totalPrice", totalPrice);
-        model.addAttribute("paymentTime", paymentTime);
-        model.addAttribute("transactionId", transactionId);
-
-        if (paymentStatus == 1) {
-            return ResponseObject.<String>builder()
-                    .message("Payment Successful")
-                    .data(null)
-                    .build();
-        } else {
-            return ResponseObject.<String>builder()
-                    .message("Payment failed")
-                    .data(null)
-                    .build();
-        }
-    }
 }

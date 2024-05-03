@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
-import com.fpt.job5project.config.jwt.VNPayConfig;
+import com.fpt.job5project.config.VNPayConfig;
 import com.fpt.job5project.service.IVNPayService;
 
 import java.io.UnsupportedEncodingException;
