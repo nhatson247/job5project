@@ -1,5 +1,6 @@
 package com.fpt.job5project.controller;
 
+import com.fpt.job5project.dto.EmployerApprovedDTO;
 import com.fpt.job5project.dto.EmployerDTO;
 import com.fpt.job5project.dto.ResponseObject;
 import com.fpt.job5project.service.IEmployerService;
@@ -7,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -59,9 +61,17 @@ public class EmployerController {
     public ResponseObject<EmployerDTO> updateEmployer(@PathVariable("id") Long id,
             @ModelAttribute EmployerDTO employerDTO, @ModelAttribute("filePhoto") MultipartFile filePhoto,
             @ModelAttribute("fileBackground") MultipartFile fileBackground) {
-        System.out.println("alo");
         ResponseObject<EmployerDTO> responseObject = new ResponseObject<>();
         responseObject.setData(iEmployerService.updateEmployer(id, employerDTO, filePhoto, fileBackground));
+        return responseObject;
+    }
+
+    @GetMapping("/approved")
+    public ResponseObject<List<EmployerApprovedDTO>> getApprovedEmployers() {
+
+        ResponseObject<List<EmployerApprovedDTO>> responseObject = new ResponseObject<>();
+        List<EmployerApprovedDTO> approvedEmployers = iEmployerService.listOfApprovedEmployers();
+        responseObject.setData(approvedEmployers);
         return responseObject;
     }
 }

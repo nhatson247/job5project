@@ -94,4 +94,7 @@ public class Employer {
     @OneToMany(mappedBy = "employer")
     private List<Job> jobs = new ArrayList<>();
 
+    @Column(name = "approved")
+    private boolean approved;
+
 }

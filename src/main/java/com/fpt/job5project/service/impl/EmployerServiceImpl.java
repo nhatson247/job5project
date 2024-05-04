@@ -1,5 +1,6 @@
 package com.fpt.job5project.service.impl;
 
+import com.fpt.job5project.dto.EmployerApprovedDTO;
 import com.fpt.job5project.dto.EmployerDTO;
 import com.fpt.job5project.entity.Employer;
 import com.fpt.job5project.exception.AppException;
@@ -16,9 +17,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-//Autowired, private, final
+// Autowired, private, final
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class EmployerServiceImpl implements IEmployerService {
@@ -31,15 +33,10 @@ public class EmployerServiceImpl implements IEmployerService {
 
     @Override
     public List<EmployerDTO> listOfEmployers() {
-        List<EmployerDTO> listDTOs = new ArrayList<>();
-        List<Employer> listEntities = employerRepository.findAll();
-        if (listEntities.isEmpty()) {
-            throw new AppException(ErrorCode.LIST_EMPLOYERS_IS_NULL);
-        }
-        for (Employer employerEntity : employerRepository.findAll()) {
-            listDTOs.add(employerMapper.toDTO(employerEntity));
-        }
-        return listDTOs;
+        List<Employer> approvedEmployers = employerRepository.findByApprovedTrue();
+        return approvedEmployers.stream()
+                .map(employerMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -60,7 +57,8 @@ public class EmployerServiceImpl implements IEmployerService {
     }
 
     @Override
-    public EmployerDTO updateEmployer(long id, EmployerDTO employerDTO, MultipartFile filePhoto, MultipartFile fileBackground) {
+    public EmployerDTO updateEmployer(long id, EmployerDTO employerDTO, MultipartFile filePhoto,
+            MultipartFile fileBackground) {
         if (employerRepository.existsByEmailAndEmployerIdNot(employerDTO.getEmail(), id))
             throw new AppException(ErrorCode.EMAIL_EXISTED);
 
@@ -90,5 +88,13 @@ public class EmployerServiceImpl implements IEmployerService {
         } else {
             employerRepository.deleteById(id);
         }
+    }
+
+    @Override
+    public List<EmployerApprovedDTO> listOfApprovedEmployers() {
+        List<Employer> pendingEmployers = employerRepository.findByApprovedFalse();
+        return pendingEmployers.stream()
+                .map(employerMapper::toDTOApprovedDTO)
+                .collect(Collectors.toList());
     }
 }

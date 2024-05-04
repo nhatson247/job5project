@@ -12,7 +12,7 @@ import com.fpt.job5project.repository.UserRepository;
 @Configuration
 public class ApplicationInitConfig {
 
-    private static final String ACCOUNT_ADMIN = "Admin";
+    private static final String ACCOUNT_ADMIN = "admin";
 
     private final PasswordEncoder passwordEncoder;
 

@@ -45,6 +45,9 @@ public enum ErrorCode {
     EMAIL_EXISTED(705, "Email already existed", HttpStatus.BAD_REQUEST),
 
     // Employer error code
+
+    EMPLOYER_NOT_FOUND(800, "Employer not found", HttpStatus.NOT_FOUND),
+    EMPLOYER_NOT_APPROVED(801, "Employer not approved", HttpStatus.BAD_REQUEST),
     EMPLOYER_EXISTED(801, "Employer already existed", HttpStatus.BAD_REQUEST),
     EMPLOYER_NAME_NOT_NULL(802, "Employer name can't be null", HttpStatus.BAD_REQUEST),
     LIST_EMPLOYERS_IS_NULL(803, "List of employers are empty", HttpStatus.BAD_REQUEST),

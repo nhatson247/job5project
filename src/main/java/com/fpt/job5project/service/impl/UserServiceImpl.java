@@ -20,6 +20,7 @@ import com.fpt.job5project.entity.Employer;
 import com.fpt.job5project.entity.User;
 import com.fpt.job5project.exception.AppException;
 import com.fpt.job5project.exception.ErrorCode;
+import com.fpt.job5project.mapper.EmployerMapper;
 import com.fpt.job5project.mapper.UserMapper;
 import com.fpt.job5project.repository.CandidateRepository;
 import com.fpt.job5project.repository.EmployerRepository;
@@ -62,7 +63,7 @@ public class UserServiceImpl implements IUserService {
 
     // TO DO: Danh sách User theo ID
     // Check tài khoản có đúng quyền truy cập không
-    @PostAuthorize("returnObject.userName == authentication.name or hasAuthority('ROLE_Admin')")
+    @PostAuthorize("returnObject.userName == authentication.name or hasAuthority('ROLE_admin')")
     @Override
     public UserDTO getUserID(long id) {
         return userMapper.toUserDTO(userRepository.findById(id)
@@ -70,6 +71,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     // TO DO: Gọi thông tin tài khoản chính chủ
+    @Override
     public UserDTO getMyInfo() {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
@@ -113,6 +115,7 @@ public class UserServiceImpl implements IUserService {
         userRepository.deleteById(id);
     }
 
+    @Override
     public void changePassword(long userId, UserChangeDTO request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
@@ -144,9 +147,9 @@ public class UserServiceImpl implements IUserService {
 
         String currentUsername = authentication.getName();
 
-        // Admin có quyền truy cập
+        // admin có quyền truy cập
         if (authentication.getAuthorities().stream()
-                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_Admin"))) {
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_admin"))) {
             return true;
         }
 
@@ -157,7 +160,8 @@ public class UserServiceImpl implements IUserService {
         return currentUser.getUserId() == userId;
     }
 
-    public void ForgetPassword(ForgetPasswordDTO request) {
+    @Override
+    public void forgetPassword(ForgetPasswordDTO request) {
 
         Employer employer = employerRepository.findByEmail(request.getEmail());
         Candidate candidate = candidateRepository.findByEmail(request.getEmail());
@@ -169,7 +173,6 @@ public class UserServiceImpl implements IUserService {
 
         String newPassword = UUID.randomUUID().toString().substring(0, 8);
         user.setPassword(passwordEncoder.encode(newPassword));
-
         userRepository.save(user);
 
         String userName = (employer != null) ? employer.getEmployerName() : candidate.getFullName();

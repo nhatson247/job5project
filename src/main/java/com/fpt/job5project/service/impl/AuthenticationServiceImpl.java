@@ -16,10 +16,12 @@ import com.fpt.job5project.dto.AuthenticationDTO;
 import com.fpt.job5project.dto.IntrospectDTO;
 import com.fpt.job5project.dto.LogoutDTO;
 import com.fpt.job5project.dto.RefreshDTO;
+import com.fpt.job5project.entity.Employer;
 import com.fpt.job5project.entity.InvalidatedToken;
 import com.fpt.job5project.entity.User;
 import com.fpt.job5project.exception.AppException;
 import com.fpt.job5project.exception.ErrorCode;
+import com.fpt.job5project.repository.EmployerRepository;
 import com.fpt.job5project.repository.InvalidatedTokenResponsitory;
 import com.fpt.job5project.repository.UserRepository;
 import com.fpt.job5project.service.IAuthenticationService;
@@ -43,6 +45,9 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private EmployerRepository employerRepository;
 
     @Autowired
 
@@ -84,6 +89,11 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 
         if (!authenticated)
             throw new AppException(ErrorCode.USER_INVALID);
+
+        Employer employer = employerRepository.findByUser(user);
+        if (employer != null && !employer.isApproved()) {
+            throw new AppException(ErrorCode.EMPLOYER_NOT_APPROVED);
+        }
 
         var token = generateToken(user);
 

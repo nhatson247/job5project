@@ -1,6 +1,7 @@
 package com.fpt.job5project.controller;
 
 import com.fpt.job5project.dto.UserDTO;
+import com.fpt.job5project.dto.EmployerApprovedDTO;
 import com.fpt.job5project.dto.ForgetPasswordDTO;
 import com.fpt.job5project.dto.ResponseObject;
 import com.fpt.job5project.dto.UserChangeDTO;
@@ -24,7 +25,7 @@ public class UserController {
     @Autowired
     IUserService iuserService;
 
-    @PreAuthorize("hasRole('Admin')")
+    @PreAuthorize("hasRole('admin')")
     @GetMapping
     ResponseObject<List<UserDTO>> getUser() {
         return ResponseObject.<List<UserDTO>>builder()
@@ -62,7 +63,7 @@ public class UserController {
                 .build();
     }
 
-    @PreAuthorize("hasRole('Admin')")
+    @PreAuthorize("hasRole('admin')")
     @DeleteMapping("/{userId}")
     ResponseObject<String> deleteUser(@PathVariable long userId) {
         iuserService.deleteUser(userId);
@@ -71,7 +72,7 @@ public class UserController {
                 .build();
     }
 
-    @PreAuthorize("hasRole('Admin')")
+    @PreAuthorize("hasRole('admin')")
     @PostMapping("/lock/{userId}")
     public ResponseObject<String> lockUserAccount(@PathVariable("userId") long userId) {
         iuserService.lockAccount(userId);
@@ -82,10 +83,19 @@ public class UserController {
 
     @PostMapping("/forget")
     public ResponseObject<String> forgetAccount(@ModelAttribute ForgetPasswordDTO request) {
-        iuserService.ForgetPassword(request);
+        iuserService.forgetPassword(request);
         return ResponseObject.<String>builder()
                 .data("Sending email successfully")
                 .build();
     }
+
+    // @PostMapping("/approved/{userId}")
+    // public ResponseObject<String> approveEmployer(@PathVariable("userId") long
+    // userId) {
+    // iuserService.approveEmployer(userId);
+    // return ResponseObject.<String>builder()
+    // .data("Approve Employer successfully")
+    // .build();
+    // }
 
 }

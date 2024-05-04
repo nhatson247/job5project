@@ -25,5 +25,6 @@ public interface IUserService {
 
     public void lockAccount(long userId);
 
-    public void ForgetPassword(ForgetPasswordDTO request);
+    public void forgetPassword(ForgetPasswordDTO request);
+
 }
