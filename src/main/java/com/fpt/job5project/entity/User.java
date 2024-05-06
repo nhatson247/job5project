@@ -2,6 +2,7 @@ package com.fpt.job5project.entity;
 
 import org.hibernate.annotations.Nationalized;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -31,10 +32,10 @@ public class User {
     @Column(name = "userid", nullable = false)
     long userId;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     Employer employer;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     Candidate candidate;
 
     @NotNull

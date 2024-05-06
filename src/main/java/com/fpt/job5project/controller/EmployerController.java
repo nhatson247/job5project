@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -73,5 +74,14 @@ public class EmployerController {
         List<EmployerApprovedDTO> approvedEmployers = iEmployerService.listOfApprovedEmployers();
         responseObject.setData(approvedEmployers);
         return responseObject;
+    }
+
+    @PreAuthorize("hasRole('admin')")
+    @PostMapping("/approved-accept/{userId}")
+    public ResponseObject<String> lockUserAccount(@PathVariable("userId") long userId) {
+        iEmployerService.approveAcceptEmployer(userId);
+        return ResponseObject.<String>builder()
+                .data("accept is success")
+                .build();
     }
 }

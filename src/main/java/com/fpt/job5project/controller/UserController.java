@@ -89,13 +89,4 @@ public class UserController {
                 .build();
     }
 
-    // @PostMapping("/approved/{userId}")
-    // public ResponseObject<String> approveEmployer(@PathVariable("userId") long
-    // userId) {
-    // iuserService.approveEmployer(userId);
-    // return ResponseObject.<String>builder()
-    // .data("Approve Employer successfully")
-    // .build();
-    // }
-
 }

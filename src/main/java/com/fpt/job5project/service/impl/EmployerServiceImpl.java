@@ -97,4 +97,17 @@ public class EmployerServiceImpl implements IEmployerService {
                 .map(employerMapper::toDTOApprovedDTO)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public void approveAcceptEmployer(long id) {
+        Employer employer = employerRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.EMPLOYER_NOT_EXIST));
+
+        if (employer.isApproved()) {
+            throw new AppException(ErrorCode.EMPLOYER_ALREADY_APPROVED);
+        }
+
+        employer.setApproved(true);
+        employerRepository.save(employer);
+    }
 }

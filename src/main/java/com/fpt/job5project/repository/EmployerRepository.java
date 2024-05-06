@@ -22,4 +22,5 @@ public interface EmployerRepository extends JpaRepository<Employer, Long> {
     List<Employer> findByApprovedFalse();
 
     List<Employer> findByApprovedTrue();
+
 }

@@ -1,0 +1,23 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css' />
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <p th:text="${'Xin chào, ' + userName}"></p>
+    <p>Chúng tôi rất tiếc thông báo rằng tài khoản đăng ký của bạn không thành công.</p>
+    <p>Vui lòng kiểm tra lại thông tin đăng ký và thử lại sau.</p>
+    <p>Cảm ơn bạn đã tham gia!</p>
+    <p>Đây là email tự động, vui lòng không trả lời.</p>
+</body>
+
+</html>

@@ -36,4 +36,5 @@ public class EmployerDTO {
 
     private String reviewScore;
 
+    private boolean approved;
 }

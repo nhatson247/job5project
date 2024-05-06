@@ -1,6 +1,5 @@
 package com.fpt.job5project.dto;
 
-import jakarta.persistence.Column;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

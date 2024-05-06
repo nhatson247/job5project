@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -11,6 +12,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.fpt.job5project.dto.EmployerDTO;
 import com.fpt.job5project.dto.ForgetPasswordDTO;
 import com.fpt.job5project.dto.MailDTO;
 import com.fpt.job5project.dto.UserChangeDTO;
@@ -54,11 +57,13 @@ public class UserServiceImpl implements IUserService {
     private IMailService iMailService;
 
     // TO DO: Danh sách User
+    // Có lọc Employer được duyệt
     @Override
     public List<UserDTO> listOfUsers() {
-        return userRepository.findAll().stream()
+        List<User> users = userRepository.findAllUsersFilteredByEmployerApproval();
+        return users.stream()
                 .map(userMapper::toUserDTO)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     // TO DO: Danh sách User theo ID
@@ -112,7 +117,10 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public void deleteUser(long id) {
-        userRepository.deleteById(id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        userRepository.delete(user);
     }
 
     @Override
@@ -160,6 +168,7 @@ public class UserServiceImpl implements IUserService {
         return currentUser.getUserId() == userId;
     }
 
+    // quên mật khẩu
     @Override
     public void forgetPassword(ForgetPasswordDTO request) {
 
@@ -179,6 +188,40 @@ public class UserServiceImpl implements IUserService {
         String userEmail = request.getEmail();
 
         sendNewPasswordByEmail(userEmail, newPassword, userName);
+    }
+
+    // xóa tài khoản có gửi mail
+    @Override
+    public void deleteUserSendMail(EmployerDTO request) {
+        Employer employer = employerRepository.findByEmail(request.getEmail());
+
+        if (employer == null) {
+            throw new AppException(ErrorCode.USER_NOT_EXISTED);
+        }
+
+        deleteUser(request.getEmployerId());
+
+        String userName = employer.getEmployerName();
+        String userEmail = request.getEmail();
+
+        sendDeleteEmployerByEmail(userEmail, userName);
+    }
+
+    private void sendDeleteEmployerByEmail(String userEmail, String name) {
+        try {
+            MailDTO mailDTO = new MailDTO();
+
+            mailDTO.setTo(userEmail);
+            mailDTO.setSubject(Const.SEND_MAIL_SUBJECT.SERVER_DELETE_USER);
+
+            Map<String, Object> props = new HashMap<>();
+            props.put("userName", name);
+            mailDTO.setProps(props);
+
+            iMailService.sendHtmlMail(mailDTO, Const.TEMPLATE_FILE_NAME.USER_DELETE);
+        } catch (MessagingException exp) {
+            exp.printStackTrace();
+        }
     }
 
     private void sendNewPasswordByEmail(String userEmail, String newPassword, String name) {

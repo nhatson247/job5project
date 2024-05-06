@@ -19,7 +19,7 @@ public class Candidate {
     @Column(name = "candidateid", nullable = false)
     private long candidateId;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "candidateid", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;

@@ -19,4 +19,6 @@ public interface IEmployerService {
 
     public List<EmployerApprovedDTO> listOfApprovedEmployers();
 
+    public void approveAcceptEmployer(long id);
+
 }

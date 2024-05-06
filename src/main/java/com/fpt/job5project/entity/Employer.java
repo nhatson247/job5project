@@ -9,6 +9,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -37,7 +38,7 @@ public class Employer {
     private long employerId;
 
     @MapsId
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "employerid", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
