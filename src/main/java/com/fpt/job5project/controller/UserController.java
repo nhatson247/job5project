@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fpt.job5project.dto.EmployerDTO;
 import com.fpt.job5project.dto.ForgetPasswordDTO;
 import com.fpt.job5project.dto.ResponseObject;
 import com.fpt.job5project.dto.UserChangeDTO;

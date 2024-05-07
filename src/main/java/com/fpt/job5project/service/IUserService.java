@@ -28,6 +28,4 @@ public interface IUserService {
 
     public void forgetPassword(ForgetPasswordDTO request);
 
-    public void deleteUserSendMail(EmployerDTO request);
-
 }

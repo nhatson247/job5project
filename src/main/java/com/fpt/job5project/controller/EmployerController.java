@@ -41,7 +41,6 @@ public class EmployerController {
         return responseObject;
     }
 
-
     @PostMapping("/create")
     public ResponseObject<EmployerDTO> addEmployer(@ModelAttribute @Valid EmployerDTO newEmployer) {
 
@@ -60,8 +59,9 @@ public class EmployerController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseObject<EmployerDTO> updateEmployer(@PathVariable("id") Long id, @ModelAttribute EmployerDTO employerDTO, @ModelAttribute("filePhoto") MultipartFile filePhoto, @ModelAttribute("fileBackground") MultipartFile fileBackground) {
-        System.out.println("alo");
+    public ResponseObject<EmployerDTO> updateEmployer(@PathVariable("id") Long id,
+            @ModelAttribute EmployerDTO employerDTO, @ModelAttribute("filePhoto") MultipartFile filePhoto,
+            @ModelAttribute("fileBackground") MultipartFile fileBackground) {
         ResponseObject<EmployerDTO> responseObject = new ResponseObject<>();
         responseObject.setData(iEmployerService.updateEmployer(id, employerDTO, filePhoto, fileBackground));
         return responseObject;
@@ -77,11 +77,20 @@ public class EmployerController {
     }
 
     @PreAuthorize("hasRole('admin')")
-    @PostMapping("/approved-accept/{userId}")
-    public ResponseObject<String> lockUserAccount(@PathVariable("userId") long userId) {
+    @PostMapping("/approvedAccept/{userId}")
+    public ResponseObject<String> approvedAcceptEmployer(@PathVariable("userId") long userId) {
         iEmployerService.approveAcceptEmployer(userId);
         return ResponseObject.<String>builder()
                 .data("accept is success")
                 .build();
+    }
+
+    @DeleteMapping("/approvedNotAccept/{id}")
+    public ResponseObject<String> approvedNotAcceptEmployer(@PathVariable("id") Long id) {
+
+        ResponseObject<String> responseObject = new ResponseObject<>();
+        iEmployerService.deleteEmployerSendMail(id);
+        responseObject.setMessage("not accept is success");
+        return responseObject;
     }
 }

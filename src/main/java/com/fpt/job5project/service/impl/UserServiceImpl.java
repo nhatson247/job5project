@@ -189,40 +189,6 @@ public class UserServiceImpl implements IUserService {
         sendNewPasswordByEmail(userEmail, newPassword, userName);
     }
 
-    // xóa tài khoản có gửi mail
-    @Override
-    public void deleteUserSendMail(EmployerDTO request) {
-        Employer employer = employerRepository.findByEmail(request.getEmail());
-
-        if (employer == null) {
-            throw new AppException(ErrorCode.USER_NOT_EXISTED);
-        }
-
-        deleteUser(request.getEmployerId());
-
-        String userName = employer.getEmployerName();
-        String userEmail = request.getEmail();
-
-        sendDeleteEmployerByEmail(userEmail, userName);
-    }
-
-    private void sendDeleteEmployerByEmail(String userEmail, String name) {
-        try {
-            MailDTO mailDTO = new MailDTO();
-
-            mailDTO.setTo(userEmail);
-            mailDTO.setSubject(Const.SEND_MAIL_SUBJECT.SERVER_DELETE_USER);
-
-            Map<String, Object> props = new HashMap<>();
-            props.put("userName", name);
-            mailDTO.setProps(props);
-
-            iMailService.sendHtmlMail(mailDTO, Const.TEMPLATE_FILE_NAME.USER_DELETE);
-        } catch (MessagingException exp) {
-            exp.printStackTrace();
-        }
-    }
-
     private void sendNewPasswordByEmail(String userEmail, String newPassword, String name) {
         try {
             MailDTO mailDTO = new MailDTO();

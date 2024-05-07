@@ -2,13 +2,20 @@ package com.fpt.job5project.service.impl;
 
 import com.fpt.job5project.dto.EmployerApprovedDTO;
 import com.fpt.job5project.dto.EmployerDTO;
+import com.fpt.job5project.dto.MailDTO;
 import com.fpt.job5project.entity.Employer;
+import com.fpt.job5project.entity.User;
 import com.fpt.job5project.exception.AppException;
 import com.fpt.job5project.exception.ErrorCode;
 import com.fpt.job5project.mapper.EmployerMapper;
 import com.fpt.job5project.repository.EmployerRepository;
+import com.fpt.job5project.repository.UserRepository;
 import com.fpt.job5project.service.IEmployerService;
+import com.fpt.job5project.service.IMailService;
 import com.fpt.job5project.service.IStorageService;
+import com.fpt.job5project.utils.Const;
+
+import jakarta.mail.MessagingException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -16,11 +23,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-//Autowired, private, final
+// Autowired, private, final
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class EmployerServiceImpl implements IEmployerService {
@@ -30,6 +39,10 @@ public class EmployerServiceImpl implements IEmployerService {
     EmployerMapper employerMapper;
 
     IStorageService storageService;
+
+    IMailService iMailService;
+
+    UserRepository userRepository;
 
     @Override
     public List<EmployerDTO> listOfEmployers() {
@@ -62,7 +75,8 @@ public class EmployerServiceImpl implements IEmployerService {
     }
 
     @Override
-    public EmployerDTO updateEmployer(long id, EmployerDTO employerDTO, MultipartFile filePhoto, MultipartFile fileBackground) {
+    public EmployerDTO updateEmployer(long id, EmployerDTO employerDTO, MultipartFile filePhoto,
+            MultipartFile fileBackground) {
         if (employerRepository.existsByEmailAndEmployerIdNot(employerDTO.getEmail(), id))
             throw new AppException(ErrorCode.EMAIL_EXISTED);
 
@@ -94,12 +108,12 @@ public class EmployerServiceImpl implements IEmployerService {
         }
     }
 
-     @Override
+    @Override
     public int upRank(long rankId, long userId) {
         return employerRepository.updateRankById(rankId, userId);
     }
 
-     @Override
+    @Override
     public List<EmployerApprovedDTO> listOfApprovedEmployers() {
         List<Employer> pendingEmployers = employerRepository.findByApprovedFalse();
         return pendingEmployers.stream()
@@ -118,5 +132,56 @@ public class EmployerServiceImpl implements IEmployerService {
 
         employer.setApproved(true);
         employerRepository.save(employer);
+
+        sendApprovalEmail(employer);
     }
+
+    private void sendApprovalEmail(Employer employer) {
+        try {
+            MailDTO mailDTO = new MailDTO();
+            mailDTO.setTo(employer.getEmail());
+            mailDTO.setSubject(Const.SEND_MAIL_SUBJECT.SERVER_ACCEPT_EMPLOYER);
+            Map<String, Object> props = new HashMap<>();
+            props.put("employerName", employer.getEmployerName());
+            mailDTO.setProps(props);
+
+            iMailService.sendHtmlMail(mailDTO, Const.TEMPLATE_FILE_NAME.EMPLOYER_ACCEPT);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void deleteEmployerSendMail(long id) {
+
+        Employer employer = employerRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.EMPLOYER_NOT_EXIST));
+
+        // Xóa tài khoản User liên kết với Employer
+        User user = employer.getUser();
+        userRepository.delete(user);
+
+        // Xóa Employer
+        employerRepository.delete(employer);
+
+        // Gửi email thông báo từ chối cho Employer
+        sendDeleteEmployerByEmail(employer);
+
+    }
+
+    private void sendDeleteEmployerByEmail(Employer employer) {
+        try {
+            MailDTO mailDTO = new MailDTO();
+            mailDTO.setTo(employer.getEmail());
+            mailDTO.setSubject(Const.SEND_MAIL_SUBJECT.SERVER_NOT_ACCEPT_EMPLOYER);
+            Map<String, Object> props = new HashMap<>();
+            props.put("employerName", employer.getEmployerName());
+            mailDTO.setProps(props);
+
+            iMailService.sendHtmlMail(mailDTO, Const.TEMPLATE_FILE_NAME.EMPLOYER_DELETE);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
