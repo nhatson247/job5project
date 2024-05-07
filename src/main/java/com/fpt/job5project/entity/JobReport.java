@@ -40,14 +40,14 @@ public class JobReport {
     @JoinColumn(name = "candidateid", insertable = false, updatable = false)
     private Candidate candidate;
 
-    @Column(name = "candidateid")
+    @Column(name = "candidateid", nullable = false)
     private long candidateId;
 
-    @Column(name = "reportdate", nullable = false)
+    @Column(name = "reportdate")
     private Date reportDate;
 
     @Nationalized
-    @Column(name = "description", nullable = false)
+    @Column(name = "description")
     private String description;
 
 }

@@ -1,4 +1,4 @@
-package com.fpt.job5project.config;
+package com.fpt.job5project.config.vnpay;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,7 @@ import java.util.*;
 @Component
 public class VNPayConfig {
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    public static String vnp_Returnurl = "/vnpay-payment";
+    public static String vnp_Returnurl = "/api/vnpay/vnpay-payment";
     public static String vnp_TmnCode = "9XCI0RM0";
     public static String vnp_HashSecret = "ZYXIFHCJIQICNQHGHNWUWMRKNTFGMPSO";
     public static String vnp_apiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";

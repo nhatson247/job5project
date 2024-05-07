@@ -9,9 +9,7 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface CandiadteMapper {
     CandidateDTO toDTO(Candidate candidate);
-
     Candidate toEntity(CandidateDTO candidateDTO);
-
     @Mapping(target = "candidateId", ignore = true)
     @Mapping(target = "photo", ignore = true)
     void updateCandidate(@MappingTarget Candidate candidate, CandidateDTO candidateDTO);

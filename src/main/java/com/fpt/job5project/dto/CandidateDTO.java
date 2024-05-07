@@ -1,5 +1,6 @@
 package com.fpt.job5project.dto;
 
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -22,7 +23,7 @@ public class CandidateDTO {
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     @JsonFormat(timezone = "GMT+07:00")
     Date birthDate;
-    int yearExpirence;
+    int yearExperience;
     String bio;
     @NotNull(message = "PHONE_NOT_NULL")
     String phone;

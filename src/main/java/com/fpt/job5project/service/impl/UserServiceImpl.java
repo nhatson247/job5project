@@ -23,7 +23,6 @@ import com.fpt.job5project.entity.Employer;
 import com.fpt.job5project.entity.User;
 import com.fpt.job5project.exception.AppException;
 import com.fpt.job5project.exception.ErrorCode;
-import com.fpt.job5project.mapper.EmployerMapper;
 import com.fpt.job5project.mapper.UserMapper;
 import com.fpt.job5project.repository.CandidateRepository;
 import com.fpt.job5project.repository.EmployerRepository;

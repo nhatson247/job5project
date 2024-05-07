@@ -15,7 +15,7 @@ import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 
 @RestController
-@RequestMapping("/api/VNpay")
+@RequestMapping("/api/vnpay")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class VNPayController {
     @Autowired
@@ -24,8 +24,7 @@ public class VNPayController {
     @PostMapping("/create-order")
     public ResponseObject<String> createOrder(@ModelAttribute OrderDTO request, HttpServletRequest http) {
         String baseUrl = http.getScheme() + "://" + http.getServerName() + ":" + http.getServerPort();
-        String vnpayUrl = vnPayService.createOrder(request.getAmount(), request.getOrderInfo(),
-                baseUrl);
+        String vnpayUrl = vnPayService.createOrder(request, baseUrl);
         return ResponseObject.<String>builder()
                 .data(vnpayUrl)
                 .build();

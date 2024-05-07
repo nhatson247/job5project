@@ -1,6 +1,8 @@
 package com.fpt.job5project.entity;
 
 import org.hibernate.annotations.Nationalized;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,13 +31,14 @@ public class JobDescription {
 
     @ManyToOne(targetEntity = Job.class)
     @JoinColumn(name = "jobid", insertable = false, updatable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Job job;
 
-    @Column(name = "jobid")
+    @Column(name = "jobid", nullable = false)
     private long jobId;
 
     @Nationalized
-    @Column(name = "description", nullable = false)
+    @Column(name = "description")
     private String description;
 
 }

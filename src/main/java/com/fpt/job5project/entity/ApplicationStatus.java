@@ -30,10 +30,9 @@ public class ApplicationStatus {
     private long status;
 
     @Nationalized
-    @Column(name = "description", nullable = false)
+    @Column(name = "description")
     private String description;
 
-    @Builder.Default
     @OneToMany(mappedBy = "applicationStatus")
     private List<Application> applications = new ArrayList<>();
 

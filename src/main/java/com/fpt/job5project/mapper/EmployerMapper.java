@@ -9,15 +9,14 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface EmployerMapper {
-
     EmployerApprovedDTO toDTOApprovedDTO(Employer employer);
 
     EmployerDTO toDTO(Employer employer);
 
     Employer toEntity(EmployerDTO employerDTO);
-
+    
     @Mapping(target = "employerId", ignore = true)
     @Mapping(target = "photo", ignore = true)
-    @Mapping(target = "backGround", ignore = true)
+    @Mapping(target = "background", ignore = true)
     void updateEmployer(@MappingTarget Employer employer, EmployerDTO employerDTO);
 }

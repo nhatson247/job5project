@@ -32,15 +32,32 @@ public class Rank {
     private long rankId;
 
     @Nationalized
-    @Column(name = "rankname", nullable = false)
+    @Column(name = "rankname")
     private String rankName;
 
     @Nationalized
-    @Column(name = "description", nullable = false)
+    @Column(name = "description")
     private String description;
 
+    @Column(name = "price")
+    private double price;
+
+    @Column(name = "displaytime")
+    private int displayTime;
+
+    @Column(name = "reuptimes")
+    private int reupTimes;
+
+    @Column(name = "numapplications")
+    private int numApplications;
+
+    @Column(name = "limitpost")
+    private int limitPost;
+
+    @Column(name = "photo")
+    private String photo;
+
     @JsonIgnore
-    @Builder.Default
     @OneToMany(mappedBy = "rank")
     private List<Employer> employers = new ArrayList<>();
 

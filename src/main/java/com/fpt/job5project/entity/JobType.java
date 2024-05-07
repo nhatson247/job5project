@@ -30,10 +30,9 @@ public class JobType {
     private int typeId;
 
     @Nationalized
-    @Column(name = "type", nullable = false)
+    @Column(name = "type")
     private String type;
 
-    @Builder.Default
     @OneToMany(mappedBy = "jobType")
     private List<Job> jobs = new ArrayList<>();
 

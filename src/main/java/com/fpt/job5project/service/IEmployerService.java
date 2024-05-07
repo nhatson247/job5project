@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+
 public interface IEmployerService {
     public List<EmployerDTO> listOfEmployers();
 
@@ -13,9 +14,11 @@ public interface IEmployerService {
 
     public EmployerDTO addEmployer(EmployerDTO employerDTO);
 
-    public EmployerDTO updateEmployer(long id, EmployerDTO employerDTO, MultipartFile photo, MultipartFile background);
+    public EmployerDTO updateEmployer(long id, EmployerDTO employerDTO,MultipartFile photo, MultipartFile background);
 
     public void deleteEmployer(long id);
+
+    public int upRank(long userId, long rankId);
 
     public List<EmployerApprovedDTO> listOfApprovedEmployers();
 

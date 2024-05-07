@@ -41,7 +41,7 @@ public class Application {
     @Column(name = "candidateid", nullable = false)
     private long candidateId;
 
-    @Column(name = "applicationdate", nullable = false)
+    @Column(name = "applicationdate")
     private Date applicationDate;
 
     @ManyToOne(targetEntity = ApplicationStatus.class)

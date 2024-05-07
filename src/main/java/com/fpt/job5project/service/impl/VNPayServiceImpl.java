@@ -1,11 +1,12 @@
 package com.fpt.job5project.service.impl;
 
+import com.fpt.job5project.config.vnpay.VNPayConfig;
+import com.fpt.job5project.dto.OrderDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
-import com.fpt.job5project.config.VNPayConfig;
 import com.fpt.job5project.service.IVNPayService;
 
 import java.io.UnsupportedEncodingException;
@@ -18,7 +19,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class VNPayServiceImpl implements IVNPayService {
 
-    public String createOrder(int total, String orderInfor, String urlReturn) {
+    public String createOrder(OrderDTO orderDTO, String urlReturn) {
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String vnp_TxnRef = VNPayConfig.getRandomNumber(8);
@@ -30,11 +31,11 @@ public class VNPayServiceImpl implements IVNPayService {
         vnp_Params.put("vnp_Version", vnp_Version);
         vnp_Params.put("vnp_Command", vnp_Command);
         vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
-        vnp_Params.put("vnp_Amount", String.valueOf(total * 100));
+        vnp_Params.put("vnp_Amount", String.valueOf(orderDTO.getAmount() * 100));
         vnp_Params.put("vnp_CurrCode", "VND");
 
         vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
-        vnp_Params.put("vnp_OrderInfo", orderInfor);
+        vnp_Params.put("vnp_OrderInfo", orderDTO.getOrderInfo() + "-" + orderDTO.getRankId() + "-" + orderDTO.getUserId());
         vnp_Params.put("vnp_OrderType", orderType);
 
         String locate = "vn";
@@ -51,7 +52,9 @@ public class VNPayServiceImpl implements IVNPayService {
 
         cld.add(Calendar.MINUTE, 15);
         String vnp_ExpireDate = formatter.format(cld.getTime());
-        vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
+
+
+
 
         List fieldNames = new ArrayList(vnp_Params.keySet());
         Collections.sort(fieldNames);

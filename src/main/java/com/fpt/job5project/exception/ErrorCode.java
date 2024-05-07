@@ -34,21 +34,18 @@ public enum ErrorCode {
     PASSWORD_INCORRECT(402, "Password incorrect", HttpStatus.BAD_REQUEST),
     PASSWORD_MISMATCH(402, "Password mismatch", HttpStatus.BAD_REQUEST),
     USER_EXISTED(401, "User already existed", HttpStatus.BAD_REQUEST),
-    USER_ALREADY_LOCKED(403, "User already locked", HttpStatus.BAD_REQUEST),
 
+    USERNAME_NOT_NULL(701, "Username can't be null", HttpStatus.BAD_REQUEST),
+    PASSWORD_NOT_NULL(702, "Password can't be null", HttpStatus.BAD_REQUEST),
+    ROLE_NOT_NULL(703, "Role can't be null", HttpStatus.BAD_REQUEST),
     USERNAME_EXISTED(704, "Username already existed", HttpStatus.BAD_REQUEST),
     USER_NOT_EXISTED(705, "User doesn't exist", HttpStatus.NOT_FOUND),
 
-    // Mail
     EMAIL_NOT_NULL(705, "Email can't be null", HttpStatus.BAD_REQUEST),
     PHONE_NOT_NULL(706, "Phone can't be null", HttpStatus.BAD_REQUEST),
     EMAIL_EXISTED(705, "Email already existed", HttpStatus.BAD_REQUEST),
 
     // Employer error code
-
-    EMPLOYER_NOT_FOUND(800, "Employer not found", HttpStatus.NOT_FOUND),
-    EMPLOYER_NOT_APPROVED(801, "Employer not approved", HttpStatus.BAD_REQUEST),
-    EMPLOYER_ALREADY_APPROVED(801, "Employer is alredy already approved", HttpStatus.BAD_REQUEST),
     EMPLOYER_EXISTED(801, "Employer already existed", HttpStatus.BAD_REQUEST),
     EMPLOYER_NAME_NOT_NULL(802, "Employer name can't be null", HttpStatus.BAD_REQUEST),
     LIST_EMPLOYERS_IS_NULL(803, "List of employers are empty", HttpStatus.BAD_REQUEST),
@@ -61,6 +58,29 @@ public enum ErrorCode {
 
     UNAUTHENTICATED(1006, "Unauthenticated", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1007, "You do not have permission", HttpStatus.FORBIDDEN),
+
+
+    LIST_PROVINCES_IS_NULL(403, "List of provinces are empty", HttpStatus.BAD_REQUEST),
+
+
+    LIST_JOB_IS_NULL(403, "List of jobs are empty", HttpStatus.BAD_REQUEST),
+    LIST_JOBDescription_IS_NULL(403, "List of Job description are empty", HttpStatus.BAD_REQUEST),
+    LIST_JOBBENEFIT_IS_NULL(403, "List of job benefit are empty", HttpStatus.BAD_REQUEST),
+    LIST_JOBRequirement_IS_NULL(403,"List of job requirement are empty", HttpStatus.BAD_REQUEST),
+    LIST_JOBType_IS_NULL(403, "List of job type are empty", HttpStatus.BAD_REQUEST),
+    LIST_Industry_IS_NULL(403, "List of industry are empty", HttpStatus.BAD_REQUEST),
+    JOB_NOT_EXIST(404, "Job doesn't exist", HttpStatus.BAD_REQUEST),
+    JOBBENEFIT_NOT_EXIST(404, "Job benefit doesn't exist", HttpStatus.BAD_REQUEST),
+    JOBDescription_NOT_EXIST(404, "Job description doesn't exist", HttpStatus.BAD_REQUEST),
+    JOBRequirement_NOT_EXIST(404, "Job requirement doesn't exist", HttpStatus.BAD_REQUEST),
+    JOBType_NOT_EXIST(404, "Job type doesn't exist", HttpStatus.BAD_REQUEST),
+
+     LIST_RANKS_IS_NULL(403, "List of ranks are empty", HttpStatus.BAD_REQUEST),
+
+    EMPLOYER_NOT_FOUND(800, "Employer not found", HttpStatus.NOT_FOUND),
+    RANK_NOT_EXIST( 404, "Rank doesn't exist", HttpStatus.BAD_REQUEST),
+    EMPLOYER_NOT_APPROVED(801, "Employer not approved", HttpStatus.BAD_REQUEST),
+    EMPLOYER_ALREADY_APPROVED(801, "Employer is alredy already approved", HttpStatus.BAD_REQUEST)
     ;
 
     private int status;

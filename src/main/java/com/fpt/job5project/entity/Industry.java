@@ -26,7 +26,7 @@ public class Industry {
     private long industryId;
 
     @Nationalized
-    @Column(name = "industryname", nullable = false)
+    @Column(name = "industryname")
     private String industryName;
 
 }

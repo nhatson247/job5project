@@ -36,7 +36,7 @@ public class Job {
     private long jobId;
 
     @Nationalized
-    @Column(name = "jobname", nullable = false)
+    @Column(name = "jobname")
     private String jobName;
 
     @ManyToOne(targetEntity = Employer.class)
@@ -46,7 +46,7 @@ public class Job {
     @Column(name = "employerid", nullable = false)
     private long employerId;
 
-    @Column(name = "postdate", nullable = false)
+    @Column(name = "postdate")
     private Date postDate;
 
     @Column(name = "expirationdate")
@@ -63,10 +63,10 @@ public class Job {
     private int typeId;
 
     @Nationalized
-    @Column(name = "jobposition", nullable = false)
+    @Column(name = "jobposition")
     private String jobPosition;
 
-    @Column(name = "numposition", nullable = false)
+    @Column(name = "numposition")
     private int numPosition;
 
     @Column(name = "minsalary")
@@ -75,8 +75,12 @@ public class Job {
     @Column(name = "maxsalary")
     private long maxSalary;
 
-    @Column(name = "yearexpirence")
-    private int yearExpirence;
+    @Column(name = "yearexperience")
+    private int yearExperience;
+
+    @Column(name = "address")
+    @Nationalized
+    private String address;
 
     @ManyToOne(targetEntity = Province.class)
     @JoinColumn(name = "location", insertable = false, updatable = false)
@@ -86,7 +90,6 @@ public class Job {
     @Nationalized
     private String location;
 
-    @Builder.Default
     @ManyToMany
     private Set<Industry> industries = new LinkedHashSet<>();
 
@@ -96,27 +99,21 @@ public class Job {
     @Column(name = "isremoved")
     private boolean isRemoved;
 
-    @Builder.Default
+    @Column(name = "reuptimesleft")
+    private int reupTimesLeft;
+
     @OneToMany(mappedBy = "job")
     private List<Application> applications = new ArrayList<>();
 
-    @Builder.Default
     @OneToMany(mappedBy = "job")
     private List<JobBenefit> jobBenefits = new ArrayList<>();
 
-    @Builder.Default
     @OneToMany(mappedBy = "job")
     private List<JobDescription> jobDescriptions = new ArrayList<>();
 
-    @Builder.Default
-    @OneToMany(mappedBy = "job")
-    private List<JobKey> jobKeys = new ArrayList<>();
-
-    @Builder.Default
     @OneToMany(mappedBy = "job")
     private List<JobReport> jobReports = new ArrayList<>();
 
-    @Builder.Default
     @OneToMany(mappedBy = "job")
     private List<JobRequirement> jobRequirements = new ArrayList<>();
 

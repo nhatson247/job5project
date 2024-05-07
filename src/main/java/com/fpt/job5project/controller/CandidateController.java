@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequestMapping("api/Candidate")
+@RequestMapping("api/candidate")
 public class CandidateController {
     ICandidateService iCandidateService;
 
@@ -47,7 +47,7 @@ public class CandidateController {
 //        return responseObject;
 //    }
 
-    @DeleteMapping("/Delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseObject<String> deleteCategory(@PathVariable("id") Long id) {
 
         ResponseObject<String> responseObject = new ResponseObject<>();
@@ -56,7 +56,7 @@ public class CandidateController {
         return responseObject;
     }
 
-    @PutMapping("/Update/{id}")
+    @PutMapping("/update/{id}")
     public ResponseObject<CandidateDTO> updateCategory(@PathVariable("id") Long id, @ModelAttribute CandidateDTO candidateDTO,@ModelAttribute("file") MultipartFile file) {
 
         ResponseObject<CandidateDTO> responseObject = new ResponseObject<>();

@@ -8,7 +8,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,11 +32,16 @@ public class CV {
     @Column(name = "candidateid")
     private long candidateId;
 
-    @NotNull
-    @Column(name = "cvfile", nullable = false)
+    @Column(name = "cvfile")
     private String cvFile;
 
-    @Column(name = "ismain")
-    private boolean isMain;
+    @Column(name = "cvname")
+    private String cvName;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "maincv")
+    private boolean mainCV;
 
 }

@@ -38,9 +38,9 @@ public class JobInterest {
     @JoinColumn(name = "candidateid", insertable = false, updatable = false)
     private Candidate candidate;
 
-    @Column(name = "candidateid")
+    @Column(name = "candidateid", nullable = false)
     private long candidateId;
 
-    @Column(name = "interestdate", nullable = false)
+    @Column(name = "interestdate")
     private Date interestDate;
 }

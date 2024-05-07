@@ -33,20 +33,20 @@ public class EmployerReview {
     @JoinColumn(name = "employerid", insertable = false, updatable = false)
     private Employer employer;
 
-    @Column(name = "employerid")
+    @Column(name = "employerid", nullable = false)
     private long employerId;
 
     @ManyToOne(targetEntity = Candidate.class)
     @JoinColumn(name = "candidateid", insertable = false, updatable = false)
     private Candidate candidate;
 
-    @Column(name = "candidateid")
+    @Column(name = "candidateid", nullable = false)
     private long candidateId;
 
-    @Column(name = "score", nullable = false)
+    @Column(name = "score")
     private double score;
 
-    @Column(name = "reviewdate", nullable = false)
+    @Column(name = "reviewdate")
     @Temporal(TemporalType.DATE)
     private Date reviewDate;
 

@@ -1,12 +1,28 @@
 package com.fpt.job5project.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.util.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
@@ -19,6 +35,7 @@ public class Candidate {
     @Column(name = "candidateid", nullable = false)
     private long candidateId;
 
+    @MapsId
     @OneToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "candidateid", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -31,8 +48,12 @@ public class Candidate {
     @Column(name = "birthdate")
     private Date birthDate;
 
-    @Column(name = "yearexpirence")
-    private int yearExpirence;
+    @Column(name = "yearexperience")
+    private int yearExperience;
+
+    @Nationalized
+    @Column(name = "currentjob")
+    private String currentJob;
 
     @Nationalized
     @Column(name = "bio")
@@ -59,19 +80,24 @@ public class Candidate {
     @Column(name = "address")
     private String address;
 
-    @Builder.Default
     @OneToMany(mappedBy = "candidate")
     private List<Application> applications = new ArrayList<>();
 
-    @Builder.Default
     @OneToMany(mappedBy = "candidate")
     private List<CV> cvs = new ArrayList<>();
 
-    @Builder.Default
     @OneToMany(mappedBy = "candidate")
     private List<EmployerReview> employerReviews = new ArrayList<>();
 
-    @Builder.Default
     @OneToMany(mappedBy = "candidate")
     private List<JobReport> jobReports = new ArrayList<>();
+
+    @OneToMany(mappedBy = "candidate")
+    private List<JobInterest> jobInterests = new ArrayList<>();
+
+    @OneToMany(mappedBy = "candidate")
+    private List<Follow> follows = new ArrayList<>();
+
+    @OneToMany(mappedBy = "candidate")
+    private List<TimeLine> timeLines = new ArrayList<>();
 }

@@ -20,7 +20,6 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -68,7 +67,7 @@ public class Employer {
     private String photo;
 
     @Column(name = "background")
-    private String backGround;
+    private String background;
 
     @ManyToOne(targetEntity = Province.class)
     @JoinColumn(name = "provincename", insertable = false, updatable = false)
@@ -82,18 +81,20 @@ public class Employer {
     @Column(name = "address")
     private String address;
 
-    @NotNull
-    @Column(name = "reviewscore", nullable = false)
+    @Column(name = "reviewscore")
     private double reviewScore;
 
     @JsonIgnore
-    @Builder.Default
     @OneToMany(mappedBy = "employer")
     private List<EmployerReview> employerReviews = new ArrayList<>();
 
-    @Builder.Default
+    @JsonIgnore
     @OneToMany(mappedBy = "employer")
     private List<Job> jobs = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "employer")
+    private List<Follow> follows = new ArrayList<>();
 
     @Column(name = "approved")
     private boolean approved;

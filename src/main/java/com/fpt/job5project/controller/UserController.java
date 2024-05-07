@@ -1,24 +1,30 @@
 package com.fpt.job5project.controller;
 
-import com.fpt.job5project.dto.UserDTO;
-import com.fpt.job5project.dto.EmployerApprovedDTO;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.fpt.job5project.dto.ForgetPasswordDTO;
 import com.fpt.job5project.dto.ResponseObject;
 import com.fpt.job5project.dto.UserChangeDTO;
+import com.fpt.job5project.dto.UserDTO;
 import com.fpt.job5project.service.IUserService;
 
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
 @RestController
-@RequestMapping("/api/Users")
+@RequestMapping("/api/users")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserController {
 

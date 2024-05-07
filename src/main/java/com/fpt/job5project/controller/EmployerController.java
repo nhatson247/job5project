@@ -18,12 +18,12 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequestMapping("api/Employer")
+@RequestMapping("api/employer")
 public class EmployerController {
 
     IEmployerService iEmployerService;
 
-    @GetMapping
+    @GetMapping("")
     public ResponseObject<List<EmployerDTO>> listEmployers() {
 
         ResponseObject<List<EmployerDTO>> responseObject = new ResponseObject<>();
@@ -41,7 +41,8 @@ public class EmployerController {
         return responseObject;
     }
 
-    @PostMapping("/Create")
+
+    @PostMapping("/create")
     public ResponseObject<EmployerDTO> addEmployer(@ModelAttribute @Valid EmployerDTO newEmployer) {
 
         ResponseObject<EmployerDTO> responseObject = new ResponseObject<>();
@@ -49,7 +50,7 @@ public class EmployerController {
         return responseObject;
     }
 
-    @DeleteMapping("/Delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseObject<String> deleteEmployer(@PathVariable("id") Long id) {
 
         ResponseObject<String> responseObject = new ResponseObject<>();
@@ -58,10 +59,9 @@ public class EmployerController {
         return responseObject;
     }
 
-    @PutMapping("/Update/{id}")
-    public ResponseObject<EmployerDTO> updateEmployer(@PathVariable("id") Long id,
-            @ModelAttribute EmployerDTO employerDTO, @ModelAttribute("filePhoto") MultipartFile filePhoto,
-            @ModelAttribute("fileBackground") MultipartFile fileBackground) {
+    @PutMapping("/update/{id}")
+    public ResponseObject<EmployerDTO> updateEmployer(@PathVariable("id") Long id, @ModelAttribute EmployerDTO employerDTO, @ModelAttribute("filePhoto") MultipartFile filePhoto, @ModelAttribute("fileBackground") MultipartFile fileBackground) {
+        System.out.println("alo");
         ResponseObject<EmployerDTO> responseObject = new ResponseObject<>();
         responseObject.setData(iEmployerService.updateEmployer(id, employerDTO, filePhoto, fileBackground));
         return responseObject;
