@@ -4,10 +4,12 @@ import java.text.ParseException;
 
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fpt.job5project.dto.AuthenticationDTO;
+import com.fpt.job5project.dto.IntrospectDTO;
 import com.fpt.job5project.dto.LogoutDTO;
 import com.fpt.job5project.dto.RefreshDTO;
 import com.fpt.job5project.dto.ResponseObject;
@@ -35,6 +37,15 @@ public class AuthenticationController {
     ResponseObject<AuthenticationDTO> authenticate(@ModelAttribute @Valid AuthenticationDTO request) {
         var result = authenticationService.authenticate(request);
         return ResponseObject.<AuthenticationDTO>builder()
+                .data(result)
+                .build();
+    }
+
+    @PostMapping("/introspect")
+    ResponseObject<IntrospectDTO> authenticate(@ModelAttribute IntrospectDTO request)
+            throws ParseException, JOSEException {
+        var result = authenticationService.introspect(request);
+        return ResponseObject.<IntrospectDTO>builder()
                 .data(result)
                 .build();
     }

@@ -27,7 +27,6 @@ public class EmployerController {
     public ResponseObject<List<EmployerDTO>> listEmployers() {
 
         ResponseObject<List<EmployerDTO>> responseObject = new ResponseObject<>();
-
         List<EmployerDTO> listDTOs = iEmployerService.listOfEmployers();
         responseObject.setData(listDTOs);
         return responseObject;
@@ -62,6 +61,7 @@ public class EmployerController {
     public ResponseObject<EmployerDTO> updateEmployer(@PathVariable("id") Long id,
             @ModelAttribute EmployerDTO employerDTO, @ModelAttribute("filePhoto") MultipartFile filePhoto,
             @ModelAttribute("fileBackground") MultipartFile fileBackground) {
+
         ResponseObject<EmployerDTO> responseObject = new ResponseObject<>();
         responseObject.setData(iEmployerService.updateEmployer(id, employerDTO, filePhoto, fileBackground));
         return responseObject;
@@ -79,12 +79,14 @@ public class EmployerController {
     @PreAuthorize("hasRole('admin')")
     @PostMapping("/approvedAccept/{userId}")
     public ResponseObject<String> approvedAcceptEmployer(@PathVariable("userId") long userId) {
+
         iEmployerService.approveAcceptEmployer(userId);
         return ResponseObject.<String>builder()
                 .data("accept is success")
                 .build();
     }
 
+    @PreAuthorize("hasRole('admin')")
     @DeleteMapping("/approvedNotAccept/{id}")
     public ResponseObject<String> approvedNotAcceptEmployer(@PathVariable("id") Long id) {
 

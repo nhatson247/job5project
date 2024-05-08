@@ -18,6 +18,5 @@ public interface IAuthenticationService {
 
     public void logout(LogoutDTO request) throws JOSEException, ParseException;
 
-    public AuthenticationDTO refreshToken(RefreshDTO request)
-            throws ParseException, JOSEException;
+    public AuthenticationDTO refreshToken(RefreshDTO request) throws ParseException, JOSEException;
 }

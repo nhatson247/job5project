@@ -13,8 +13,10 @@ import lombok.NoArgsConstructor;
 public enum ErrorCode {
     UNEXPECTED_ERROR(999, "Unexpected error", HttpStatus.INTERNAL_SERVER_ERROR),
     INVALID_KEY(400, "Invalid message key", HttpStatus.BAD_REQUEST),
-
+    INVALID_TOKEN(400, "Invalid token", HttpStatus.UNAUTHORIZED),
+    TOKEN_EXPIRED(401, "Token expired aaaaaaaaa", HttpStatus.UNAUTHORIZED),
     // Category error code
+
     CATEGORY_EXISTED(401, "Category already existed", HttpStatus.BAD_REQUEST),
     CATEGORY_NAME_NOT_NULL(402, "Category name can't be null", HttpStatus.BAD_REQUEST),
     LIST_CATEGORY_IS_NULL(403, "List of categories are empty", HttpStatus.BAD_REQUEST),
@@ -59,14 +61,12 @@ public enum ErrorCode {
     UNAUTHENTICATED(1006, "Unauthenticated", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1007, "You do not have permission", HttpStatus.FORBIDDEN),
 
-
     LIST_PROVINCES_IS_NULL(403, "List of provinces are empty", HttpStatus.BAD_REQUEST),
-
 
     LIST_JOB_IS_NULL(403, "List of jobs are empty", HttpStatus.BAD_REQUEST),
     LIST_JOBDescription_IS_NULL(403, "List of Job description are empty", HttpStatus.BAD_REQUEST),
     LIST_JOBBENEFIT_IS_NULL(403, "List of job benefit are empty", HttpStatus.BAD_REQUEST),
-    LIST_JOBRequirement_IS_NULL(403,"List of job requirement are empty", HttpStatus.BAD_REQUEST),
+    LIST_JOBRequirement_IS_NULL(403, "List of job requirement are empty", HttpStatus.BAD_REQUEST),
     LIST_JOBType_IS_NULL(403, "List of job type are empty", HttpStatus.BAD_REQUEST),
     LIST_Industry_IS_NULL(403, "List of industry are empty", HttpStatus.BAD_REQUEST),
     JOB_NOT_EXIST(404, "Job doesn't exist", HttpStatus.BAD_REQUEST),
@@ -75,13 +75,12 @@ public enum ErrorCode {
     JOBRequirement_NOT_EXIST(404, "Job requirement doesn't exist", HttpStatus.BAD_REQUEST),
     JOBType_NOT_EXIST(404, "Job type doesn't exist", HttpStatus.BAD_REQUEST),
 
-     LIST_RANKS_IS_NULL(403, "List of ranks are empty", HttpStatus.BAD_REQUEST),
+    LIST_RANKS_IS_NULL(403, "List of ranks are empty", HttpStatus.BAD_REQUEST),
 
     EMPLOYER_NOT_FOUND(800, "Employer not found", HttpStatus.NOT_FOUND),
-    RANK_NOT_EXIST( 404, "Rank doesn't exist", HttpStatus.BAD_REQUEST),
+    RANK_NOT_EXIST(404, "Rank doesn't exist", HttpStatus.BAD_REQUEST),
     EMPLOYER_NOT_APPROVED(801, "Employer not approved", HttpStatus.BAD_REQUEST),
-    EMPLOYER_ALREADY_APPROVED(801, "Employer is alredy already approved", HttpStatus.BAD_REQUEST)
-    ;
+    EMPLOYER_ALREADY_APPROVED(801, "Employer is alredy already approved", HttpStatus.BAD_REQUEST);
 
     private int status;
     private String message;
