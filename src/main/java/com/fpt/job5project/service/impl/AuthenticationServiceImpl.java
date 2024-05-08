@@ -35,6 +35,7 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import org.springframework.security.core.AuthenticationException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.NonFinal;
@@ -137,7 +138,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
         var username = signedJWT.getJWTClaimsSet().getSubject();
 
         var user = userRepository.findByUserName(username)
-                .orElseThrow(() -> new AppException(ErrorCode.CANDIDATE_EXISTED));
+                .orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
 
         var token = generateToken(user);
 
@@ -159,7 +160,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
                 .issueTime(new Date())
                 .expirationTime(new Date(
 
-                        Instant.now().plus(4, ChronoUnit.HOURS).toEpochMilli()))
+                        Instant.now().plus(10, ChronoUnit.SECONDS).toEpochMilli()))
                 .jwtID(UUID.randomUUID().toString())
                 .claim("scope", user.getRole())
                 .build();
@@ -183,13 +184,15 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 
         Date expiryTime = (isRefresh)
                 ? new Date(signedJWT.getJWTClaimsSet().getIssueTime()
-                        .toInstant().plus(4, ChronoUnit.HOURS).toEpochMilli())
+                        .toInstant().plus(3000, ChronoUnit.SECONDS).toEpochMilli())
                 : signedJWT.getJWTClaimsSet().getExpirationTime();
 
         var verified = signedJWT.verify(verifier);
 
-        if (!(verified && expiryTime.after(new Date())))
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        if (!(verified && expiryTime.after(new Date()))) {
+            throw new AuthenticationException("Token expired") {
+            };
+        }
 
         if (invalidatedTokenResponsitory.existsById(signedJWT.getJWTClaimsSet().getJWTID()))
             throw new AppException(ErrorCode.UNAUTHENTICATED);

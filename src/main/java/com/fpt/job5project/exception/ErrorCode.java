@@ -14,7 +14,7 @@ public enum ErrorCode {
     UNEXPECTED_ERROR(999, "Unexpected error", HttpStatus.INTERNAL_SERVER_ERROR),
     INVALID_KEY(400, "Invalid message key", HttpStatus.BAD_REQUEST),
     INVALID_TOKEN(400, "Invalid token", HttpStatus.UNAUTHORIZED),
-    TOKEN_EXPIRED(401, "Token expired aaaaaaaaa", HttpStatus.UNAUTHORIZED),
+    TOKEN_EXPIRED(401, "Token expired", HttpStatus.UNAUTHORIZED),
     // Category error code
 
     CATEGORY_EXISTED(401, "Category already existed", HttpStatus.BAD_REQUEST),

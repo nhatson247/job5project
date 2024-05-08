@@ -28,7 +28,7 @@ public class EmployerDTO {
 
     private String photo;
 
-    private String backGround;
+    private String background;
 
     private String provinceName;
 
