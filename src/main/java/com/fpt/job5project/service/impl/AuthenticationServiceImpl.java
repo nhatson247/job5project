@@ -16,6 +16,7 @@ import com.fpt.job5project.dto.AuthenticationDTO;
 import com.fpt.job5project.dto.IntrospectDTO;
 import com.fpt.job5project.dto.LogoutDTO;
 import com.fpt.job5project.dto.RefreshDTO;
+import com.fpt.job5project.entity.Application;
 import com.fpt.job5project.entity.Employer;
 import com.fpt.job5project.entity.InvalidatedToken;
 import com.fpt.job5project.entity.User;
@@ -160,7 +161,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
                 .issueTime(new Date())
                 .expirationTime(new Date(
 
-                        Instant.now().plus(10, ChronoUnit.SECONDS).toEpochMilli()))
+                        Instant.now().plus(4, ChronoUnit.HOURS).toEpochMilli()))
                 .jwtID(UUID.randomUUID().toString())
                 .claim("scope", user.getRole())
                 .build();
@@ -184,7 +185,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 
         Date expiryTime = (isRefresh)
                 ? new Date(signedJWT.getJWTClaimsSet().getIssueTime()
-                        .toInstant().plus(3000, ChronoUnit.SECONDS).toEpochMilli())
+                        .toInstant().plus(4, ChronoUnit.HOURS).toEpochMilli())
                 : signedJWT.getJWTClaimsSet().getExpirationTime();
 
         var verified = signedJWT.verify(verifier);

@@ -2,14 +2,12 @@ package com.fpt.job5project.config.jwt;
 
 import java.io.IOException;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fpt.job5project.dto.ResponseObject;
-import com.fpt.job5project.exception.AppException;
 import com.fpt.job5project.exception.ErrorCode;
 
 import jakarta.servlet.ServletException;

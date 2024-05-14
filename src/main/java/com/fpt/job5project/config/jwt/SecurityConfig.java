@@ -21,6 +21,7 @@ public class SecurityConfig {
     // private static final String[] publicEndpoints = {
     // "api/auth/login", "api/auth/register", "api/auth/logout",
     // "api/auth/refresh", "/api/auth/introspect",
+    // "api/province"
     // };
 
     private static final String[] publicEndpoints = { "/**"
@@ -37,6 +38,9 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(
                 // request -> request.requestMatchers(HttpMethod.POST,
                 // publicEndpoints).permitAll()
+                // .requestMatchers(HttpMethod.GET,
+                // publicEndpoints)
+                // .permitAll()
                 // .anyRequest().authenticated());
 
                 // // truy cập tất cả phương thức
