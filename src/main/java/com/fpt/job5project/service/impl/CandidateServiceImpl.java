@@ -25,7 +25,6 @@ public class CandidateServiceImpl implements ICandidateService {
     CandiadteMapper candiadteMapper;
     IStorageService storageService;
 
-
     @Override
     public List<CandidateDTO> listOfCandidate() {
         List<CandidateDTO> listDTOs = new ArrayList<>();
@@ -33,7 +32,7 @@ public class CandidateServiceImpl implements ICandidateService {
         if (listEntities.isEmpty()) {
             throw new AppException(ErrorCode.LIST_CANDIDATE_IS_NULL);
         }
-        for (Candidate candidateEntity : candidateRepository.findAll()) {
+        for (Candidate candidateEntity : listEntities) {
             listDTOs.add(candiadteMapper.toDTO(candidateEntity));
         }
         return listDTOs;
@@ -49,23 +48,18 @@ public class CandidateServiceImpl implements ICandidateService {
 
     @Override
     public CandidateDTO updateCandidate(long id, CandidateDTO candidateDTO, MultipartFile file) {
-        Candidate foundCandidate = candidateRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.CANDIDATE_NOT_EXIST));
-        if (candidateRepository.existsByEmailAndCandidateIdNot(candidateDTO.getEmail(), id)) {
+
+        if (candidateRepository.existsByEmailAndCandidateIdNot(candidateDTO.getEmail(), id))
             throw new AppException(ErrorCode.EMAIL_EXISTED);
+        Candidate foundCandidate = candidateRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.CANDIDATE_NOT_EXIST));
+        if (foundCandidate != null) {
+            candiadteMapper.updateCandidate(foundCandidate, candidateDTO);
+            String generatedFileName = storageService.storeFile(file);
+            foundCandidate.setPhoto(generatedFileName);
         }
-        /*Candidate foundByEmail = candidateRepository.findByEmail(candidateDTO.getEmail());*/
-
-
-
-        candiadteMapper.updateCandidate(foundCandidate, candidateDTO);
-
-        if (!file.isEmpty()) {
-            String generatedFilePhotoName = storageService.storeFile(file);
-            foundCandidate.setPhoto(generatedFilePhotoName);
-        }
-
         return candiadteMapper.toDTO(candidateRepository.save(foundCandidate));
     }
+
 
     @Override
     public void deleteCandidate(long id) {
@@ -76,4 +70,19 @@ public class CandidateServiceImpl implements ICandidateService {
             candidateRepository.deleteById(id);
         }
     }
+
+    @Override
+    public List<CandidateDTO> findAllByIdIn(List<Long> ids) {
+        List<CandidateDTO> listDTOs = new ArrayList<>();
+        List<Candidate> listEntities = candidateRepository.findAllByCandidateIdIn(ids);
+        if (listEntities.isEmpty()) {
+            throw new AppException(ErrorCode.LIST_CANDIDATE_IS_NULL);
+        }
+        for (Candidate candidateEntity : listEntities) {
+            listDTOs.add(candiadteMapper.toDTO(candidateEntity));
+        }
+        return listDTOs;
+    }
+
+
 }

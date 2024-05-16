@@ -43,8 +43,8 @@ public class StorageServiceImpl implements IStorageService {
 	@Override
 	public String storeFile(MultipartFile file) {
 		try {
-			System.out.println("Haha");
-			if (file.isEmpty()) {
+			System.out.println(file != null);
+			if (file == null) {
 				throw new AppException(ErrorCode.IMAGE_NULL);
 			}
 			//check file is image?

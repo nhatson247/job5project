@@ -13,7 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.fpt.job5project.dto.EmployerDTO;
 import com.fpt.job5project.dto.ForgetPasswordDTO;
 import com.fpt.job5project.dto.MailDTO;
 import com.fpt.job5project.dto.UserChangeDTO;

@@ -6,4 +6,12 @@ import com.fpt.job5project.dto.IndustryDTO;
 
 public interface IIndustryService {
     public List<IndustryDTO> getAllIndustry();
+
+    public IndustryDTO addIndustry(IndustryDTO newIndustryDTO);
+
+    public IndustryDTO updateIndustry(long id, IndustryDTO newIndustryDTO);
+
+    public void deleteIndustry(long id);
+
+    public IndustryDTO getIndustryID(long id);
 }

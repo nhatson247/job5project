@@ -1,6 +1,7 @@
 package com.fpt.job5project.dto;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,8 +19,14 @@ public class UserChangeDTO {
     String password;
 
     @NotEmpty(message = "New Password is required")
+    @Size(min = 8, message = "New Password must be at least 8 characters long")
     String newPassword;
 
     @NotEmpty(message = "Confirm New Password is required")
+    @Size(min = 8, message = "Confirm New Password must be at least 8 characters long")
     String confirmNewPassword;
+
+    public boolean isNewPasswordMatching() {
+        return newPassword != null && newPassword.equals(confirmNewPassword);
+    }
 }

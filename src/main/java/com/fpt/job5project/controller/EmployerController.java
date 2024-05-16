@@ -8,7 +8,6 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +26,7 @@ public class EmployerController {
     public ResponseObject<List<EmployerDTO>> listEmployers() {
 
         ResponseObject<List<EmployerDTO>> responseObject = new ResponseObject<>();
+
         List<EmployerDTO> listDTOs = iEmployerService.listOfEmployers();
         responseObject.setData(listDTOs);
         return responseObject;
@@ -40,7 +40,7 @@ public class EmployerController {
         return responseObject;
     }
 
-    @PostMapping("/create")
+    @PostMapping("/Create")
     public ResponseObject<EmployerDTO> addEmployer(@ModelAttribute @Valid EmployerDTO newEmployer) {
 
         ResponseObject<EmployerDTO> responseObject = new ResponseObject<>();

@@ -33,4 +33,10 @@ public interface JobsIndustriesRepository extends JpaRepository<JobsIndustries, 
     @Transactional
     @Query(value = "DELETE jobs_industries WHERE job_jobid = :jobId", nativeQuery = true)
     public void deleteIndustryByJobId(@Param("jobId") long jobId);
+
+    @Modifying
+    @Transactional
+    @Query(value = "delete from jobs_industries where industries_industryid = :industryId", nativeQuery = true)
+    public void deleteIndustryJobByIndustryId(@Param("industryId") long industryId);
+
 }

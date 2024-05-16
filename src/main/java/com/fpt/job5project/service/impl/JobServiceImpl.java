@@ -57,4 +57,34 @@ public class JobServiceImpl implements IJobService {
         return jobMapper.toDTO(foundJob);
     }
 
+    @Override
+    public List<JobDTO> getTopJobForHome(int numJobs) {
+        List<JobDTO> listDTO = new ArrayList<>();
+        List<Job> listEntity = jobRepository.getTopJobForHome(numJobs);
+        for (Job a : listEntity) {
+            listDTO.add(jobMapper.toDTO(a));
+        }
+        return listDTO;
+    }
+
+    @Override
+    public List<JobDTO> getJobByEmployer(long employerId) {
+        List<JobDTO> listDTO = new ArrayList<>();
+        List<Job> listEntity = jobRepository.findByEmployerId(employerId);
+        for(Job a : listEntity){
+            listDTO.add(jobMapper.toDTO(a));
+        }
+        return listDTO;
+    }
+
+    @Override
+    public List<JobDTO> resultSearchJob(long industryId, String searchValue, long minSalary, long maxSalary, String location) {
+        List<JobDTO> listDTO = new ArrayList<>();
+        List<Job> listEntity = jobRepository.resultSearch(industryId, searchValue, minSalary, maxSalary, location);
+        for (Job a : listEntity) {
+            listDTO.add(jobMapper.toDTO(a));
+        }
+        return listDTO;
+    }
+
 }

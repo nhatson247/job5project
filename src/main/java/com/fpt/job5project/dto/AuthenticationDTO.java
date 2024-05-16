@@ -1,8 +1,10 @@
 package com.fpt.job5project.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -14,10 +16,13 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AuthenticationDTO {
 
-    @NotEmpty(message = "Username is required")
+    @NotBlank(message = "Username is required")
+    @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
     String userName;
 
-    @NotEmpty(message = "Password is required")
+    @NotBlank(message = "Password is required")
+    // @Size(min = 8, message = "Password must be at least 8 characters")
+    @JsonIgnore
     String password;
 
     String token;

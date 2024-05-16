@@ -11,4 +11,6 @@ public interface IJobsIndustriesService {
     public void deleteIndustryOfJob(long jobId, long industryId);
 
     public void deleteIndustriesByJobId(long jobId);
+
+    public void deleteIndustryJobByIndustryId(long industryId);
 }

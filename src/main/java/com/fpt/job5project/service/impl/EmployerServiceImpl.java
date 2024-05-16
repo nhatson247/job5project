@@ -14,7 +14,6 @@ import com.fpt.job5project.service.IEmployerService;
 import com.fpt.job5project.service.IMailService;
 import com.fpt.job5project.service.IStorageService;
 import com.fpt.job5project.utils.Const;
-
 import jakarta.mail.MessagingException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -23,13 +22,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-// Autowired, private, final
+//Autowired, private, final
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class EmployerServiceImpl implements IEmployerService {
@@ -39,7 +39,6 @@ public class EmployerServiceImpl implements IEmployerService {
     EmployerMapper employerMapper;
 
     IStorageService storageService;
-
     IMailService iMailService;
 
     UserRepository userRepository;
@@ -75,8 +74,7 @@ public class EmployerServiceImpl implements IEmployerService {
     }
 
     @Override
-    public EmployerDTO updateEmployer(long id, EmployerDTO employerDTO, MultipartFile filePhoto,
-            MultipartFile fileBackground) {
+    public EmployerDTO updateEmployer(long id, EmployerDTO employerDTO, MultipartFile filePhoto, MultipartFile fileBackground) {
         if (employerRepository.existsByEmailAndEmployerIdNot(employerDTO.getEmail(), id))
             throw new AppException(ErrorCode.EMAIL_EXISTED);
 
@@ -108,7 +106,7 @@ public class EmployerServiceImpl implements IEmployerService {
         }
     }
 
-    @Override
+     @Override
     public int upRank(long rankId, long userId) {
         return employerRepository.updateRankById(rankId, userId);
     }
@@ -183,5 +181,4 @@ public class EmployerServiceImpl implements IEmployerService {
             e.printStackTrace();
         }
     }
-
 }

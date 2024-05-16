@@ -88,7 +88,7 @@ public class UserController {
     }
 
     @PostMapping("/forget")
-    public ResponseObject<String> forgetAccount(@ModelAttribute ForgetPasswordDTO request) {
+    public ResponseObject<String> forgetAccount(@Valid @ModelAttribute ForgetPasswordDTO request) {
         iuserService.forgetPassword(request);
         return ResponseObject.<String>builder()
                 .data("Sending email successfully")

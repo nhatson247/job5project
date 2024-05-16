@@ -41,4 +41,5 @@ public class JobDTO {
     String location;
     boolean isExpired;
     boolean isRemoved;
+    int reupTimesLeft;
 }

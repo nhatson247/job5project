@@ -80,7 +80,19 @@ public enum ErrorCode {
     EMPLOYER_NOT_FOUND(800, "Employer not found", HttpStatus.NOT_FOUND),
     RANK_NOT_EXIST(404, "Rank doesn't exist", HttpStatus.BAD_REQUEST),
     EMPLOYER_NOT_APPROVED(801, "Employer not approved", HttpStatus.BAD_REQUEST),
-    EMPLOYER_ALREADY_APPROVED(801, "Employer is alredy already approved", HttpStatus.BAD_REQUEST);
+    EMPLOYER_ALREADY_APPROVED(801, "Employer is alredy already approved", HttpStatus.BAD_REQUEST),
+    //Job interest error code
+    LIST_CV_IS_NULL(201, "List of job interests are empty",HttpStatus.BAD_REQUEST),
+    CV_NOT_EXIST(204, "job interest doesn't exist",HttpStatus.BAD_REQUEST),
+
+    //Job interest error code
+    LIST_JOB_REPORT_IS_NULL(301, "List of job interests are empty",HttpStatus.BAD_REQUEST),
+    JOB_REPORT_NOT_EXIST(304, "job interest doesn't exist",HttpStatus.BAD_REQUEST),
+
+    //Job interest error code
+    LIST_JOB_INTEREST_IS_NULL(401, "List of job interests are empty",HttpStatus.BAD_REQUEST),
+    JOB_INTEREST_NOT_EXIST(404, "job interest doesn't exist",HttpStatus.BAD_REQUEST),
+    ;
 
     private int status;
     private String message;

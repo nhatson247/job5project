@@ -34,4 +34,14 @@ public interface EmployerRepository extends JpaRepository<Employer, Long> {
     @Query("SELECT COUNT(DISTINCT e.employerId) FROM Employer e")
     long countDistinctEmployerIds();
 
+    // @Modifying
+    // @Transactional
+    // @Query(value = "SELECT * FROM Employers WHERE employerId = :employerId",
+    // nativeQuery = true)
+    // List<Employer> getById(@Param("employerId") long employerId);
+
+    // @Modifying
+    // @Transactional
+    // @Query(value = "EXEC deleteUserByUserName :userName", nativeQuery = true)
+    // void deleteUserByUserName(@Param("userName")String userName);
 }

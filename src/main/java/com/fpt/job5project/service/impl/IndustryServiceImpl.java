@@ -36,4 +36,35 @@ public class IndustryServiceImpl implements IIndustryService {
         }
         return listDTO;
     }
+
+    @Override
+    public IndustryDTO addIndustry(IndustryDTO newIndustryDTO) {
+        Industry newIndustry = new Industry();
+        newIndustry = industryMapper.toEntity(newIndustryDTO);
+        return industryMapper.toDTO(industryRepository.save(newIndustry));
+    }
+
+    @Override
+    public IndustryDTO updateIndustry(long id, IndustryDTO newIndustryDTO) {
+        Industry foundIndustry = industryRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.CANDIDATE_NOT_EXIST));
+        industryMapper.updateIndustry(foundIndustry, newIndustryDTO);
+        return industryMapper.toDTO(industryRepository.save(foundIndustry));
+    }
+
+    @Override
+    public void deleteIndustry(long id) {
+        boolean existsById = industryRepository.existsById(id);
+        if (!existsById) {
+            throw new AppException(ErrorCode.CANDIDATE_NOT_EXIST);
+        } else {
+            industryRepository.deleteById(id);
+        }
+    }
+
+    @Override
+    public IndustryDTO getIndustryID(long id) {
+        return industryMapper.toDTO(industryRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_EXISTED)));
+    }
 }

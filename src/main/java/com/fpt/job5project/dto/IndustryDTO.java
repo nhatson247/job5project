@@ -1,5 +1,6 @@
 package com.fpt.job5project.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,5 +15,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class IndustryDTO {
     private long industryId;
+
+    @NotBlank(message = "Industry name is required")
     private String industryName;
 }

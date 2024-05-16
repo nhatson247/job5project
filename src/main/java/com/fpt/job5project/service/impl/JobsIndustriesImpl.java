@@ -16,7 +16,7 @@ import java.util.List;
 public class JobsIndustriesImpl implements IJobsIndustriesService {
     JobsIndustriesRepository jobsIndustriesRepository;
     @Override
-    public void addJobsIndustries(com.fpt.job5project.Model.JobsIndustries jobsIndustries) {
+    public void addJobsIndustries(JobsIndustries jobsIndustries) {
 
         int checkExists = jobsIndustriesRepository.checkExists(jobsIndustries.getIndustries_industryid(), jobsIndustries.getJob_jobid());
         if(checkExists == 0){
@@ -39,6 +39,11 @@ public class JobsIndustriesImpl implements IJobsIndustriesService {
     @Override
     public void deleteIndustriesByJobId(long jobId) {
         jobsIndustriesRepository.deleteIndustryByJobId((jobId));
+    }
+
+    @Override
+    public void deleteIndustryJobByIndustryId(long industryId) {
+        jobsIndustriesRepository.deleteIndustryJobByIndustryId(industryId);
     }
 
 
