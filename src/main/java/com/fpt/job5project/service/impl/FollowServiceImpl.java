@@ -22,13 +22,10 @@ import java.util.List;
 public class FollowServiceImpl implements IFollowService {
     FollowRepository followRepository;
     FollowMapper followMapper;
+
     @Override
     public List<FollowDTO> listOfJobFollowByCandidateId(Long id) {
         List<FollowDTO> listDTOs = new ArrayList<>();
-//        List<Follow> listEntities = jobFollowRepository.findAll();
-//        if (listEntities.isEmpty()) {
-//            throw new AppException(ErrorCode.LIST_CV_IS_NULL);
-//        }
         for (Follow followEntity : followRepository.findByCandidateId(id)) {
             System.out.println("hello"+followEntity.getCandidateId());
             listDTOs.add(followMapper.toDTO(followEntity));
@@ -41,6 +38,15 @@ public class FollowServiceImpl implements IFollowService {
         Follow jobFollow = followRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.CV_NOT_EXIST));
         return followMapper.toDTO(jobFollow);
+    }
+
+    @Override
+    public List<FollowDTO> getJobFollowByCandidateAndEmployer(Long candidateId, Long employerId) {
+        List<FollowDTO> listDTOs = new ArrayList<>();
+        for (Follow followEntity : followRepository.findByCandidateIdAndAndEmployerId(candidateId,employerId)) {
+            listDTOs.add(followMapper.toDTO(followEntity));
+        }
+        return listDTOs;
     }
 
     @Override
@@ -68,4 +74,7 @@ public class FollowServiceImpl implements IFollowService {
             followRepository.deleteById(id);
         }
     }
+
+
+
 }

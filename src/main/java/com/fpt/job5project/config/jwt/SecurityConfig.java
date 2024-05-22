@@ -21,11 +21,12 @@ public class SecurityConfig {
      private static final String[] publicEndpoints = {
      "api/auth/login", "api/auth/register", "api/auth/logout",
      "api/auth/refresh", "api/auth/introspect",
-             "api/province", "api/industry","api/job/getTopJobForHome/{numJobs}",
+             "api/province", "api/industry","api/industry/{industryId}","api/job/getTopJobForHome/{numJobs}",
              "api/v1/files/{fileName}","api/job/{id}","api/employer/{id}","api/jobrequirement/{id}"
              ,"api/job/{id}","api/jobbenefit/{id}","api/jobdecription/{id}",
              "api/jobsIndustries/{id}",
              "api/employer","favicon.ico","api/vnpay/vnpay-payment","api/candidate/update/{id}",
+             "api/jobsIndustries/quantityJobOfIndustryId","api/users/myInfo"
      };
 
 //    private static final String[] publicEndpoints = { "/**"

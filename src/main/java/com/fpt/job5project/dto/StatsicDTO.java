@@ -13,8 +13,8 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class IndustryStatsDTO {
+public class StatsicDTO {
 
-    private String industryName;
-    private long totalJobs;
+    private String stacticName;
+    private long total;
 }

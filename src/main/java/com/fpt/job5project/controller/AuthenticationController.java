@@ -4,6 +4,7 @@ import java.text.ParseException;
 
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -69,6 +70,7 @@ public class AuthenticationController {
     ResponseObject<Void> logout(@ModelAttribute LogoutDTO request) throws JOSEException, ParseException {
         authenticationService.logout(request);
         return ResponseObject.<Void>builder()
+                .message("logout successful")
                 .build();
     }
 

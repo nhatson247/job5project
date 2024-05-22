@@ -2,8 +2,11 @@ package com.fpt.job5project.controller;
 
 import com.fpt.job5project.dto.EmployerApprovedDTO;
 import com.fpt.job5project.dto.EmployerDTO;
+import com.fpt.job5project.dto.NotificationDTO;
 import com.fpt.job5project.dto.ResponseObject;
 import com.fpt.job5project.service.IEmployerService;
+import com.fpt.job5project.service.INotificationService;
+
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -90,9 +94,9 @@ public class EmployerController {
     @DeleteMapping("/approvedNotAccept/{id}")
     public ResponseObject<String> approvedNotAcceptEmployer(@PathVariable("id") Long id) {
 
-        ResponseObject<String> responseObject = new ResponseObject<>();
         iEmployerService.deleteEmployerSendMail(id);
-        responseObject.setMessage("not accept is success");
-        return responseObject;
+        return ResponseObject.<String>builder()
+                .data("not accept is success")
+                .build();
     }
 }

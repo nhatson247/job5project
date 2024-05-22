@@ -1,6 +1,7 @@
 package com.fpt.job5project.controller;
 
-import com.fpt.job5project.Model.JobsIndustries;
+import com.fpt.job5project.dto.JobsIndustriesDTO;
+import com.fpt.job5project.dto.QuantityJobDTO;
 import com.fpt.job5project.dto.ResponseObject;
 import com.fpt.job5project.service.IJobsIndustriesService;
 import lombok.AccessLevel;
@@ -19,7 +20,7 @@ public class JobsIndustriesController {
     @Autowired
     IJobsIndustriesService iJobsIndustries;
     @PostMapping("/create")
-    public ResponseObject<String> addJobsIndustries(@ModelAttribute JobsIndustries jobsIndustries){
+    public ResponseObject<String> addJobsIndustries(@ModelAttribute JobsIndustriesDTO jobsIndustries){
         ResponseObject<String> responseObject = new ResponseObject<>();
         iJobsIndustries.addJobsIndustries(jobsIndustries);
         responseObject.setMessage("JobsIndustries has been added");
@@ -27,14 +28,14 @@ public class JobsIndustriesController {
     }
 
     @GetMapping("/{id}")
-    public ResponseObject<List<JobsIndustries>> getIndustriesByJobID(@PathVariable("id") long id){
-        ResponseObject<List<JobsIndustries>> responseObject = new ResponseObject<>();
+    public ResponseObject<List<JobsIndustriesDTO>> getIndustriesByJobID(@PathVariable("id") long id){
+        ResponseObject<List<JobsIndustriesDTO>> responseObject = new ResponseObject<>();
         responseObject.setData(iJobsIndustries.getJobIndustriesByJobId(id));
         return  responseObject;
     }
 
     @DeleteMapping("/delete")
-    public ResponseObject<String> deleteIndustryOfJob(@ModelAttribute JobsIndustries jobsIndustries) {
+    public ResponseObject<String> deleteIndustryOfJob(@ModelAttribute JobsIndustriesDTO jobsIndustries) {
         ResponseObject<String> responseObject = new ResponseObject<>();
         iJobsIndustries.deleteIndustryOfJob(jobsIndustries.getJob_jobid(), jobsIndustries.getIndustries_industryid());
         responseObject.setMessage("JobsIndustries has been deleted");
@@ -47,6 +48,14 @@ public class JobsIndustriesController {
         ResponseObject<String> responseObject = new ResponseObject<>();
         iJobsIndustries.deleteIndustriesByJobId(id);
         responseObject.setMessage("list industries of job has been deleted");
+        return responseObject;
+    }
+    @GetMapping("/quantityJobOfIndustryId")
+    public ResponseObject<List<QuantityJobDTO>> quantityJobOfIndustryId() {
+
+        ResponseObject<List<QuantityJobDTO>> responseObject = new ResponseObject<>();
+        List<QuantityJobDTO> result = iJobsIndustries.quantityJobOfIndustryId();
+        responseObject.setData(result);
         return responseObject;
     }
 }

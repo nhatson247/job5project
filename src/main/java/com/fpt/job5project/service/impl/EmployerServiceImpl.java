@@ -3,6 +3,7 @@ package com.fpt.job5project.service.impl;
 import com.fpt.job5project.dto.EmployerApprovedDTO;
 import com.fpt.job5project.dto.EmployerDTO;
 import com.fpt.job5project.dto.MailDTO;
+import com.fpt.job5project.dto.NotificationDTO;
 import com.fpt.job5project.entity.Employer;
 import com.fpt.job5project.entity.User;
 import com.fpt.job5project.exception.AppException;
@@ -12,6 +13,7 @@ import com.fpt.job5project.repository.EmployerRepository;
 import com.fpt.job5project.repository.UserRepository;
 import com.fpt.job5project.service.IEmployerService;
 import com.fpt.job5project.service.IMailService;
+import com.fpt.job5project.service.INotificationService;
 import com.fpt.job5project.service.IStorageService;
 import com.fpt.job5project.utils.Const;
 import jakarta.mail.MessagingException;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import java.util.HashMap;
@@ -29,7 +32,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-//Autowired, private, final
+// Autowired, private, final
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class EmployerServiceImpl implements IEmployerService {
@@ -39,7 +42,10 @@ public class EmployerServiceImpl implements IEmployerService {
     EmployerMapper employerMapper;
 
     IStorageService storageService;
+
     IMailService iMailService;
+
+    INotificationService iNotificationService;
 
     UserRepository userRepository;
 
@@ -74,7 +80,8 @@ public class EmployerServiceImpl implements IEmployerService {
     }
 
     @Override
-    public EmployerDTO updateEmployer(long id, EmployerDTO employerDTO, MultipartFile filePhoto, MultipartFile fileBackground) {
+    public EmployerDTO updateEmployer(long id, EmployerDTO employerDTO, MultipartFile filePhoto,
+            MultipartFile fileBackground) {
         if (employerRepository.existsByEmailAndEmployerIdNot(employerDTO.getEmail(), id))
             throw new AppException(ErrorCode.EMAIL_EXISTED);
 
@@ -106,7 +113,7 @@ public class EmployerServiceImpl implements IEmployerService {
         }
     }
 
-     @Override
+    @Override
     public int upRank(long rankId, long userId) {
         return employerRepository.updateRankById(rankId, userId);
     }
@@ -132,6 +139,7 @@ public class EmployerServiceImpl implements IEmployerService {
         employerRepository.save(employer);
 
         sendApprovalEmail(employer);
+        sendNotificationByEmployer(id);
     }
 
     private void sendApprovalEmail(Employer employer) {
@@ -180,5 +188,14 @@ public class EmployerServiceImpl implements IEmployerService {
         } catch (MessagingException e) {
             e.printStackTrace();
         }
+    }
+
+    private void sendNotificationByEmployer(long id) {
+        NotificationDTO notification = new NotificationDTO();
+        notification.setUserId(id);
+        notification.setPostDate(new Date());
+        notification.setMessage("Tài khoản của bạn đã được duyệt.");
+        iNotificationService.addNotification(notification);
+
     }
 }

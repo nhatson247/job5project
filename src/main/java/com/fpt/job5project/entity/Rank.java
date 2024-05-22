@@ -48,9 +48,6 @@ public class Rank {
     @Column(name = "reuptimes")
     private int reupTimes;
 
-    @Column(name = "numapplications")
-    private int numApplications;
-
     @Column(name = "limitpost")
     private int limitPost;
 

@@ -1,21 +1,22 @@
-package com.fpt.job5project.Model;
+package com.fpt.job5project.dto;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity
-public class JobsIndustries {
-    @Id
+//@Entity
+//@IdClass(JobsIndustriesId.class)
+public class JobsIndustriesDTO implements Serializable {
+//    @Id
     private long industries_industryid;
-
+//    @Id
     private long job_jobid;
 
 }

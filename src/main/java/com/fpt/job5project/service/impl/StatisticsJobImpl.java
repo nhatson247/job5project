@@ -6,10 +6,11 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fpt.job5project.dto.IndustryStatsDTO;
+import com.fpt.job5project.dto.StatsicDTO;
 import com.fpt.job5project.repository.EmployerRepository;
 import com.fpt.job5project.repository.IndustryRepository;
 import com.fpt.job5project.repository.JobRepository;
+import com.fpt.job5project.repository.RankRepository;
 import com.fpt.job5project.service.IStatisticsService;
 
 @Service
@@ -19,39 +20,47 @@ public class StatisticsJobImpl implements IStatisticsService {
     private JobRepository jobRepository;
 
     @Autowired
-    IndustryRepository industryRepository;
+    private IndustryRepository industryRepository;
 
     @Autowired
     private EmployerRepository employerRepository;
 
     @Autowired
+    private RankRepository rankRepository;
+
     public long getTotalJobs() {
-        return jobRepository.countByIsExpiredFalse();
+        return jobRepository.countTotalJobs();
     }
 
-    @Autowired
     public long getTotalCompanies() {
         return employerRepository.countDistinctEmployerIds();
     }
 
-    public List<IndustryStatsDTO> getTopIndustriesByJobCount(int topCount) {
+    public List<StatsicDTO> getTotalPriceFromRanks() {
+        return rankRepository.getRankPrices()
+                .stream()
+                .map(objects -> new StatsicDTO((String) objects[0], ((Number) objects[1]).longValue()))
+                .collect(Collectors.toList());
+    }
+
+    public List<StatsicDTO> getTopIndustriesByJobCount(int topCount) {
         return industryRepository.findTopIndustriesByJobCount(topCount)
                 .stream()
-                .map(objects -> new IndustryStatsDTO((String) objects[0], ((Number) objects[1]).longValue()))
+                .map(objects -> new StatsicDTO((String) objects[0], ((Number) objects[1]).longValue()))
                 .collect(Collectors.toList());
     }
 
-    public List<IndustryStatsDTO> getTopIndustriesByJobApplicationCount(int topCount) {
+    public List<StatsicDTO> getTopIndustriesByJobApplicationCount(int topCount) {
         return industryRepository.findTopIndustriesByJobApplicationCount(topCount)
                 .stream()
-                .map(objects -> new IndustryStatsDTO((String) objects[0], ((Number) objects[1]).longValue()))
+                .map(objects -> new StatsicDTO((String) objects[0], ((Number) objects[1]).longValue()))
                 .collect(Collectors.toList());
     }
 
-    public List<IndustryStatsDTO> getTopLocationJobCount(int topCount) {
+    public List<StatsicDTO> getTopLocationJobCount(int topCount) {
         return jobRepository.findTopLocationJobCount(topCount)
                 .stream()
-                .map(objects -> new IndustryStatsDTO((String) objects[0], ((Number) objects[1]).longValue()))
+                .map(objects -> new StatsicDTO((String) objects[0], ((Number) objects[1]).longValue()))
                 .collect(Collectors.toList());
     }
 }

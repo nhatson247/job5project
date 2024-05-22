@@ -16,11 +16,11 @@ import java.util.Date;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CandidateDTO {
-    long candidateId;
+   long candidateId;
     @NotEmpty(message = "FULLNAME_NOT_NULL")
     String fullName;
     @NotNull(message = "BIRTHDATE_NOT_NULL")
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     @JsonFormat(timezone = "GMT+07:00")
     Date birthDate;
     int yearExperience;
@@ -32,5 +32,6 @@ public class CandidateDTO {
     String photo;
     String provinceName;
     String address;
+    String currentJob;
 
 }

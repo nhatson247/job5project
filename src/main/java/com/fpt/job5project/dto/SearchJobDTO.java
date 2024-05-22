@@ -15,4 +15,6 @@ public class SearchJobDTO {
     private long minSalary;
     private long maxSalary;
     private String location;
+    private int experience;
+    private int typeJob;
 }

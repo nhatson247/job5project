@@ -1,7 +1,7 @@
 package com.fpt.job5project.controller;
 
-
 import com.fpt.job5project.dto.JobReportDTO;
+import com.fpt.job5project.dto.JobReportDetailDTO;
 import com.fpt.job5project.dto.ResponseObject;
 import com.fpt.job5project.service.IJobReportService;
 import lombok.AccessLevel;
@@ -19,23 +19,23 @@ public class JobReportController {
 
     IJobReportService iJobReportService;
 
-    @GetMapping("/")
-    public ResponseObject<List<JobReportDTO>> listJobReport() {
+    @GetMapping
+    public ResponseObject<List<JobReportDetailDTO>> listJobReport() {
 
-        ResponseObject<List<JobReportDTO>> responseObject = new ResponseObject<>();
-        List<JobReportDTO> listDTOs = iJobReportService.listOfJobReports();
+        ResponseObject<List<JobReportDetailDTO>> responseObject = new ResponseObject<>();
+        List<JobReportDetailDTO> listDTOs = iJobReportService.listOfJobReports();
         responseObject.setData(listDTOs);
         return responseObject;
     }
 
-    @PostMapping("/Create")
+    @PostMapping("/create")
     public ResponseObject<JobReportDTO> addJobInterest(@ModelAttribute JobReportDTO jobReportDTO) {
         ResponseObject<JobReportDTO> responseObject = new ResponseObject<>();
         responseObject.setData(iJobReportService.addJobReport(jobReportDTO));
         return responseObject;
     }
 
-    @DeleteMapping("/Delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseObject<String> deleteJobInterest(@PathVariable("id") Long id) {
 
         ResponseObject<String> responseObject = new ResponseObject<>();

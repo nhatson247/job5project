@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CVDTO {
-    private long cvId;
-    private long candidateId;
-    private String cvFile;
+public class QuantityJobDTO {
+    private long industryid;
 
+    private String industryname;
+    private int quantity;
 }

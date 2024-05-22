@@ -31,7 +31,8 @@ public interface EmployerRepository extends JpaRepository<Employer, Long> {
 
     List<Employer> findByApprovedTrue();
 
-    @Query("SELECT COUNT(DISTINCT e.employerId) FROM Employer e")
+    @Transactional
+    @Query(value = "SELECT COUNT(DISTINCT e.employerId) FROM employers e", nativeQuery = true)
     long countDistinctEmployerIds();
 
     // @Modifying

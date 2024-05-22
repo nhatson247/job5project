@@ -52,9 +52,6 @@ public class Job {
     @Column(name = "expirationdate")
     private Date expirationDate;
 
-    @Column(name = "acceptdate")
-    private Date acceptDate;
-
     @ManyToOne(targetEntity = JobType.class)
     @JoinColumn(name = "typeid", insertable = false, updatable = false)
     private JobType jobType;
@@ -93,11 +90,9 @@ public class Job {
     @ManyToMany
     private Set<Industry> industries = new LinkedHashSet<>();
 
-    @Column(name = "isexpired")
-    private boolean isExpired;
 
-    @Column(name = "isremoved")
-    private boolean isRemoved;
+    @Column(name = "removed")
+    private boolean removed;
 
     @Column(name = "reuptimesleft")
     private int reupTimesLeft;

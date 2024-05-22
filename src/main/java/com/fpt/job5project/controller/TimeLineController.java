@@ -39,7 +39,7 @@ public class TimeLineController {
     }*/
 
 
-    @PostMapping("/Create")
+    @PostMapping("/create")
     public ResponseObject<TimeLineDTO> addTimeLine(@ModelAttribute @Valid TimeLineDTO newApplication) {
 
         ResponseObject<TimeLineDTO> responseObject = new ResponseObject<>();
@@ -47,7 +47,7 @@ public class TimeLineController {
         return responseObject;
     }
 
-    @DeleteMapping("/Delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseObject<String> deleteTimeLine(@PathVariable("id") Long id) {
 
         ResponseObject<String> responseObject = new ResponseObject<>();
@@ -56,7 +56,7 @@ public class TimeLineController {
         return responseObject;
     }
 
-    @PutMapping("/Update/{id}")
+    @PutMapping("/update/{id}")
     public ResponseObject<TimeLineDTO> updateTimeLine(@PathVariable("id") Long id, @ModelAttribute TimeLineDTO timeLineDTO) {
 
         ResponseObject<TimeLineDTO> responseObject = new ResponseObject<>();

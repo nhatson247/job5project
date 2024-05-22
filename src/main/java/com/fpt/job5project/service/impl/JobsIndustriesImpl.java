@@ -1,6 +1,8 @@
 package com.fpt.job5project.service.impl;
 
-import com.fpt.job5project.Model.JobsIndustries;
+import com.fpt.job5project.dto.JobsIndustriesDTO;
+import com.fpt.job5project.dto.QuantityJobDTO;
+import com.fpt.job5project.entity.Job;
 import com.fpt.job5project.repository.JobsIndustriesRepository;
 import com.fpt.job5project.service.IJobsIndustriesService;
 import lombok.AccessLevel;
@@ -8,16 +10,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class JobsIndustriesImpl implements IJobsIndustriesService {
+
     JobsIndustriesRepository jobsIndustriesRepository;
     @Override
-    public void addJobsIndustries(JobsIndustries jobsIndustries) {
-
+    public void addJobsIndustries(JobsIndustriesDTO jobsIndustries) {
+        System.out.println(jobsIndustries);
         int checkExists = jobsIndustriesRepository.checkExists(jobsIndustries.getIndustries_industryid(), jobsIndustries.getJob_jobid());
         if(checkExists == 0){
             jobsIndustriesRepository.insertJobsIndustries(jobsIndustries.getIndustries_industryid(), jobsIndustries.getJob_jobid());
@@ -25,10 +29,18 @@ public class JobsIndustriesImpl implements IJobsIndustriesService {
 
     }
 
-    @Override
-    public List<JobsIndustries> getJobIndustriesByJobId(long jobId) {
-        List<JobsIndustries> listIndustries = jobsIndustriesRepository.findIndustriesByJobId(jobId);
-        return  listIndustries;
+    public List<JobsIndustriesDTO> getJobIndustriesByJobId(long jobId) {
+        List<Object[]> listIndustries = jobsIndustriesRepository.findIndustriesByJobId(jobId);
+
+        List<JobsIndustriesDTO> list = new ArrayList<>();
+        for(Object[] result : listIndustries){
+            System.out.println((Long) result[0]);
+            JobsIndustriesDTO a = new JobsIndustriesDTO();
+            a.setJob_jobid((Long) result[1]);
+            a.setIndustries_industryid((Long) result[0]);
+            list.add(a);
+        }
+        return  list;
     }
 
     @Override
@@ -46,5 +58,16 @@ public class JobsIndustriesImpl implements IJobsIndustriesService {
         jobsIndustriesRepository.deleteIndustryJobByIndustryId(industryId);
     }
 
-
+    public List<QuantityJobDTO> quantityJobOfIndustryId(){
+        List<Object[]> results = jobsIndustriesRepository.quantityJobOfIndustryId();
+        List<QuantityJobDTO> quantityJobDTOs = new ArrayList<>();
+        for (Object[] result : results) {
+            QuantityJobDTO quantityJobDTO = new QuantityJobDTO();
+            quantityJobDTO.setIndustryid((Long) result[0]);
+            quantityJobDTO.setIndustryname((String) result[1]);
+            quantityJobDTO.setQuantity((Integer) result[2]);
+            quantityJobDTOs.add(quantityJobDTO);
+        }
+        return quantityJobDTOs;
+    }
 }

@@ -14,6 +14,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class IndustryDTO {
+
     private long industryId;
 
     @NotBlank(message = "Industry name is required")

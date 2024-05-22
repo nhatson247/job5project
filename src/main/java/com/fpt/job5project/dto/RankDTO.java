@@ -16,7 +16,6 @@ public class RankDTO {
     private double price;
     private int displayTime;
     private int reupTimes;
-    private int numApplications;
     private int limitPost;
     private String photo;
 

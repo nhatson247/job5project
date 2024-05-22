@@ -47,7 +47,6 @@ public class EmployerReview {
     private double score;
 
     @Column(name = "reviewdate")
-    @Temporal(TemporalType.DATE)
     private Date reviewDate;
 
 }

@@ -35,13 +35,13 @@ public class CV {
     @Column(name = "cvfile")
     private String cvFile;
 
-    @Column(name = "cvname")
-    private String cvName;
+    // @Column(name = "cvname")
+    // private String cvName;
 
-    @Column(name = "description")
-    private String description;
+    // @Column(name = "description")
+    // private String description;
 
-    @Column(name = "maincv")
-    private boolean mainCV;
+    // @Column(name = "maincv")
+    // private boolean mainCV;
 
 }

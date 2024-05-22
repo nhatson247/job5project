@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface FollowRepository  extends JpaRepository<Follow,Long> {
     public List<Follow> findByCandidateId(Long id);
-
+    public List<Follow> findByCandidateIdAndAndEmployerId(Long candidateId, Long employerId);
 }

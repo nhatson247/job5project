@@ -16,6 +16,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Data
 @AllArgsConstructor
@@ -31,6 +33,7 @@ public class JobReport {
 
     @ManyToOne(targetEntity = Job.class)
     @JoinColumn(name = "jobid", insertable = false, updatable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Job job;
 
     @Column(name = "jobid", nullable = false)

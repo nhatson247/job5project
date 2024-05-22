@@ -6,7 +6,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,7 +20,6 @@ import com.fpt.job5project.entity.InvalidatedToken;
 import com.fpt.job5project.entity.User;
 import com.fpt.job5project.exception.AppException;
 import com.fpt.job5project.exception.ErrorCode;
-import com.fpt.job5project.repository.EmployerRepository;
 import com.fpt.job5project.repository.InvalidatedTokenResponsitory;
 import com.fpt.job5project.repository.UserRepository;
 import com.fpt.job5project.service.IAuthenticationService;
@@ -36,27 +34,26 @@ import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 
 @Service
 @RequiredArgsConstructor
-
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationServiceImpl implements IAuthenticationService {
 
-        @Autowired
         private UserRepository userRepository;
-
-        @Autowired
-        private EmployerRepository employerRepository;
-
-        @Autowired
 
         private InvalidatedTokenResponsitory invalidatedTokenResponsitory;
 
         @NonFinal
         @Value("${com.nimbusds.jwt.signerKey}")
         protected String singerKey;
+
+        private static final int TOKEN_LIFE_TIME = 4;
+        private static final int REFRESH_TOKEN_LIFETIME = 4;
 
         // TO DO: Kiểm tra token
         public IntrospectDTO introspect(IntrospectDTO request)
@@ -155,11 +152,11 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
                 // Body
                 JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                                 .subject(user.getUserName())
-                                .issuer("son.com")
+                                .issuer("job5.com")
                                 .issueTime(new Date())
                                 .expirationTime(new Date(
 
-                                                Instant.now().plus(4, ChronoUnit.HOURS).toEpochMilli()))
+                                                Instant.now().plus(TOKEN_LIFE_TIME, ChronoUnit.HOURS).toEpochMilli()))
                                 .jwtID(UUID.randomUUID().toString())
                                 .claim("scope", user.getRole())
                                 .build();
@@ -178,21 +175,29 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 
         private SignedJWT verifyToken(String token, boolean isRefresh) throws JOSEException, ParseException {
                 JWSVerifier verifier = new MACVerifier(singerKey.getBytes());
-
                 SignedJWT signedJWT = SignedJWT.parse(token);
 
+                // Xác định thời hạn hết hạn tùy thuộc vào loại token (access hoặc refresh)
                 Date expiryTime = (isRefresh)
                                 ? new Date(signedJWT.getJWTClaimsSet().getIssueTime()
-                                                .toInstant().plus(4, ChronoUnit.HOURS).toEpochMilli())
+                                                .toInstant().plus(REFRESH_TOKEN_LIFETIME, ChronoUnit.HOURS)
+                                                .toEpochMilli())
                                 : signedJWT.getJWTClaimsSet().getExpirationTime();
 
-                var verified = signedJWT.verify(verifier);
+                boolean verified = signedJWT.verify(verifier);
 
-                if (!(verified && expiryTime.after(new Date()))) {
-                        throw new AuthenticationException("Token expired") {
-                        };
+                // Kiểm tra token đã hết hạn hay chưa
+                if (!verified || !expiryTime.after(new Date())) {
+                        // Nếu là refresh token và đã hết hạn, ném ra ngoại lệ đặc biệt
+                        if (isRefresh) {
+                                throw new AppException(ErrorCode.USER_NOT_EXISTED);
+                        } else {
+                                throw new AuthenticationException("Token expired") {
+                                };
+                        }
                 }
 
+                // Kiểm tra token có bị hủy bỏ không
                 if (invalidatedTokenResponsitory.existsById(signedJWT.getJWTClaimsSet().getJWTID()))
                         throw new AppException(ErrorCode.UNAUTHENTICATED);
 

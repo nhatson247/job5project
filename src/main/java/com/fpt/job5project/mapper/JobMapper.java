@@ -14,6 +14,8 @@ public interface JobMapper {
     Job toEntity(JobDTO jobDTO);
 
     @Mapping(target = "jobId", ignore = true)
+    @Mapping(target = "expirationDate", ignore = true)
+    @Mapping(target = "postDate", ignore = true)
     // @Mapping(target = "photo", ignore = true)
     void updateJob(@MappingTarget Job job, JobDTO jobDTO);
 

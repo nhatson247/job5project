@@ -1,11 +1,5 @@
 package com.fpt.job5project.service.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
 import com.fpt.job5project.dto.EmployerReviewDTO;
 import com.fpt.job5project.entity.EmployerReview;
 import com.fpt.job5project.exception.AppException;
@@ -13,15 +7,19 @@ import com.fpt.job5project.exception.ErrorCode;
 import com.fpt.job5project.mapper.EmployerReviewMapper;
 import com.fpt.job5project.repository.EmployerReviewRepository;
 import com.fpt.job5project.service.IEmployerReviewService;
-
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class EmployerReviewService implements IEmployerReviewService {
+public class EmployerReviewServiceImpl implements IEmployerReviewService {
 
     EmployerReviewRepository employerReviewRepository;
     EmployerReviewMapper employerReviewMapper;
@@ -47,6 +45,12 @@ public class EmployerReviewService implements IEmployerReviewService {
     }
 
     @Override
+    public EmployerReviewDTO getEmployerReviewByCandidateId(long id) {
+        EmployerReview employerReview = employerReviewRepository.findByCandidateId(id);
+        return employerReviewMapper.toDTO(employerReview);
+    }
+
+    @Override
     public EmployerReviewDTO addEmployerReview(EmployerReviewDTO employerReviewDTO) {
         EmployerReview employerReview = employerReviewMapper.toEntity(employerReviewDTO);
         employerReview.setReviewDate(new Date());
@@ -55,8 +59,7 @@ public class EmployerReviewService implements IEmployerReviewService {
 
     @Override
     public EmployerReviewDTO updateEmployerReview(long id, EmployerReviewDTO employerReviewDTO) {
-        EmployerReview foundEmployerReview = employerReviewRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.CV_NOT_EXIST));
+        EmployerReview foundEmployerReview = employerReviewRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.CV_NOT_EXIST));
         if (foundEmployerReview != null) {
             employerReviewMapper.updateEmployerReview(foundEmployerReview, employerReviewDTO);
         }

@@ -1,6 +1,7 @@
 package com.fpt.job5project.controller;
 
 import com.fpt.job5project.dto.FollowDTO;
+import com.fpt.job5project.dto.JobInterestDTO;
 import com.fpt.job5project.dto.ResponseObject;
 import com.fpt.job5project.service.IFollowService;
 import jakarta.validation.Valid;
@@ -27,7 +28,14 @@ public class FollowController {
         responseObject.setData(listDTOs);
         return responseObject;
     }
+    @GetMapping("/getByCandidateAndEmployer/{candidateId}/{employerId}")
+    public ResponseObject<List<FollowDTO>> getlistJobInterests(@PathVariable("candidateId") Long candidateId, @PathVariable("employerId") Long employerId) {
 
+        ResponseObject<List<FollowDTO>> responseObject = new ResponseObject<>();
+        List<FollowDTO> followDTOS = iFollowService.getJobFollowByCandidateAndEmployer(candidateId, employerId);
+        responseObject.setData(followDTOS);
+        return responseObject;
+    }
     @GetMapping("/{id}")
     public ResponseObject<FollowDTO> getJobFollow(@PathVariable("id") long id) {
 

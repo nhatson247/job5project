@@ -82,10 +82,9 @@ public class ApplicationServiceimpl implements IApplicationService {
 
 
     @Override
-    public ApplicationDTO addApplication(ApplicationDTO applicationDTO, MultipartFile file) {
+    public ApplicationDTO addApplication(ApplicationDTO applicationDTO) {
         Application application = applicationMapper.toEntity(applicationDTO);
-        String generatedFileName = storageService.storeFile(file);
-        application.setCv(generatedFileName);
+
         application.setApplicationDate(new Date());
         return applicationMapper.toDTO(applicationRepository.save(application));
     }

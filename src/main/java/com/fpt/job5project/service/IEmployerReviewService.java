@@ -11,6 +11,8 @@ public interface IEmployerReviewService {
 
     public EmployerReviewDTO getEmployerReview(long id);
 
+    public EmployerReviewDTO getEmployerReviewByCandidateId(long id);
+
     public EmployerReviewDTO addEmployerReview(EmployerReviewDTO employerReviewDTO);
 
     public EmployerReviewDTO updateEmployerReview(long id, EmployerReviewDTO employerReviewDTO);

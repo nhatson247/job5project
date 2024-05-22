@@ -29,9 +29,6 @@ public class JobDTO {
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     @JsonFormat(timezone = "GMT+07:00")
     Date expirationDate;
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
-    @JsonFormat(timezone = "GMT+07:00")
-    Date acceptDate;
     int typeId;
     String jobPosition;
     int numPosition;
@@ -39,7 +36,6 @@ public class JobDTO {
     long maxSalary;
     int yearExperience;
     String location;
-    boolean isExpired;
-    boolean isRemoved;
+    boolean removed;
     int reupTimesLeft;
 }

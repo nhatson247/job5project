@@ -8,7 +8,7 @@ import java.util.List;
 public interface IApplicationService {
     public List<ApplicationDTO> listOfApplication();
 
-    public ApplicationDTO addApplication(ApplicationDTO applicationDTO, MultipartFile file);
+    public ApplicationDTO addApplication(ApplicationDTO applicationDTO);
 
     public ApplicationDTO updateApplication(long id, ApplicationDTO applicationDTO, MultipartFile file);
 

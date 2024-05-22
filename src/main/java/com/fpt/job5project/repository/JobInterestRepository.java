@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface JobInterestRepository extends JpaRepository<JobInterest, Long> {
     public List<JobInterest> findByCandidateId(Long id);
+
+    public List<JobInterest> findByCandidateIdAndJobId(Long candidateId, Long jobId);
 }
