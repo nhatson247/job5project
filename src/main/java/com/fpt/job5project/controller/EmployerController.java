@@ -1,12 +1,7 @@
 package com.fpt.job5project.controller;
 
-import com.fpt.job5project.dto.EmployerApprovedDTO;
-import com.fpt.job5project.dto.EmployerDTO;
-import com.fpt.job5project.dto.NotificationDTO;
-import com.fpt.job5project.dto.ResponseObject;
+import com.fpt.job5project.dto.*;
 import com.fpt.job5project.service.IEmployerService;
-import com.fpt.job5project.service.INotificationService;
-
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +10,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -44,6 +38,7 @@ public class EmployerController {
         return responseObject;
     }
 
+
     @PostMapping("/Create")
     public ResponseObject<EmployerDTO> addEmployer(@ModelAttribute @Valid EmployerDTO newEmployer) {
 
@@ -62,10 +57,8 @@ public class EmployerController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseObject<EmployerDTO> updateEmployer(@PathVariable("id") Long id,
-            @ModelAttribute EmployerDTO employerDTO, @ModelAttribute("filePhoto") MultipartFile filePhoto,
-            @ModelAttribute("fileBackground") MultipartFile fileBackground) {
-
+    public ResponseObject<EmployerDTO> updateEmployer(@PathVariable("id") Long id, @ModelAttribute EmployerDTO employerDTO, @ModelAttribute("filePhoto") MultipartFile filePhoto, @ModelAttribute("fileBackground") MultipartFile fileBackground) {
+        System.out.println("alo");
         ResponseObject<EmployerDTO> responseObject = new ResponseObject<>();
         responseObject.setData(iEmployerService.updateEmployer(id, employerDTO, filePhoto, fileBackground));
         return responseObject;
@@ -98,5 +91,26 @@ public class EmployerController {
         return ResponseObject.<String>builder()
                 .data("not accept is success")
                 .build();
+    }
+
+    @GetMapping("/getTop")
+    public ResponseObject<List<EmployerDTO>> getTopEmployers() {
+
+        ResponseObject<List<EmployerDTO>> responseObject = new ResponseObject<>();
+
+        List<EmployerDTO> listDTOs = iEmployerService.getTopEmployers();
+        responseObject.setData(listDTOs);
+        return responseObject;
+    }
+
+    @PostMapping("/searchEmployer")
+    public ResponseObject<List<EmployerDTO>> resultSearchEmployer(@ModelAttribute SearchEmployerDTO searchEmployerDTO) {
+        ResponseObject<List<EmployerDTO>> responseObject = new ResponseObject<>();
+        if(searchEmployerDTO.getEmployerName().equals("''")){
+            searchEmployerDTO.setEmployerName(null);
+        }
+
+        responseObject.setData(iEmployerService.resultSearchEmployer(searchEmployerDTO.getEmployerName(),searchEmployerDTO.getSkip(),searchEmployerDTO.getLimit()));
+        return responseObject;
     }
 }

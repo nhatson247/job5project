@@ -43,8 +43,8 @@ public class StatisticsJobImpl implements IStatisticsService {
                 .collect(Collectors.toList());
     }
 
-    public List<StatsicDTO> getTopIndustriesByJobCount(int topCount) {
-        return industryRepository.findTopIndustriesByJobCount(topCount)
+    public List<StatsicDTO> getTopIndustriesByJobCount() {
+        return industryRepository.findTopIndustriesByJobCount()
                 .stream()
                 .map(objects -> new StatsicDTO((String) objects[0], ((Number) objects[1]).longValue()))
                 .collect(Collectors.toList());

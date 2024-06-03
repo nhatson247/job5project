@@ -45,8 +45,8 @@ public class EmployerReviewServiceImpl implements IEmployerReviewService {
     }
 
     @Override
-    public EmployerReviewDTO getEmployerReviewByCandidateId(long id) {
-        EmployerReview employerReview = employerReviewRepository.findByCandidateId(id);
+    public EmployerReviewDTO getEmployerReviewByCandidateIdAndEmployerId(long cId, long eId) {
+        EmployerReview employerReview = employerReviewRepository.findByCandidateIdAndEmployerId(cId, eId);
         return employerReviewMapper.toDTO(employerReview);
     }
 

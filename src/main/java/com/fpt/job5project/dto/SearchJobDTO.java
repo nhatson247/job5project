@@ -17,4 +17,6 @@ public class SearchJobDTO {
     private String location;
     private int experience;
     private int typeJob;
+    private int skip;
+    private int limit;
 }

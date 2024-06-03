@@ -1,24 +1,21 @@
 package com.fpt.job5project.service.impl;
 
-import com.fpt.job5project.dto.CandidateDTO;
-import com.fpt.job5project.dto.JobReportDTO;
-import com.fpt.job5project.dto.JobReportDetailDTO;
-import com.fpt.job5project.entity.Candidate;
-import com.fpt.job5project.entity.JobInterest;
-import com.fpt.job5project.entity.JobReport;
-import com.fpt.job5project.exception.AppException;
-import com.fpt.job5project.exception.ErrorCode;
-import com.fpt.job5project.mapper.JobReportMapper;
-import com.fpt.job5project.repository.JobReportRepository;
-import com.fpt.job5project.service.IJobReportService;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.fpt.job5project.dto.JobReportDTO;
+import com.fpt.job5project.dto.JobReportDetailDTO;
+import com.fpt.job5project.entity.JobReport;
+import com.fpt.job5project.mapper.JobReportMapper;
+import com.fpt.job5project.repository.JobReportRepository;
+import com.fpt.job5project.service.IJobReportService;
+
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 @Service
 @RequiredArgsConstructor
@@ -48,7 +45,6 @@ public class JobReportServiceImpl implements IJobReportService {
         return listDTOs;
     }
 
-
     @Override
     public JobReportDTO addJobReport(JobReportDTO jobReportDTO) {
         JobReport jobInterestEntity = jobReportMapper.toEntity(jobReportDTO);
@@ -58,11 +54,21 @@ public class JobReportServiceImpl implements IJobReportService {
 
     @Override
     public void deleteJobReport(long id) {
-        boolean existsById = jobReportRepository.existsById(id);
-        if (!existsById) {
-            throw new AppException(ErrorCode.JOB_REPORT_NOT_EXIST);
-        } else {
-            jobReportRepository.deleteById(id);
-        }
+
+        jobReportRepository.deleteJobReports(id);
+
+    }
+
+    @Override
+    public void deleteJobReportID(long id) {
+
+        jobReportRepository.deleteJobID(id);
+
+    }
+
+    @Override
+    public boolean getReportByCandidateIdAndJobId(Long candidateId, Long jobId) {
+        JobReport jobReport = jobReportRepository.findByCandidateIdAndJobId(candidateId, jobId);
+        return jobReport != null;
     }
 }

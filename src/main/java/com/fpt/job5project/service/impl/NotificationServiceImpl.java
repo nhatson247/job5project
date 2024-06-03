@@ -23,6 +23,7 @@ public class NotificationServiceImpl implements INotificationService {
     @Override
     public NotificationDTO addNotification(NotificationDTO newNotification) {
         Notification notificationEntity = notificationMapper.toEntity(newNotification);
+        System.out.println(notificationEntity.getUserId());
 
         return notificationMapper.toDTO(notificationRepository.save(notificationEntity));
     }
@@ -36,6 +37,7 @@ public class NotificationServiceImpl implements INotificationService {
         }
         return listDTOs;
     }
+
 
     @Override
     public void deleteNotification(long id) {
@@ -51,5 +53,6 @@ public class NotificationServiceImpl implements INotificationService {
     public int updateNotificationStatus(long userId) {
         return notificationRepository.updateNotificationStatus(userId);
     }
+
 
 }

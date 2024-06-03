@@ -54,8 +54,11 @@ public class CandidateServiceImpl implements ICandidateService {
         Candidate foundCandidate = candidateRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.CANDIDATE_NOT_EXIST));
         if (foundCandidate != null) {
             candiadteMapper.updateCandidate(foundCandidate, candidateDTO);
-            String generatedFileName = storageService.storeFile(file);
-            foundCandidate.setPhoto(generatedFileName);
+            if(!file.isEmpty()){
+                String generatedFileName = storageService.storeFile(file);
+                foundCandidate.setPhoto(generatedFileName);
+
+            }
         }
         return candiadteMapper.toDTO(candidateRepository.save(foundCandidate));
     }

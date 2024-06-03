@@ -1,10 +1,10 @@
 package com.fpt.job5project.service;
 
-import com.fpt.job5project.dto.CandidateDTO;
-import com.fpt.job5project.entity.Candidate;
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import com.fpt.job5project.dto.CandidateDTO;
 
 public interface ICandidateService {
     public List<CandidateDTO> listOfCandidate();

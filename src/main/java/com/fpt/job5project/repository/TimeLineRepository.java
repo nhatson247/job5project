@@ -15,4 +15,9 @@ public interface TimeLineRepository extends JpaRepository<TimeLine, Long> {
     @Transactional
     @Query(value = "select * from timelines where candidateid = :id", nativeQuery = true)
     public List<TimeLine> findByCandidateId(Long id);
+
+    @Modifying
+    @Transactional
+    @Query(value = "delete from timelines where candidateid = :id", nativeQuery = true)
+    public void deleteByCandidateId(Long id);
 }

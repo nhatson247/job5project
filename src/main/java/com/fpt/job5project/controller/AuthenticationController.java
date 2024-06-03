@@ -2,18 +2,13 @@ package com.fpt.job5project.controller;
 
 import java.text.ParseException;
 
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.fpt.job5project.dto.*;
+import com.fpt.job5project.exception.AppException;
+import com.fpt.job5project.exception.ErrorCode;
+import com.fpt.job5project.repository.CandidateRepository;
+import com.fpt.job5project.repository.EmployerRepository;
+import org.springframework.web.bind.annotation.*;
 
-import com.fpt.job5project.dto.AuthenticationDTO;
-import com.fpt.job5project.dto.IntrospectDTO;
-import com.fpt.job5project.dto.LogoutDTO;
-import com.fpt.job5project.dto.RefreshDTO;
-import com.fpt.job5project.dto.ResponseObject;
-import com.fpt.job5project.dto.UserDTO;
 import com.fpt.job5project.service.IAuthenticationService;
 import com.fpt.job5project.service.IUserService;
 import com.nimbusds.jose.JOSEException;
@@ -30,6 +25,8 @@ import lombok.experimental.FieldDefaults;
 public class AuthenticationController {
 
     IAuthenticationService authenticationService;
+    EmployerRepository employerRepository;
+    CandidateRepository candidateRepository;
 
     IUserService iUserService;
 
@@ -50,8 +47,11 @@ public class AuthenticationController {
                 .build();
     }
 
-    @PostMapping("/register")
-    ResponseObject<UserDTO> createUser(@ModelAttribute @Valid UserDTO request) {
+    @PostMapping("/register/{email}")
+    ResponseObject<UserDTO> createUser(@ModelAttribute @Valid UserDTO request, @PathVariable("email") String email) {
+        if (candidateRepository.existsByEmail(email) || employerRepository.existsByEmail(email)) {
+            throw new AppException(ErrorCode.EMAIL_EXISTED);
+        }
         return ResponseObject.<UserDTO>builder()
                 .data(iUserService.addUser(request))
                 .build();

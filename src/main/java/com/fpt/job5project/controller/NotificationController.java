@@ -2,7 +2,6 @@ package com.fpt.job5project.controller;
 
 import java.util.List;
 
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fpt.job5project.dto.NotificationDTO;
 import com.fpt.job5project.dto.ResponseObject;
-import com.fpt.job5project.service.IEmployerService;
 import com.fpt.job5project.service.INotificationService;
 
 import lombok.AccessLevel;
@@ -28,8 +26,6 @@ import lombok.experimental.FieldDefaults;
 public class NotificationController {
 
     INotificationService iNotificationService;
-
-    IEmployerService iEmployerService;
 
     @GetMapping("/{id}")
     public ResponseObject<List<NotificationDTO>> listNotification(@PathVariable("id") long id) {
@@ -71,5 +67,4 @@ public class NotificationController {
         responseObject.setData(iNotificationService.updateNotificationStatus(id));
         return responseObject;
     }
-
 }

@@ -39,8 +39,18 @@ public class JobReportController {
     public ResponseObject<String> deleteJobInterest(@PathVariable("id") Long id) {
 
         ResponseObject<String> responseObject = new ResponseObject<>();
-        iJobReportService.deleteJobReport(id);
+        iJobReportService.deleteJobReportID(id);
         responseObject.setMessage("Job report has been deleted");
+        return responseObject;
+    }
+
+    @GetMapping("/getByCandidateAndJob/{candidateId}/{jobId}")
+    public ResponseObject<Boolean> getReportByCandidateIdAndJobId(@PathVariable("candidateId") Long candidateId,
+            @PathVariable("jobId") Long jobId) {
+
+        ResponseObject<Boolean> responseObject = new ResponseObject<>();
+        Boolean check = iJobReportService.getReportByCandidateIdAndJobId(candidateId, jobId);
+        responseObject.setData(check);
         return responseObject;
     }
 }

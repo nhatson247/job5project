@@ -3,7 +3,6 @@ package com.fpt.job5project.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fpt.job5project.dto.JobDTO;
@@ -38,7 +36,7 @@ public class JobController {
         if (newJob.getJobName() == null || newJob.getJobName().isEmpty()) {
             throw new IllegalArgumentException("jobName không được null hoặc rỗng");
         }
-
+        // System.out.println("alo" + newJob.getJobName());
         ResponseObject<JobDTO> responseObject = new ResponseObject<>();
         responseObject.setData(iJobService.addJob(newJob));
         return responseObject;
@@ -91,7 +89,8 @@ public class JobController {
         System.out.println(searchJobDTO.getLocation());
         responseObject.setData(iJobService.resultSearchJob(searchJobDTO.getIndustryId(), searchJobDTO.getSearchValue(),
                 searchJobDTO.getMinSalary(), searchJobDTO.getMaxSalary(), searchJobDTO.getLocation(),
-                searchJobDTO.getExperience(), searchJobDTO.getTypeJob()));
+                searchJobDTO.getExperience(), searchJobDTO.getTypeJob(), searchJobDTO.getSkip(),
+                searchJobDTO.getLimit()));
         return responseObject;
     }
 
@@ -117,11 +116,19 @@ public class JobController {
         return responseObject;
     }
 
-    @PutMapping("/hide/{jobId}/report/{reportId}")
-    public ResponseObject<String> hideJob(@PathVariable long jobId, @PathVariable long reportId) {
-        iJobService.hideJob(jobId, reportId);
+    @PutMapping("/hide/{jobId}/report/{reportId}/employer/{employerId}")
+    public ResponseObject<String> hideJob(@PathVariable long jobId, @PathVariable long reportId,
+            @PathVariable long employerId) {
+        iJobService.hideJob(jobId, reportId, employerId);
         return ResponseObject.<String>builder()
                 .data("hide job successfully")
                 .build();
+    }
+
+    @GetMapping("/numJobOfEmployer/{id}")
+    public ResponseObject<Integer> NumJobOfEmployer(@PathVariable("id") long id) {
+        ResponseObject<Integer> responseObject = new ResponseObject<>();
+        responseObject.setData(iJobService.numJobOfEmployer(id));
+        return responseObject;
     }
 }

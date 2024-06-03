@@ -11,7 +11,7 @@ public interface IStatisticsService {
 
     public List<StatsicDTO> getTotalPriceFromRanks();
 
-    public List<StatsicDTO> getTopIndustriesByJobCount(int topCount);
+    public List<StatsicDTO> getTopIndustriesByJobCount();
 
     public List<StatsicDTO> getTopIndustriesByJobApplicationCount(int topCount);
 

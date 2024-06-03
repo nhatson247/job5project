@@ -1,16 +1,25 @@
 package com.fpt.job5project.controller;
 
+import java.util.List;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.fpt.job5project.dto.FollowDTO;
-import com.fpt.job5project.dto.JobInterestDTO;
 import com.fpt.job5project.dto.ResponseObject;
 import com.fpt.job5project.service.IFollowService;
+
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -28,14 +37,27 @@ public class FollowController {
         responseObject.setData(listDTOs);
         return responseObject;
     }
+
+    @GetMapping("/listFollow/{id}")
+    public ResponseObject<Integer> listOfFollowByEnployerId(@PathVariable("id") Long id) {
+
+        ResponseObject<Integer> responseObject = new ResponseObject<>();
+
+        List<FollowDTO> listDTOs = iFollowService.listOfFollowByEmployerId(id);
+        responseObject.setData(listDTOs.size());
+        return responseObject;
+    }
+
     @GetMapping("/getByCandidateAndEmployer/{candidateId}/{employerId}")
-    public ResponseObject<List<FollowDTO>> getlistJobInterests(@PathVariable("candidateId") Long candidateId, @PathVariable("employerId") Long employerId) {
+    public ResponseObject<List<FollowDTO>> getlistJobInterests(@PathVariable("candidateId") Long candidateId,
+            @PathVariable("employerId") Long employerId) {
 
         ResponseObject<List<FollowDTO>> responseObject = new ResponseObject<>();
         List<FollowDTO> followDTOS = iFollowService.getJobFollowByCandidateAndEmployer(candidateId, employerId);
         responseObject.setData(followDTOS);
         return responseObject;
     }
+
     @GetMapping("/{id}")
     public ResponseObject<FollowDTO> getJobFollow(@PathVariable("id") long id) {
 
@@ -43,7 +65,6 @@ public class FollowController {
         responseObject.setData(iFollowService.getJobFollow(id));
         return responseObject;
     }
-
 
     @PostMapping("/create")
     public ResponseObject<FollowDTO> addJobFollow(@ModelAttribute @Valid FollowDTO newJobFollow) {

@@ -11,14 +11,14 @@ import java.util.List;
 
 public interface IndustryRepository extends JpaRepository<Industry, Long> {
     @Modifying
-    @Transactional
-    @Query(value = "SELECT TOP(:topCount) ind.industryname, COUNT(j.jobid) AS TotalJobs " +
-            "FROM industries ind " +
-            "LEFT JOIN jobs_industries ji ON ji.industries_industryid  = ind.industryid " +
-            "LEFT JOIN jobs j ON ji.job_jobid = j.jobid " +
-            "GROUP BY ind.industryname " +
-            "ORDER BY TotalJobs DESC", nativeQuery = true)
-    List<Object[]> findTopIndustriesByJobCount(@Param("topCount") int topCount);
+        @Transactional
+        @Query(value = "SELECT ind.industryname, COUNT(j.jobid) AS TotalJobs " +
+                        "FROM industries ind " +
+                        "LEFT JOIN jobs_industries ji ON ji.industries_industryid  = ind.industryid " +
+                        "LEFT JOIN jobs j ON ji.job_jobid = j.jobid " +
+                        "GROUP BY ind.industryname " +
+                        "ORDER BY TotalJobs DESC", nativeQuery = true)
+        List<Object[]> findTopIndustriesByJobCount();
 
     @Modifying
     @Transactional

@@ -60,12 +60,11 @@ public class UserController {
                 .build();
     }
 
-    @PostMapping("/{userId}")
-    public ResponseObject<String> changePassword(@Valid @ModelAttribute UserChangeDTO request,
-            @PathVariable long userId) {
+    @PutMapping("/changePassword/{userId}")
+    public ResponseObject<String> changePassword(@PathVariable long userId, @ModelAttribute UserChangeDTO request) {
         iuserService.changePassword(userId, request);
         return ResponseObject.<String>builder()
-                .data("User has been changed")
+                .data("Password has been changed")
                 .build();
     }
 

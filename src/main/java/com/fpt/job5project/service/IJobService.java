@@ -19,7 +19,7 @@ public interface IJobService {
     public List<JobDTO> getJobByEmployer(long employerId);
 
     public List<JobDTO> resultSearchJob(long industryId, String searchValue, long minSalary, long maxSalary,
-            String location, int experience, int typeJob);
+            String location, int experience, int typeJob, int skip, int limit);
 
     public int updateIsExpired(long id);
 
@@ -27,5 +27,7 @@ public interface IJobService {
 
     public int deleteJob(long id);
 
-    public void hideJob(long jobId, long reportId);
+    public void hideJob(long jobId, long reportId, long employerId);
+
+    public int numJobOfEmployer(long employerId);
 }

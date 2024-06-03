@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface IFollowService {
    public List<FollowDTO> listOfJobFollowByCandidateId(Long id);
+    public List<FollowDTO> listOfFollowByEmployerId(Long id);
 
     public FollowDTO getJobFollow(long id);
 

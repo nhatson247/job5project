@@ -46,9 +46,8 @@ public class StatisticsController {
 
         // 1 thống kê theo ngành
         @GetMapping("/count/industry")
-        public ResponseObject<List<StatsicDTO>> getTopIndustriesByJobCount(
-                        @RequestParam(name = "topCount", defaultValue = "4") int topCount) {
-                List<StatsicDTO> topIndustries = iStatisticsService.getTopIndustriesByJobCount(topCount);
+        public ResponseObject<List<StatsicDTO>> getTopIndustriesByJobCount() {
+                List<StatsicDTO> topIndustries = iStatisticsService.getTopIndustriesByJobCount();
 
                 return ResponseObject.<List<StatsicDTO>>builder()
                                 .data(topIndustries)

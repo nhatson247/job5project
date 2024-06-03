@@ -1,17 +1,22 @@
 package com.fpt.job5project.controller;
 
+import java.util.List;
 
-import com.fpt.job5project.dto.ApplicationDTO;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.fpt.job5project.dto.JobInterestDTO;
 import com.fpt.job5project.dto.ResponseObject;
 import com.fpt.job5project.service.IJobInterestService;
-import jakarta.validation.Valid;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,14 +34,18 @@ public class JobInterestController {
         responseObject.setData(listDTOs);
         return responseObject;
     }
+
     @GetMapping("/getByCandidateAndJob/{candidateId}/{jobId}")
-    public ResponseObject<List<JobInterestDTO>> getlistJobInterests(@PathVariable("candidateId") Long candidateId, @PathVariable("jobId") Long jobId) {
+    public ResponseObject<List<JobInterestDTO>> getlistJobInterests(@PathVariable("candidateId") Long candidateId,
+            @PathVariable("jobId") Long jobId) {
 
         ResponseObject<List<JobInterestDTO>> responseObject = new ResponseObject<>();
-        List<JobInterestDTO> jobInterestDTOS = jobInterestService.getJobInterestByCandidateIdAndByJobId(candidateId, jobId);
+        List<JobInterestDTO> jobInterestDTOS = jobInterestService.getJobInterestByCandidateIdAndByJobId(candidateId,
+                jobId);
         responseObject.setData(jobInterestDTOS);
         return responseObject;
     }
+
     @PostMapping("/create")
     public ResponseObject<JobInterestDTO> addJobInterest(@ModelAttribute JobInterestDTO jobInterest) {
         ResponseObject<JobInterestDTO> responseObject = new ResponseObject<>();

@@ -44,16 +44,16 @@ import lombok.experimental.NonFinal;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationServiceImpl implements IAuthenticationService {
 
-        private UserRepository userRepository;
+        UserRepository userRepository;
 
-        private InvalidatedTokenResponsitory invalidatedTokenResponsitory;
+        InvalidatedTokenResponsitory invalidatedTokenResponsitory;
 
         @NonFinal
         @Value("${com.nimbusds.jwt.signerKey}")
         protected String singerKey;
 
-        private static final int TOKEN_LIFE_TIME = 4;
-        private static final int REFRESH_TOKEN_LIFETIME = 4;
+        static final int TOKEN_LIFE_TIME = 4;
+        static final int REFRESH_TOKEN_LIFETIME = 4;
 
         // TO DO: Kiểm tra token
         public IntrospectDTO introspect(IntrospectDTO request)
@@ -90,10 +90,8 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
                 if (!authenticated)
                         throw new AppException(ErrorCode.USER_INVALID);
 
-                // Employer employer = employerRepository.findByUser(user);
-                // if (employer != null && !employer.isApproved()) {
-                // throw new AppException(ErrorCode.EMPLOYER_NOT_APPROVED);
-                // }
+                if (user.isBlocked())
+                        throw new AppException(ErrorCode.USER_IS_BLOCK);
 
                 var token = generateToken(user);
 

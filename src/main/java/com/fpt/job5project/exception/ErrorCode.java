@@ -14,7 +14,6 @@ public enum ErrorCode {
     UNEXPECTED_ERROR(999, "Unexpected error", HttpStatus.INTERNAL_SERVER_ERROR),
     INVALID_KEY(400, "Invalid message key", HttpStatus.BAD_REQUEST),
     INVALID_TOKEN(400, "Invalid token", HttpStatus.UNAUTHORIZED),
-    REFRESH_TOKEN_EXPIRED(400, "Refresh token expired", HttpStatus.UNAUTHORIZED),
     TOKEN_EXPIRED(401, "Token expired", HttpStatus.UNAUTHORIZED),
     USER_NOT_LOGIN(200, "User not login", HttpStatus.UNAUTHORIZED),
     // Category error code
@@ -45,6 +44,7 @@ public enum ErrorCode {
     ROLE_NOT_NULL(703, "Role can't be null", HttpStatus.BAD_REQUEST),
     USERNAME_EXISTED(704, "Username already existed", HttpStatus.BAD_REQUEST),
     USER_NOT_EXISTED(706, "User doesn't exist", HttpStatus.BAD_REQUEST),
+    USER_IS_BLOCK(401, "User is block", HttpStatus.BAD_REQUEST),
 
     EMAIL_NOT_NULL(705, "Email can't be null", HttpStatus.BAD_REQUEST),
     PHONE_NOT_NULL(706, "Phone can't be null", HttpStatus.BAD_REQUEST),
@@ -84,17 +84,17 @@ public enum ErrorCode {
     RANK_NOT_EXIST(404, "Rank doesn't exist", HttpStatus.BAD_REQUEST),
     EMPLOYER_NOT_APPROVED(801, "Employer not approved", HttpStatus.BAD_REQUEST),
     EMPLOYER_ALREADY_APPROVED(801, "Employer is alredy already approved", HttpStatus.BAD_REQUEST),
-    // Job interest error code
-    LIST_CV_IS_NULL(201, "List of job interests are empty", HttpStatus.BAD_REQUEST),
-    CV_NOT_EXIST(204, "job interest doesn't exist", HttpStatus.BAD_REQUEST),
+    //Job interest error code
+    LIST_CV_IS_NULL(201, "List of job interests are empty",HttpStatus.BAD_REQUEST),
+    CV_NOT_EXIST(204, "job interest doesn't exist",HttpStatus.BAD_REQUEST),
 
-    // Job interest error code
-    LIST_JOB_REPORT_IS_NULL(301, "List of job interests are empty", HttpStatus.BAD_REQUEST),
-    JOB_REPORT_NOT_EXIST(304, "job interest doesn't exist", HttpStatus.BAD_REQUEST),
+    //Job interest error code
+    LIST_JOB_REPORT_IS_NULL(301, "List of job interests are empty",HttpStatus.BAD_REQUEST),
+    JOB_REPORT_NOT_EXIST(304, "job interest doesn't exist",HttpStatus.BAD_REQUEST),
 
-    // Job interest error code
-    LIST_JOB_INTEREST_IS_NULL(401, "List of job interests are empty", HttpStatus.BAD_REQUEST),
-    JOB_INTEREST_NOT_EXIST(404, "job interest doesn't exist", HttpStatus.BAD_REQUEST),
+    //Job interest error code
+    LIST_JOB_INTEREST_IS_NULL(401, "List of job interests are empty",HttpStatus.BAD_REQUEST),
+    JOB_INTEREST_NOT_EXIST(404, "job interest doesn't exist",HttpStatus.BAD_REQUEST),
     ;
 
     private int status;

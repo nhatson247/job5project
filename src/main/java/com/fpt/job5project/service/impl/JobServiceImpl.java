@@ -1,16 +1,14 @@
 package com.fpt.job5project.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import com.fpt.job5project.dto.JobHomeDTO;
-import com.fpt.job5project.dto.QuantityJobDTO;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Tuple;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fpt.job5project.dto.JobDTO;
+import com.fpt.job5project.dto.JobHomeDTO;
+import com.fpt.job5project.dto.NotificationDTO;
 import com.fpt.job5project.entity.Job;
 import com.fpt.job5project.exception.AppException;
 import com.fpt.job5project.exception.ErrorCode;
@@ -20,6 +18,7 @@ import com.fpt.job5project.service.IJobReportService;
 import com.fpt.job5project.service.IJobService;
 import com.fpt.job5project.service.INotificationService;
 
+import jakarta.persistence.Tuple;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -29,8 +28,9 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class JobServiceImpl implements IJobService {
     JobRepository jobRepository;
+    IJobReportService iJobReportService;
     JobMapper jobMapper;
-    IJobReportService ỉIJobReportService;
+    INotificationService iNotificationService;
 
     @Override
     public JobDTO addJob(JobDTO newJobDTO) {
@@ -61,7 +61,7 @@ public class JobServiceImpl implements IJobService {
     }
 
     public JobDTO getOneJob(long id) {
-        Job foundJob = jobRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.CANDIDATE_NOT_EXIST));
+        Job foundJob = jobRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.JOB_NOT_EXIST));
         return jobMapper.toDTO(foundJob);
     }
 
@@ -96,10 +96,10 @@ public class JobServiceImpl implements IJobService {
 
     @Override
     public List<JobDTO> resultSearchJob(long industryId, String searchValue, long minSalary, long maxSalary,
-            String location, int experience, int typeJob) {
+            String location, int experience, int typeJob, int skip, int limit) {
         List<JobDTO> listDTO = new ArrayList<>();
         List<Job> listEntity = jobRepository.resultSearch(industryId, searchValue, minSalary, maxSalary, location,
-                experience, typeJob);
+                experience, typeJob, skip, limit);
         for (Job a : listEntity) {
             listDTO.add(jobMapper.toDTO(a));
         }
@@ -122,9 +122,26 @@ public class JobServiceImpl implements IJobService {
     }
 
     @Override
-    public void hideJob(long jobId, long reportId) {
+    public void hideJob(long jobId, long reportId, long employerId) {
         jobRepository.hideJob(jobId);
-        ỉIJobReportService.deleteJobReport(reportId);
+
+        iJobReportService.deleteJobReport(jobId);
+
+        sendNotificationByEmployerReport(employerId);
+    }
+
+    private void sendNotificationByEmployerReport(long id) {
+        NotificationDTO notification = new NotificationDTO();
+        notification.setUserId(id);
+        notification.setPostDate(new Date());
+        notification.setMessage("Bài viết của bạn đã bị ẩn do vi phạm điều khoản của chúng tôi");
+        iNotificationService.addNotification(notification);
+
+    }
+
+    @Override
+    public int numJobOfEmployer(long employerId) {
+        return jobRepository.NumJobOfEmployer(employerId);
     }
 
 }

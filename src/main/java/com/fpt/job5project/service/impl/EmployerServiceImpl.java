@@ -1,5 +1,15 @@
 package com.fpt.job5project.service.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.fpt.job5project.dto.EmployerApprovedDTO;
 import com.fpt.job5project.dto.EmployerDTO;
 import com.fpt.job5project.dto.MailDTO;
@@ -16,20 +26,11 @@ import com.fpt.job5project.service.IMailService;
 import com.fpt.job5project.service.INotificationService;
 import com.fpt.job5project.service.IStorageService;
 import com.fpt.job5project.utils.Const;
+
 import jakarta.mail.MessagingException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 // Autowired, private, final
@@ -40,12 +41,9 @@ public class EmployerServiceImpl implements IEmployerService {
     EmployerRepository employerRepository;
 
     EmployerMapper employerMapper;
-
-    IStorageService storageService;
-
-    IMailService iMailService;
-
     INotificationService iNotificationService;
+    IStorageService storageService;
+    IMailService iMailService;
 
     UserRepository userRepository;
 
@@ -197,5 +195,28 @@ public class EmployerServiceImpl implements IEmployerService {
         notification.setMessage("Tài khoản của bạn đã được duyệt.");
         iNotificationService.addNotification(notification);
 
+    }
+
+    @Override
+    public List<EmployerDTO> getTopEmployers() {
+        List<EmployerDTO> listDTOs = new ArrayList<>();
+        List<Employer> listEntities = employerRepository.getTopEmployers();
+        if (listEntities.isEmpty()) {
+            throw new AppException(ErrorCode.LIST_EMPLOYERS_IS_NULL);
+        }
+        for (Employer employerEntity : listEntities) {
+            listDTOs.add(employerMapper.toDTO(employerEntity));
+        }
+        return listDTOs;
+    }
+
+    @Override
+    public List<EmployerDTO> resultSearchEmployer(String employerName, int skip, int limit) {
+        List<EmployerDTO> listDTO = new ArrayList<>();
+        List<Employer> listEntity = employerRepository.resultSearch(employerName, skip, limit);
+        for (Employer a : listEntity) {
+            listDTO.add(employerMapper.toDTO(a));
+        }
+        return listDTO;
     }
 }

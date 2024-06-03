@@ -1,17 +1,24 @@
 package com.fpt.job5project.controller;
 
+import java.util.List;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.fpt.job5project.dto.EmployerReviewDTO;
 import com.fpt.job5project.dto.ResponseObject;
 import com.fpt.job5project.service.IEmployerReviewService;
+
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,16 +45,17 @@ public class EmployerReviewController {
         return responseObject;
     }
 
-    @GetMapping("/candidate/{id}")
-    public ResponseObject<EmployerReviewDTO> getEmployerReviewByCandidateId(@PathVariable("id") long id) {
+    @GetMapping("/candidate/{cId}/{eId}")
+    public ResponseObject<EmployerReviewDTO> getEmployerReviewByCandidateIdAndEmployerId(@PathVariable("cId") long cId,
+            @PathVariable("eId") long eId) {
         ResponseObject<EmployerReviewDTO> responseObject = new ResponseObject<>();
-        responseObject.setData(iEmployerReviewService.getEmployerReviewByCandidateId(id));
+        responseObject.setData(iEmployerReviewService.getEmployerReviewByCandidateIdAndEmployerId(cId, eId));
         return responseObject;
     }
 
-
     @PostMapping("/create")
-    public ResponseObject<EmployerReviewDTO> addEmployerReview(@ModelAttribute @Valid EmployerReviewDTO employerReviewDTO) {
+    public ResponseObject<EmployerReviewDTO> addEmployerReview(
+            @ModelAttribute @Valid EmployerReviewDTO employerReviewDTO) {
 
         ResponseObject<EmployerReviewDTO> responseObject = new ResponseObject<>();
         responseObject.setData(iEmployerReviewService.addEmployerReview(employerReviewDTO));
@@ -64,7 +72,8 @@ public class EmployerReviewController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseObject<EmployerReviewDTO> updateEmployerReview(@PathVariable("id") Long id, @ModelAttribute EmployerReviewDTO employerReviewDTO) {
+    public ResponseObject<EmployerReviewDTO> updateEmployerReview(@PathVariable("id") Long id,
+            @ModelAttribute EmployerReviewDTO employerReviewDTO) {
 
         ResponseObject<EmployerReviewDTO> responseObject = new ResponseObject<>();
         responseObject.setData(iEmployerReviewService.updateEmployerReview(id, employerReviewDTO));

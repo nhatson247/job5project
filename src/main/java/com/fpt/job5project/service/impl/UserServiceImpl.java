@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import com.fpt.job5project.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,10 +14,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.fpt.job5project.dto.ForgetPasswordDTO;
-import com.fpt.job5project.dto.MailDTO;
-import com.fpt.job5project.dto.UserChangeDTO;
-import com.fpt.job5project.dto.UserDTO;
 import com.fpt.job5project.entity.Candidate;
 import com.fpt.job5project.entity.Employer;
 import com.fpt.job5project.entity.User;
@@ -88,8 +85,10 @@ public class UserServiceImpl implements IUserService {
     @Override
     public UserDTO addUser(UserDTO request) {
 
-        if (userRepository.existsByUserName(request.getUserName()))
+        if (userRepository.existsByUserName(request.getUserName())){
+            System.out.println("hi ban");
             throw new AppException(ErrorCode.USER_EXISTED);
+        }
 
         User user = userMapper.toUser(request);
         passwordEncoder = new BCryptPasswordEncoder(5);
@@ -130,9 +129,7 @@ public class UserServiceImpl implements IUserService {
             throw new AppException(ErrorCode.PASSWORD_INCORRECT);
         }
 
-        if (!request.getNewPassword().equals(request.getConfirmNewPassword())) {
-            throw new AppException(ErrorCode.PASSWORD_MISMATCH);
-        }
+
 
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);

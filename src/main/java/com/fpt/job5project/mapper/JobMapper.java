@@ -16,7 +16,7 @@ public interface JobMapper {
     @Mapping(target = "jobId", ignore = true)
     @Mapping(target = "expirationDate", ignore = true)
     @Mapping(target = "postDate", ignore = true)
-    // @Mapping(target = "photo", ignore = true)
+     @Mapping(target = "reupTimesLeft", ignore = true)
     void updateJob(@MappingTarget Job job, JobDTO jobDTO);
 
 }

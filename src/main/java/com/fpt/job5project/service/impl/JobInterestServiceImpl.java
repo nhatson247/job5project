@@ -1,24 +1,22 @@
 package com.fpt.job5project.service.impl;
 
-import com.fpt.job5project.dto.CandidateDTO;
-import com.fpt.job5project.dto.JobInterestDTO;
-import com.fpt.job5project.entity.Candidate;
-import com.fpt.job5project.entity.JobInterest;
-import com.fpt.job5project.entity.User;
-import com.fpt.job5project.exception.AppException;
-import com.fpt.job5project.exception.ErrorCode;
-import com.fpt.job5project.mapper.JobInterestMapper;
-import com.fpt.job5project.repository.CandidateRepository;
-import com.fpt.job5project.repository.JobInterestRepository;
-import com.fpt.job5project.service.IJobInterestService;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.fpt.job5project.dto.JobInterestDTO;
+import com.fpt.job5project.entity.JobInterest;
+import com.fpt.job5project.exception.AppException;
+import com.fpt.job5project.exception.ErrorCode;
+import com.fpt.job5project.mapper.JobInterestMapper;
+import com.fpt.job5project.repository.JobInterestRepository;
+import com.fpt.job5project.service.IJobInterestService;
+
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 @Service
 @RequiredArgsConstructor
@@ -32,9 +30,9 @@ public class JobInterestServiceImpl implements IJobInterestService {
     public List<JobInterestDTO> getJobInterest(long id) {
         List<JobInterestDTO> listDTOs = new ArrayList<>();
         List<JobInterest> listInterests = jobInterestRepository.findByCandidateId(id);
-//        if (listInterests.isEmpty()) {
-//            throw new AppException(ErrorCode.LIST_JOB_INTEREST_IS_NULL);
-//        }
+        // if (listInterests.isEmpty()) {
+        // throw new AppException(ErrorCode.LIST_JOB_INTEREST_IS_NULL);
+        // }
         for (JobInterest jobInterestEntity : listInterests) {
             listDTOs.add(jobInterestMapper.toDTO(jobInterestEntity));
         }

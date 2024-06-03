@@ -33,6 +33,15 @@ public class FollowServiceImpl implements IFollowService {
         return listDTOs;
     }
 
+     @Override
+    public List<FollowDTO> listOfFollowByEmployerId(Long id) {
+        List<FollowDTO> listDTOs = new ArrayList<>();
+        for (Follow followEntity : followRepository.findByEmployerId(id)) {
+            listDTOs.add(followMapper.toDTO(followEntity));
+        }
+        return listDTOs;
+    }
+
     @Override
     public FollowDTO getJobFollow(long id) {
         Follow jobFollow = followRepository.findById(id)
