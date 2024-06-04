@@ -27,26 +27,24 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequestMapping("api/application")
 public class ApplicationController {
+
     IApplicationService applicationService;
 
     @GetMapping("/getByCandidate/{id}")
     public ResponseObject<List<ApplicationDTO>> listOfApplications(@PathVariable("id") Long id) {
 
-        ResponseObject<List<ApplicationDTO>> responseObject = new ResponseObject<>();
+        return ResponseObject.<List<ApplicationDTO>>builder()
+                .data(applicationService.listOfApplicationByCandidateId(id))
+                .build();
 
-        List<ApplicationDTO> listDTOs = applicationService.listOfApplicationByCandidateId(id);
-        responseObject.setData(listDTOs);
-        return responseObject;
     }
 
     @GetMapping("/{id}")
     public ResponseObject<List<ApplicationDTO>> listOfApplicationsByJobId(@PathVariable("id") Long id) {
 
-        ResponseObject<List<ApplicationDTO>> responseObject = new ResponseObject<>();
-
-        List<ApplicationDTO> listDTOs = applicationService.listOfApplicationByJobId(id);
-        responseObject.setData(listDTOs);
-        return responseObject;
+        return ResponseObject.<List<ApplicationDTO>>builder()
+                .data(applicationService.listOfApplicationByJobId(id))
+                .build();
     }
 
     @GetMapping("/getByCandidateAndJob/")
@@ -55,7 +53,7 @@ public class ApplicationController {
 
         ResponseObject<ApplicationDTO> responseObject = new ResponseObject<>();
         ApplicationDTO applicationDTO = applicationService.getApplicationByCandidateAndJob(candidateId, jobId);
-        System.out.println(applicationDTO);
+
         if (applicationDTO == null) {
             responseObject.setMessage("Not found");
         } else {
@@ -67,43 +65,44 @@ public class ApplicationController {
     @PostMapping("/create")
     public ResponseObject<ApplicationDTO> addApplication(@ModelAttribute @Valid ApplicationDTO newApplication) {
 
-        ResponseObject<ApplicationDTO> responseObject = new ResponseObject<>();
-        responseObject.setData(applicationService.addApplication(newApplication));
-        return responseObject;
+        return ResponseObject.<ApplicationDTO>builder()
+                .data(applicationService.addApplication(newApplication))
+                .build();
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseObject<String> deleteApplication(@PathVariable("id") Long id) {
 
-        ResponseObject<String> responseObject = new ResponseObject<>();
         applicationService.deleteApplication(id);
-        responseObject.setMessage("Application has been deleted");
-        return responseObject;
+        return ResponseObject.<String>builder()
+                .data("Application has been deleted")
+                .build();
     }
 
     @PutMapping("/update/{id}")
     public ResponseObject<ApplicationDTO> updateApplication(@PathVariable("id") Long id,
             @ModelAttribute ApplicationDTO applicationDTO, @ModelAttribute("file") MultipartFile file) {
 
-        ResponseObject<ApplicationDTO> responseObject = new ResponseObject<>();
-        responseObject.setData(applicationService.updateApplication(id, applicationDTO, file));
-        return responseObject;
+        return ResponseObject.<ApplicationDTO>builder()
+                .data(applicationService.updateApplication(id, applicationDTO, file))
+                .build();
     }
 
     @PutMapping("/updateStatus/{id}")
     public ResponseObject<ApplicationDTO> updateApplicationStatus(@PathVariable("id") Long id,
             @ModelAttribute ApplicationDTO applicationDTO) {
-        ResponseObject<ApplicationDTO> responseObject = new ResponseObject<>();
-        responseObject.setData(applicationService.updateApplicationStatus(id, applicationDTO));
-        return responseObject;
 
+        return ResponseObject.<ApplicationDTO>builder()
+                .data(applicationService.updateApplicationStatus(id, applicationDTO))
+                .build();
     }
 
     @GetMapping("/getByJob/{jobId}")
     public ResponseObject<List<ApplicationDTO>> getJobByEmployer(@PathVariable("jobId") Long jobId) {
-        ResponseObject<List<ApplicationDTO>> responseObject = new ResponseObject<>();
-        responseObject.setData(applicationService.listOfApplicationByJobId(jobId));
-        return responseObject;
+
+        return ResponseObject.<List<ApplicationDTO>>builder()
+                .data(applicationService.listOfApplicationByJobId(jobId))
+                .build();
     }
 
 }

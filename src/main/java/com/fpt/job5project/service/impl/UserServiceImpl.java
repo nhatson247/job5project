@@ -85,8 +85,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public UserDTO addUser(UserDTO request) {
 
-        if (userRepository.existsByUserName(request.getUserName())){
-            System.out.println("hi ban");
+        if (userRepository.existsByUserName(request.getUserName())) {
             throw new AppException(ErrorCode.USER_EXISTED);
         }
 
@@ -128,8 +127,6 @@ public class UserServiceImpl implements IUserService {
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new AppException(ErrorCode.PASSWORD_INCORRECT);
         }
-
-
 
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);

@@ -28,7 +28,7 @@ public class TimeLineServiceimpl implements ITimeLineService {
     @Override
     public List<TimeLineDTO> listOfTimeLine(Long id) {
         List<TimeLineDTO> listDTOs = new ArrayList<>();
-        List<TimeLine> listEntities = timeLineRepository.findByCandidateId(id);
+
         for (TimeLine timeLineEntity : timeLineRepository.findByCandidateId(id)) {
             listDTOs.add(timeLineMapper.toDTO(timeLineEntity));
         }
@@ -53,7 +53,6 @@ public class TimeLineServiceimpl implements ITimeLineService {
 
     @Override
     public void deleteTimeLine(long id) {
-        boolean existsById = timeLineRepository.existsById(id);
 
         timeLineRepository.deleteByCandidateId(id);
 
